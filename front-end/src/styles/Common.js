@@ -12,6 +12,8 @@ export const Common = {
     white01: "#ffffff",
 
     black01: "#000000",
+
+    lavender01: "#BA76D1",
   },
 };
 
