@@ -4,7 +4,7 @@ import { MainHeaderWrapper, SearchWrapper } from "../styles/MainHeaderEmotion";
 import Logo from "../assets/gamemakase_logo.svg";
 import FontLogo from "../assets/font_logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const MainHeader = () => {
   const navigate = useNavigate();
@@ -49,10 +49,12 @@ const MainHeader = () => {
         {/* search 페이지에서 useLocation().state.keyword 로 받아서 사용 */}
       </SearchWrapper>
       <div className="menu-wrapper">
-        <div className="profile-img"></div>
+        <div className="profile-img">
+          <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+        </div>
         {/* 아래 코드는 로그인 기능 생기고 수정 필요함 */}
         <p className="single-menu">USERNAME</p>
-        <p className="single-menu"> | </p>
+        <p className="single-menu"> </p>
         <p className="single-menu">LOGOUT</p>
       </div>
     </MainHeaderWrapper>
