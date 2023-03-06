@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 
+import MainHeader from "./components/MainHeader";
+
 import Home from "./pages/Home";
 import Detail from "./pages/Detail";
 import Profile from "./pages/Profile";
@@ -16,6 +18,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <MainHeader></MainHeader>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/detail/:gameId" element={<Detail />} />
