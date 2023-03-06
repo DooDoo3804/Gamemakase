@@ -7,6 +7,10 @@ body {
   margin: 0;
 }
 
+.App {
+  min-height: 100vh;
+  background-color: #323232;
+}
 /* 미디어쿼리로 너비 설정 */
 /* @media (min-width: 650px) {
   .App {
