@@ -49,6 +49,9 @@ export const MainHeaderWrapper = styled.div`
     background-color: ${Common.colors.mainColor03};
     border-radius: 70%;
     margin-right: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
