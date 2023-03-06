@@ -1,7 +1,7 @@
-import MainHeaderWrapper from "../styles/MainHeaderEmotion";
+import { MainHeaderWrapper } from "../styles/MainHeaderEmotion";
 
 const MainHeader = () => {
-  return <MainHeaderWrapper></MainHeaderWrapper>;
+  return <MainHeaderWrapper>header</MainHeaderWrapper>;
 };
 
 export default MainHeader;

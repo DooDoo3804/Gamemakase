@@ -1,4 +1,4 @@
-const Common = {
+export const Common = {
   colors: {
     mainColor01: "#323232",
     mainColor02: "#37334D",
@@ -15,8 +15,6 @@ const Common = {
   },
 };
 
-export default Common;
-
-// import Common from "../styles/Common"
+// import { Common } from "../styles/Common"
 // import한 후 js파일에서 다음과 같이 사용
 // ${Common.colors.mainColor01}
