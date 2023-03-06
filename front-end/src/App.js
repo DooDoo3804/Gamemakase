@@ -23,7 +23,7 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/test" element={<Test />} />
           <Route path="/testResult/:resultId" element={<TestResult />} />
-          <Route path="/serverError" element={<ServerError />} />
+          <Route path="/500" element={<ServerError />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -15,6 +15,6 @@ export const Common = {
   },
 };
 
-// import Common from "../styles/common"
+// import Common from "../styles/Common"
 // import한 후 js파일에서 다음과 같이 사용
 // ${Common.colors.mainColor01}
