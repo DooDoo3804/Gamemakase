@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, A11y } from "swiper";
+import { Navigation, Pagination, A11y, Autoplay } from "swiper";
 import Lottie from "react-lottie";
 import { HomeWrapper, Banner, RecommendWrapper } from "../styles/HomeEmotion";
 import banner_img from "../assets/banner_img.json";
@@ -12,7 +12,6 @@ import banner_img2 from "../assets/banner_img2.json";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/scrollbar";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -41,11 +40,12 @@ const Home = () => {
   return (
     <HomeWrapper>
       <Swiper
-        modules={[Navigation, Pagination, A11y]}
+        modules={[Autoplay, Navigation, Pagination, A11y]}
         spaceBetween={0}
         slidesPerView={1}
         navigation
         pagination={{ clickable: true }}
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
         // onSwiper={(swiper) => console.log(swiper)}
         // onSlideChange={() => console.log("slide change")}
       >
