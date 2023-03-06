@@ -10,12 +10,12 @@ export const HomeWrapper = styled.div`
   .swiper-slide {
   }
   .swiper-pagination-bullet-active {
-    background-color: white;
+    background-color: ${Common.colors.white01};
   }
 
   .swiper-button-next::after,
   .swiper-button-prev::after {
-    color: #ffffff;
+    color: ${Common.colors.white01};
   }
 `;
 
@@ -63,7 +63,7 @@ export const Banner = styled.div`
 
   .subtitle {
     margin: 0;
-    color: #ffffff;
+    color: ${Common.colors.white01};
     font-family: "Noto Serif KR", serif;
     font-size: 1.2rem;
     font-weight: 300;
@@ -71,7 +71,7 @@ export const Banner = styled.div`
 
   .title {
     margin: 0;
-    color: #ffffff;
+    color: ${Common.colors.white01};
     font-family: "Noto Sans KR", serif;
     font-size: 2.8rem;
     font-weight: 700;
@@ -85,9 +85,9 @@ export const Banner = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #ffffff;
+    color: ${Common.colors.white01};
     background-color: rgba(255, 255, 255, 0.4);
-    border: 1px solid #ffffff;
+    border: 1px solid ${Common.colors.white01};
     border-radius: 2rem;
     font-size: 1rem;
     font-family: "Noto Sans KR", serif;
