@@ -45,6 +45,7 @@ const MainHeader = () => {
           onClick={() =>
             navigate("/search", { state: { keyword: keyword.current } })
           }
+          className="search-icon"
         />
         {/* search 페이지에서 useLocation().state.keyword 로 받아서 사용 */}
       </SearchWrapper>
@@ -53,7 +54,9 @@ const MainHeader = () => {
           <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
         </div>
         {/* 아래 코드는 로그인 기능 생기고 수정 필요함 */}
-        <p className="single-menu">USERNAME</p>
+        <p className="single-menu" onClick={() => navigate(`/profile/1`)}>
+          USERNAME
+        </p>
         <p className="single-menu"> </p>
         <p className="single-menu">LOGOUT</p>
       </div>

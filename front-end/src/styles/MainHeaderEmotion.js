@@ -17,6 +17,7 @@ export const MainHeaderWrapper = styled.div`
     display: flex;
     width: 5rem;
     height: 3rem;
+    cursor: pointer;
   }
 
   .logo-img {
@@ -42,6 +43,7 @@ export const MainHeaderWrapper = styled.div`
 
   .single-menu {
     margin: 0rem 0.3rem;
+    cursor: pointer;
     white-space: pre-wrap;
   }
 
@@ -54,10 +56,15 @@ export const MainHeaderWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    @media (max-width: 560px) {
+      display: none;
+    }
   }
 `;
 
 export const SearchWrapper = styled.div`
+  transition: all 0.5s ease-in-out;
+
   .search-bar {
     height: 2.5rem;
     background-color: ${Common.colors.mainColor01};
@@ -67,5 +74,23 @@ export const SearchWrapper = styled.div`
     color: ${Common.colors.lightGray01};
     font-family: "Sarpanch", sans-serif;
     margin-right: 0.8rem;
+    transition: all 0.5s ease-in-out;
+
+    @media (min-width: 1040px) {
+      width: 20rem;
+    }
+    @media (max-width: 1040px) {
+      width: 15rem;
+    }
+    @media (max-width: 768px) {
+      width: 8rem;
+    }
+    @media (max-width: 560px) {
+      display: none;
+    }
+  }
+
+  .search-icon {
+    cursor: pointer;
   }
 `;
