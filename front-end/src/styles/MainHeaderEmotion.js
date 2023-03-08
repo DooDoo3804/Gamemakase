@@ -3,7 +3,9 @@ import { Common } from "../styles/Common";
 
 export const MainHeaderWrapper = styled.div`
   display: flex;
-  background-color: ${Common.colors.mainColor01};
+  position: relative;
+  z-index: 99;
+  background-color: rgba(50, 50, 50, 0.3);
   color: ${Common.colors.lightGray01};
   height: 3.5rem;
   margin: 0;
