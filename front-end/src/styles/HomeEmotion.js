@@ -110,6 +110,62 @@ export const RecommendWrapper = styled.div`
     font-family: "Noto Sans KR", serif;
     font-size: 1.5rem;
     font-weight: 600;
-    margin: 0.5rem 0rem;
+    padding: 0.5rem 0rem;
+  }
+`;
+
+export const GamesWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+export const SingleGame = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0rem;
+
+  .img-wrapper {
+    display: flex;
+    justify-content: center;
+    z-index: 9;
+
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .img-wrapper:hover {
+    z-index: 9;
+    transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    -o-transform: scale(1.05);
+  }
+
+  .game-img {
+    z-index: 9;
+    border-radius: 2rem;
+    object-fit: contain;
+  }
+
+  .game-title {
+    color: ${Common.colors.white01};
+    font-family: "Noto Sans KR", serif;
+    margin: 0.5rem 0.5rem;
+  }
+`;
+
+export const MoreGamesWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  .single-game {
+    width: 20rem;
+    color: ${Common.colors.white01};
   }
 `;
