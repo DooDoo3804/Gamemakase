@@ -11,19 +11,21 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ImageSaveRequestDto {
-  private String type;
-  private long typeId;
-  private String imagePath;
 
-  public ImageSaveRequestDto(String type, long typeId){
-    this.type = type;
-    this.typeId = typeId;
-  }
-  public Image toEntity(String imagePath){
+  public Image toProfile(String imagePath, long typeId){
     return Image.builder()
-        .type(type)
+        .type("profile")
         .typeId(typeId)
         .imagePath(imagePath)
         .build();
   }
+
+  public Image toGame(String imagePath, long typeId){
+    return Image.builder()
+        .type("game")
+        .typeId(typeId)
+        .imagePath(imagePath)
+        .build();
+  }
+
 }

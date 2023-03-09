@@ -11,7 +11,12 @@ public class ImageServiceImpl implements ImageService {
   private final ImageRepository imageRepository;
 
   @Override
-  public void saveFile(ImageSaveRequestDto requestDto, String image_path) {
-    imageRepository.save(requestDto.toEntity(image_path));
+  public void saveProfileImage(ImageSaveRequestDto requestDto, String imagePath, long typeId) {
+    imageRepository.save(requestDto.toProfile(imagePath, typeId));
+  }
+
+  @Override
+  public void saveGameImage(ImageSaveRequestDto requestDto, String imagePath, long typeId) {
+    imageRepository.save(requestDto.toGame(imagePath, typeId));
   }
 }
