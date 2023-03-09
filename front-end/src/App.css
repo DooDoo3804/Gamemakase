@@ -9,6 +9,19 @@
     url("//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff2");
 }
 
+::-webkit-scrollbar {
+  width: 14px;
+}
+::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #9988BD;
+}
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+  display: none;
+}
 body,
 html {
   margin: 0;
