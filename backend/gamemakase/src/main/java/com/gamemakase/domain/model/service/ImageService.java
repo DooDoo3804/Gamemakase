@@ -3,5 +3,7 @@ package com.gamemakase.domain.model.service;
 import com.gamemakase.domain.model.dto.ImageSaveRequestDto;
 
 public interface ImageService {
-  void saveFile(ImageSaveRequestDto requestDto, String imagePath);
+  void saveProfileImage(ImageSaveRequestDto requestDto, String imagePath, long typeId);
+
+  void saveGameImage(ImageSaveRequestDto requestDto, String imagePath, long typeId);
 }
