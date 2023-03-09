@@ -42,16 +42,18 @@ public class JwtTokenProvider implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() { // secret 값을 decode 하여 key 값에 저장
-        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     // 토큰 생성
     public String createToken(com.gamemakase.domain.model.entity.User user, long times) {
         Date expirationTime = new Date(System.currentTimeMillis() + times); // 만료 일자를 계산한다.
-        String authorities = user.getAuthorities().stream().map(authority -> authority.getAuthority()).collect(Collectors.joining(","));
+        String authority = user.getAuthority().getAuthorityName().name();
+        System.out.println(authority);
         return Jwts.builder()
                 .setSubject(String.valueOf(user.getUserId()))
-                .claim(AUTHORITIES_KEY, authorities)
+                .claim(AUTHORITIES_KEY, authority)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(expirationTime)
                 .compact();
@@ -59,15 +61,16 @@ public class JwtTokenProvider implements InitializingBean {
 
     // 토큰을 입력받아 권한 정보를 리턴한다.
     public Authentication getAuthentication(String token) {
+        System.out.println(token);
         Claims claims = Jwts
                 .parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-
+        String[] role = {claims.get(AUTHORITIES_KEY).toString()};
         Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                Arrays.stream(role)
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
