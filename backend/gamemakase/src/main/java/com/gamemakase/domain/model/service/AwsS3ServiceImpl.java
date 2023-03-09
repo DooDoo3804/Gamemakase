@@ -7,6 +7,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.gamemakase.domain.model.dto.ImageSaveRequestDto;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,16 +31,17 @@ public class AwsS3ServiceImpl implements AwsS3Service{
   private final ImageService imageService;
 
   @Override
-  public void UploadImage(MultipartFile file) {
+  public void uploadProfileImage(MultipartFile file) {
     String fileName = createFileName(file.getOriginalFilename());
     String url = defaultUrl+fileName;
+    long userId = 1;
 
     ObjectMetadata objectMetadata = new ObjectMetadata();
     objectMetadata.setContentLength(file.getSize());
     objectMetadata.setContentType(file.getContentType());
 
     ImageSaveRequestDto requestDto = new ImageSaveRequestDto();
-    imageService.saveFile(requestDto, url);
+    imageService.saveProfileImage(requestDto, url, userId);
 
     try (InputStream inputStream = file.getInputStream()) {
       amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
@@ -48,6 +51,32 @@ public class AwsS3ServiceImpl implements AwsS3Service{
     }
 
   }
+
+  @Override
+  public void uploadGameImage(List<MultipartFile> files) {
+    List<String> fileList = new ArrayList<>();
+
+    files.forEach(file -> {
+      String fileName = createFileName(file.getOriginalFilename());
+      String url = defaultUrl+fileName;
+      long gameId = 2;
+
+      ObjectMetadata objectMetadata = new ObjectMetadata();
+      objectMetadata.setContentLength(file.getSize());
+      objectMetadata.setContentType(file.getContentType());
+
+      ImageSaveRequestDto requestDto = new ImageSaveRequestDto();
+      imageService.saveGameImage(requestDto, url, gameId);
+
+      try (InputStream inputStream = file.getInputStream()) {
+        amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+            .withCannedAcl(CannedAccessControlList.PublicRead));
+      } catch (IOException e) {
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
+      }
+    });
+  }
+
 
   private String createFileName(String fileName) {
     return UUID.randomUUID().toString().concat(getFileExtension(fileName));
