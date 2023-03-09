@@ -49,6 +49,11 @@ export const Banner = styled.div`
     display: flex;
     margin-left: 8rem;
     width: 13rem;
+    transition: display 0.5s ease-in-out;
+
+    @media (max-width: 650px) {
+      display: none;
+    }
   }
 
   .single-lottie {
@@ -58,30 +63,59 @@ export const Banner = styled.div`
 
   .text-wrapper {
     z-index: 2;
-    margin-right: 3rem;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.5s ease-in-out;
+
+    @media (min-width: 650px) {
+      margin-right: 3rem;
+    }
+
+    @media (max-width: 650px) {
+      align-items: center;
+    }
   }
 
   .subtitle {
     margin: 0;
     color: ${Common.colors.white01};
     font-family: "Noto Serif KR", serif;
-    font-size: 1.2rem;
     font-weight: 300;
+
+    transition: font-size 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      font-size: 1.2rem;
+    }
+    @media (max-width: 768px) {
+      font-size: 1.1rem;
+    }
+    @media (max-width: 500px) {
+      font-size: 1rem;
+    }
   }
 
   .title {
     margin: 0;
     color: ${Common.colors.white01};
     font-family: "Noto Sans KR", serif;
-    font-size: 2.8rem;
     font-weight: 700;
     text-shadow: #000 1px 0 4px;
+    transition: font-size 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      font-size: 2.8rem;
+    }
+    @media (max-width: 768px) {
+      font-size: 2.4rem;
+    }
+    @media (max-width: 500px) {
+      font-size: 2rem;
+    }
   }
 
   .test-btn {
     margin-top: 0.8rem;
-    width: 9rem;
-    height: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -89,16 +123,42 @@ export const Banner = styled.div`
     background-color: rgba(255, 255, 255, 0.4);
     border: 1px solid ${Common.colors.white01};
     border-radius: 2rem;
-    font-size: 1rem;
+
     font-family: "Noto Sans KR", serif;
+    cursor: pointer;
+
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      width: 9rem;
+      height: 2.5rem;
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) {
+      width: 8rem;
+      height: 2.3rem;
+      font-size: 1rem;
+    }
+    @media (max-width: 500px) {
+      width: 6rem;
+      height: 2rem;
+      font-size: 0.8rem;
+    }
   }
 
   .test-btn:hover {
     background-color: rgba(255, 255, 255, 0.5);
-    transition: background 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
     font-weight: 600;
-    font-size: 1.05rem;
+
     transition: font-size 0.3s ease-in-out;
+
+    @media (min-width: 500px) {
+      font-size: 1.05rem;
+    }
+    @media (max-width: 500px) {
+      font-size: 0.85rem;
+    }
   }
 `;
 
@@ -112,22 +172,33 @@ export const RecommendWrapper = styled.div`
     font-weight: 600;
     padding: 0.5rem 0rem;
   }
-`;
 
-export const GamesWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
+  .game-title {
+    color: ${Common.colors.white01};
+    font-family: "Noto Sans KR", serif;
+    margin: 0.5rem 0.5rem;
 
-export const SingleGame = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 0.5rem 0rem;
+    @media (min-width: 768px) {
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
+    @media (max-width: 500px) {
+      font-size: 0.6rem;
+    }
+  }
 
-  .img-wrapper {
-    display: flex;
-    justify-content: center;
-    z-index: 9;
+  .swiper-slide {
+    margin: 2rem 0rem;
+  }
+
+  .swiper-slide img {
+    width: 100%;
+    border-radius: 10%;
+    object-fit: contain;
+    cursor: pointer;
+    z-index: 8;
 
     transform: scale(1);
     -webkit-transform: scale(1);
@@ -137,25 +208,13 @@ export const SingleGame = styled.div`
     transition: all 0.3s ease-in-out;
   }
 
-  .img-wrapper:hover {
+  .swiper-slide img:hover {
     z-index: 9;
     transform: scale(1.05);
     -webkit-transform: scale(1.05);
     -moz-transform: scale(1.05);
     -ms-transform: scale(1.05);
     -o-transform: scale(1.05);
-  }
-
-  .game-img {
-    z-index: 9;
-    border-radius: 2rem;
-    object-fit: contain;
-  }
-
-  .game-title {
-    color: ${Common.colors.white01};
-    font-family: "Noto Sans KR", serif;
-    margin: 0.5rem 0.5rem;
   }
 `;
 

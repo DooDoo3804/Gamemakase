@@ -8,8 +8,6 @@ import {
   HomeWrapper,
   Banner,
   RecommendWrapper,
-  SingleGame,
-  GamesWrapper,
   MoreGamesWrapper,
 } from "../styles/HomeEmotion";
 import banner_img from "../assets/banner_img.json";
@@ -150,18 +148,13 @@ const Home = () => {
     for (let i = 0; i < games.length; i++) {
       result.push(
         <SwiperSlide key={games[i].gameId}>
-          <SingleGame onClick={() => navigate(`/detail/${games[i].gameId}`)}>
-            <div>
-              <div className="img-wrapper">
-                <img
-                  src={games[i].gameImage}
-                  alt="game_img"
-                  className="game-img"
-                />
-              </div>
-              <p className="game-title">{games[i].gameName}</p>
-            </div>
-          </SingleGame>
+          <img
+            src={games[i].gameImage}
+            alt="game_img"
+            className="game-img"
+            onClick={() => navigate(`/detail/${games[i].gameId}`)}
+          />
+          <p className="game-title">{games[i].gameName}</p>
         </SwiperSlide>
       );
     }
@@ -233,9 +226,19 @@ const Home = () => {
             <div className="rcm-title">나를 위한 게임</div>
             <Swiper
               modules={[Navigation]}
-              spaceBetween={0}
               slidesPerView={3}
+              spaceBetween={10}
               navigation
+              breakpoints={{
+                360: {
+                  slidesPerView: 2,
+                  spaceBetween: 10,
+                },
+                500: {
+                  slidesPerView: 3,
+                  spaceBetween: 20,
+                },
+              }}
             >
               {renderGames(recommendGames)}
             </Swiper>
@@ -246,9 +249,19 @@ const Home = () => {
             <div className="rcm-title">인기 게임</div>
             <Swiper
               modules={[Navigation]}
-              spaceBetween={0}
               slidesPerView={3}
+              spaceBetween={10}
               navigation
+              breakpoints={{
+                360: {
+                  slidesPerView: 2,
+                  spaceBetween: 10,
+                },
+                500: {
+                  slidesPerView: 3,
+                  spaceBetween: 20,
+                },
+              }}
             >
               {renderGames(popularGames)}
             </Swiper>
