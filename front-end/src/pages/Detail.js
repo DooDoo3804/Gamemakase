@@ -278,7 +278,10 @@ const Detail = () => {
           }}
         >
           <div className="profile-wrapper">
-            <div className="profile-img-wrapper">
+            <div
+              className="profile-img-wrapper"
+              onClick={() => navigate(`/profile/${reviewData[i].userId}`)}
+            >
               <img
                 src={reviewData[i].userImagePath}
                 alt="profile"
