@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { motion } from "framer-motion";
 import { Common } from "./Common";
 
 export const DetailWrapper = styled.div`
@@ -315,10 +316,20 @@ export const RecommendUsers = styled.div`
   }
 
   .single-user {
-    margin: 0rem 3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: all 0.5s ease-in-out;
+
+    @media (min-width: 768px) {
+      margin: 0rem 3rem;
+    }
+    @media (max-width: 768px) {
+      margin: 0rem 2rem;
+    }
+    @media (max-width: 500px) {
+      margin: 0rem 0.5rem;
+    }
   }
 
   .profile-wrapper {
@@ -328,16 +339,16 @@ export const RecommendUsers = styled.div`
     cursor: pointer;
 
     @media (min-width: 768px) {
-      width: 8rem;
-      height: 8rem;
+      width: 7rem;
+      height: 7rem;
     }
     @media (max-width: 768px) {
-      width: 6rem;
-      height: 6rem;
+      width: 5rem;
+      height: 5rem;
     }
     @media (max-width: 500px) {
-      width: 4rem;
-      height: 4rem;
+      width: 3rem;
+      height: 3rem;
     }
   }
 
@@ -376,5 +387,231 @@ export const RecommendUsers = styled.div`
     @media (max-width: 500px) {
       height: 3rem;
     }
+  }
+`;
+
+export const ReviewWrapper = styled.div`
+  @media (min-width: 768px) {
+    padding: 0rem 4rem;
+  }
+  @media (max-width: 768px) {
+    padding: 0rem 3rem;
+  }
+  @media (max-width: 500px) {
+    padding: 0rem 2rem;
+  }
+
+  .title-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    @media (min-width: 768px) {
+      font-size: 3vw;
+    }
+    @media (max-width: 768px) {
+      font-size: 3vw;
+    }
+    @media (max-width: 500px) {
+      font-size: 14px;
+    }
+  }
+
+  .title-text {
+    margin: 0;
+    font-family: "Noto Sans KR", serif;
+    font-weight: 700;
+  }
+
+  .review-wrapper {
+    display: flex;
+
+    flex-wrap: wrap;
+    padding-bottom: 10rem;
+
+    @media (min-width: 1000px) {
+      margin-top: 2rem;
+      justify-content: space-around;
+    }
+    @media (max-width: 1000px) {
+      margin-top: 1.5rem;
+      justify-content: space-around;
+    }
+    @media (max-width: 620px) {
+      justify-content: center;
+      margin-top: 1rem;
+    }
+  }
+
+  .no-review {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media (min-width: 768px) {
+      height: 25rem;
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) {
+      height: 20rem;
+      font-size: 0.8rem;
+    }
+    @media (max-width: 500px) {
+      height: 15rem;
+      font-size: 0.6rem;
+    }
+  }
+`;
+
+export const SingleReview = styled(motion.div)`
+  background-color: rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease-in-out;
+  height: 14rem;
+  overflow: hidden;
+  border: 1.5px solid ${Common.colors.white01};
+  font-family: "Noto Sans KR", serif;
+
+  @media (min-width: 1000px) {
+    width: 22rem;
+    margin: 1rem 0.5rem;
+    border-radius: 2.5rem;
+    padding: 1.8rem;
+  }
+  @media (max-width: 1000px) {
+    width: 40%;
+    margin: 1rem 0rem;
+    border-radius: 2rem;
+    padding: 1.5rem;
+  }
+  @media (max-width: 620px) {
+    width: 95%;
+    border-radius: 2rem;
+    margin: 0.5rem 0rem;
+    padding: 1.5rem;
+  }
+
+  .profile-wrapper {
+    display: flex;
+  }
+
+  .profile-img-wrapper {
+    border-radius: 70%;
+    overflow: hidden;
+
+    @media (min-width: 1000px) {
+      width: 4rem;
+      height: 4rem;
+    }
+    @media (max-width: 1000px) {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+    @media (max-width: 620px) {
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+
+  .profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .star-wrapper {
+    display: flex;
+  }
+
+  .profile-content-wrapper {
+    margin: 0rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+
+  .user-name {
+    margin: 0;
+    font-weight: 700;
+
+    @media (min-width: 620px) {
+      font-size: 1rem;
+    }
+    @media (max-width: 620px) {
+      font-size: 0.8rem;
+    }
+  }
+
+  .review-title {
+    font-weight: 700;
+
+    @media (min-width: 620px) {
+      font-size: 1rem;
+      margin: 0.5rem 0rem;
+    }
+    @media (max-width: 620px) {
+      font-size: 0.8rem;
+      margin: 0.5rem 0rem;
+    }
+  }
+
+  .review-content {
+    margin: 0;
+
+    @media (min-width: 620px) {
+      line-height: 1.3rem;
+      font-size: 0.8rem;
+    }
+    @media (max-width: 620px) {
+      line-height: 1rem;
+      font-size: 0.6rem;
+    }
+  }
+`;
+
+export const FaStar = styled.div`
+  color: ${(props) => (props.active === "true" ? "#F0C322" : "#515151")};
+
+  @media (min-width: 620px) {
+    font-size: 0.8rem;
+  }
+  @media (max-width: 620px) {
+    font-size: 0.6rem;
+  }
+`;
+
+export const ChatBtn = styled(motion.div)`
+  position: fixed;
+  z-index: 99;
+  background-color: ${Common.colors.mainColor04};
+  border-radius: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${Common.colors.white01};
+  cursor: pointer;
+
+  @media (min-width: 768px) {
+    border: 2px solid ${Common.colors.white01};
+    width: 5rem;
+    height: 5rem;
+    bottom: 3rem;
+    right: 3rem;
+    font-size: 2rem;
+  }
+  @media (max-width: 768px) {
+    border: 2px solid ${Common.colors.white01};
+    width: 4.5rem;
+    height: 4.5rem;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    font-size: 1.8rem;
+  }
+  @media (max-width: 500px) {
+    border: 1.5px solid ${Common.colors.white01};
+    width: 4rem;
+    height: 4rem;
+    bottom: 2rem;
+    right: 2rem;
+    font-size: 1.5rem;
   }
 `;
