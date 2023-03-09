@@ -1,6 +1,5 @@
-package com.gamemakase.global.util;
+package com.gamemakase.global.config.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -9,17 +8,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 
-public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+@Component
+public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-  private final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationEntryPoint.class);
+  private final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
 
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response,
       AuthenticationException authException) throws IOException, ServletException {
 
-    ObjectMapper objectMapper = new ObjectMapper();
-    LOGGER.info("[commence] 인증 실패로 response.sendError 발생");
+    logger.info("인증 실패");
 
     response.setStatus(401);
     response.setContentType("application/json");
