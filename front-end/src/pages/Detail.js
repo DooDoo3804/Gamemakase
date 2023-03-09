@@ -1,5 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { DetailWrapper, RecommendUsers } from "../styles/DetailEmotion";
+import {
+  DetailWrapper,
+  RecommendUsers,
+  ReviewWrapper,
+} from "../styles/DetailEmotion";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
@@ -13,6 +17,9 @@ import scrap_img from "../assets/scrap_img.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faRegularStar } from "@fortawesome/free-regular-svg-icons";
+
+import { motion } from "framer-motion";
+import TranslucentBtn from "../components/TranslucentBtn";
 
 const Detail = () => {
   const navigate = useNavigate();
@@ -189,10 +196,18 @@ const Detail = () => {
         >
           <div className="detail-main">
             <div className="main-wrapper">
-              <div className="title-wrapper">
+              <motion.div
+                className="title-wrapper"
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{
+                  opacity: 1,
+                  x: 0,
+                  transition: { delay: 0.1 },
+                }}
+              >
                 <p className="title">{gameData.gameName}</p>
                 <p className="discription">{gameData.gameDescription}</p>
-              </div>
+              </motion.div>
               {/* 로그인했을 때 노출 */}
               <div className="scrap-wrapper">
                 {gameData.isLiked ? (
@@ -204,7 +219,15 @@ const Detail = () => {
             </div>
           </div>
           <div className="detail-sub">
-            <div className="info-wrapper">
+            <motion.div
+              className="info-wrapper"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+                transition: { delay: 0.7 },
+              }}
+            >
               <span className="single-info">
                 <p className="info-title">Preference</p>
                 <p className="info-content">{gameData.gamePrice + "%"}</p>
@@ -217,7 +240,7 @@ const Detail = () => {
                 <p className="info-title">Genres</p>
                 <p className="info-content">{renderGenres()}</p>
               </span>
-            </div>
+            </motion.div>
             <div className="scrennshots-wrapper">
               <p className="screenshot-text">스크린샷</p>
               <Swiper
@@ -234,9 +257,23 @@ const Detail = () => {
           <div className="gradient"></div>
           <RecommendUsers>
             <p className="title-text">이 게임을 좋아하는 유저</p>
-            <div className="users-wrapper">{renderUsers()}</div>
+            <motion.div
+              className="users-wrapper"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+                transition: { delay: 0.1 },
+              }}
+            >
+              {renderUsers()}
+            </motion.div>
             <div className="gradient"></div>
           </RecommendUsers>
+          <ReviewWrapper>
+            <p className="title-text">리뷰</p>
+            <TranslucentBtn text="히히"></TranslucentBtn>
+          </ReviewWrapper>
         </DetailWrapper>
       ) : (
         // CSS 수정 필요함

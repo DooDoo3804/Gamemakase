@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { motion } from "framer-motion";
 import { Common } from "./Common";
 
 export const DetailWrapper = styled.div`
@@ -315,10 +316,20 @@ export const RecommendUsers = styled.div`
   }
 
   .single-user {
-    margin: 0rem 3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: all 0.5s ease-in-out;
+
+    @media (min-width: 768px) {
+      margin: 0rem 3rem;
+    }
+    @media (max-width: 768px) {
+      margin: 0rem 2rem;
+    }
+    @media (max-width: 500px) {
+      margin: 0rem 0.5rem;
+    }
   }
 
   .profile-wrapper {
@@ -328,16 +339,16 @@ export const RecommendUsers = styled.div`
     cursor: pointer;
 
     @media (min-width: 768px) {
-      width: 8rem;
-      height: 8rem;
+      width: 7rem;
+      height: 7rem;
     }
     @media (max-width: 768px) {
-      width: 6rem;
-      height: 6rem;
+      width: 5rem;
+      height: 5rem;
     }
     @media (max-width: 500px) {
-      width: 4rem;
-      height: 4rem;
+      width: 3rem;
+      height: 3rem;
     }
   }
 
@@ -375,6 +386,27 @@ export const RecommendUsers = styled.div`
     }
     @media (max-width: 500px) {
       height: 3rem;
+    }
+  }
+`;
+
+export const ReviewWrapper = styled(motion.div)`
+  .title-text {
+    margin: 0;
+    font-family: "Noto Sans KR", serif;
+    font-weight: 700;
+
+    @media (min-width: 768px) {
+      padding: 0rem 4rem;
+      font-size: 3vw;
+    }
+    @media (max-width: 768px) {
+      padding: 0rem 3rem;
+      font-size: 3vw;
+    }
+    @media (max-width: 500px) {
+      padding: 0rem 2rem;
+      font-size: 14px;
     }
   }
 `;
