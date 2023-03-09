@@ -38,7 +38,10 @@ const TranslucentBtnEmotion = styled.div`
 
     transition: font-size 0.3s ease-in-out;
 
-    @media (min-width: 500px) {
+    @media (min-width: 768px) {
+      font-size: 1.05rem;
+    }
+    @media (max-width: 768px) {
       font-size: 0.85rem;
     }
     @media (max-width: 500px) {
