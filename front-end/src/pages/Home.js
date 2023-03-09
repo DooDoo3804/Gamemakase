@@ -12,6 +12,7 @@ import {
 } from "../styles/HomeEmotion";
 import banner_img from "../assets/banner_img.json";
 import banner_img2 from "../assets/banner_img2.json";
+import banner_plate from "../assets/banner_plate.svg";
 
 // Import Swiper styles
 import "swiper/css";
@@ -25,6 +26,39 @@ const Home = () => {
   const [ref, inView] = useInView();
 
   // 임시 데이터
+  const todayGames = [
+    {
+      gameId: 1,
+      gameName: "Stray",
+      gameImage:
+        "https://cdn.akamai.steamstatic.com/steam/apps/1332010/header_292x136.jpg?t=1670349423",
+    },
+    {
+      gameId: 2,
+      gameName: "Cult of the Lamb",
+      gameImage:
+        "https://cdn.akamai.steamstatic.com/steam/apps/1313140/header_292x136.jpg?t=1674826230",
+    },
+    {
+      gameId: 3,
+      gameName: "Help Me!",
+      gameImage:
+        "https://cdn.akamai.steamstatic.com/steam/apps/1557780/header_292x136_koreana.jpg?t=1640234732",
+    },
+    {
+      gameId: 4,
+      gameName: "Call of Duty",
+      gameImage:
+        "https://cdn.akamai.steamstatic.com/steam/apps/1767320/header_292x136_koreana.jpg?t=1642579277",
+    },
+    {
+      gameId: 5,
+      gameName: "The Past Within",
+      gameImage:
+        "https://cdn.akamai.steamstatic.com/steam/apps/1515210/header_292x136.jpg?t=1676931955",
+    },
+  ];
+
   const recommendGames = [
     {
       gameId: 1,
@@ -142,6 +176,25 @@ const Home = () => {
     },
   };
 
+  const renderTodayGames = () => {
+    const result = [];
+
+    for (let i = 0; i < todayGames.length; i++) {
+      result.push(
+        <div key={i} className="single-game">
+          <img
+            src={todayGames[i].gameImage}
+            alt="game_img"
+            className="game-img"
+          />
+          <img src={banner_plate} alt="plate" className="plate" />
+        </div>
+      );
+    }
+
+    return result;
+  };
+
   const renderGames = (games) => {
     const result = [];
 
@@ -183,7 +236,7 @@ const Home = () => {
         slidesPerView={1}
         navigation
         pagination={{ clickable: true }}
-        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        // autoplay={{ delay: 4000, disableOnInteraction: false }}
         // onSwiper={(swiper) => console.log(swiper)}
         // onSlideChange={() => console.log("slide change")}
       >
@@ -193,6 +246,9 @@ const Home = () => {
               <div className="text-wrapper">
                 <p className="subtitle">겜마카세가 추천하는,</p>
                 <p className="title">오늘의 게임 5선</p>
+              </div>
+              <div className="games-wrapper">
+                {todayGames ? renderTodayGames() : null}
               </div>
             </div>
           </Banner>
