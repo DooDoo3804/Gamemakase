@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import ScrollToTop from "./components/ScrollToTop";
 
 import MainHeader from "./components/MainHeader";
 
@@ -18,6 +19,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <ScrollToTop />
         <MainHeader></MainHeader>
         <Routes>
           <Route path="/" element={<Home />} />

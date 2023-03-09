@@ -497,6 +497,7 @@ export const SingleReview = styled(motion.div)`
   .profile-img-wrapper {
     border-radius: 70%;
     overflow: hidden;
+    cursor: pointer;
 
     @media (min-width: 1000px) {
       width: 4rem;
