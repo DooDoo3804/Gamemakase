@@ -164,7 +164,7 @@ const Detail = () => {
     if (recommendedUsers) {
       for (let i = 0; i < recommendedUsers.length; i++) {
         result.push(
-          <div className="single-user">
+          <div className="single-user" key={recommendedUsers[i].userId}>
             <div
               className="profile-wrapper"
               onClick={() => navigate(`/profile/${recommendedUsers[i].userId}`)}
