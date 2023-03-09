@@ -578,3 +578,40 @@ export const FaStar = styled.div`
     font-size: 0.6rem;
   }
 `;
+
+export const ChatBtn = styled(motion.div)`
+  position: fixed;
+  z-index: 99;
+  background-color: ${Common.colors.mainColor04};
+  border-radius: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${Common.colors.white01};
+  cursor: pointer;
+
+  @media (min-width: 768px) {
+    border: 2px solid ${Common.colors.white01};
+    width: 5rem;
+    height: 5rem;
+    bottom: 3rem;
+    right: 3rem;
+    font-size: 2rem;
+  }
+  @media (max-width: 768px) {
+    border: 2px solid ${Common.colors.white01};
+    width: 4.5rem;
+    height: 4.5rem;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    font-size: 1.8rem;
+  }
+  @media (max-width: 500px) {
+    border: 1.5px solid ${Common.colors.white01};
+    width: 4rem;
+    height: 4rem;
+    bottom: 2rem;
+    right: 2rem;
+    font-size: 1.5rem;
+  }
+`;

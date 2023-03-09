@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import {
+  ChatBtn,
   DetailWrapper,
   FaStar,
   RecommendUsers,
@@ -18,7 +19,10 @@ import "swiper/css/pagination";
 import scrap_img from "../assets/scrap_img.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { faStar as faRegularStar } from "@fortawesome/free-regular-svg-icons";
+import {
+  faCommentDots,
+  faStar as faRegularStar,
+} from "@fortawesome/free-regular-svg-icons";
 
 import { motion } from "framer-motion";
 import TranslucentBtn from "../components/TranslucentBtn";
@@ -401,6 +405,9 @@ const Detail = () => {
         // CSS 수정 필요함
         <DetailWrapper>존재하지 않는 게임입니다.</DetailWrapper>
       )}
+      <ChatBtn>
+        <FontAwesomeIcon icon={faCommentDots} />
+      </ChatBtn>
     </div>
   );
 };
