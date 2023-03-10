@@ -219,7 +219,14 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
             }
           }}
         >
-          <ReviewModalBody>
+          <ReviewModalBody
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+              transition: {},
+            }}
+          >
             <div className="icon-container">
               <FontAwesomeIcon
                 icon={faXmark}
