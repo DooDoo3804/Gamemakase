@@ -8,7 +8,7 @@ export const DetailWrapper = styled.div`
   .detail-main {
     display: flex;
     margin-top: -3.9rem;
-    width: 100vw;
+    width: 100%;
     height: 56vw;
     background-image: linear-gradient(
         to bottom,

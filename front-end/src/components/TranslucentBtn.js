@@ -50,8 +50,12 @@ const TranslucentBtnEmotion = styled.div`
   }
 `;
 
-const TranslucentBtn = ({ text }) => {
-  return <TranslucentBtnEmotion>{text}</TranslucentBtnEmotion>;
+const TranslucentBtn = ({ text, onClick }) => {
+  return (
+    <TranslucentBtnEmotion onClick={() => onClick()}>
+      {text}
+    </TranslucentBtnEmotion>
+  );
 };
 
 export default TranslucentBtn;
