@@ -214,17 +214,31 @@ export const ProfileMainStatistics = styled.div`
       font-size: 12px;
     }
   }
+
+    .no-data-msg {
+    color : ${Common.colors.white01};
+    font-size: 24px;
+    font-family: "Noto Sans KR";
+  }
 `;
 
 export const ProfileScrapBook = styled.div`
   position: relative;
-  left: 10%;
+  margin-left: 10%;
   width: 80%;
 
   .box {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    padding-bottom: 30px;
+  }
+  padding-bottom: 50px;
+
+  .no-data-msg {
+    color : ${Common.colors.white01};
+    font-size: 24px;
+    font-family: "Noto Sans KR";
   }
 `;
 
