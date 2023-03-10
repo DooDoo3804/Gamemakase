@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ReviewModal from "../components/ReviewModal";
 import {
   ChatBtn,
   DetailWrapper,
@@ -29,6 +31,8 @@ import TranslucentBtn from "../components/TranslucentBtn";
 
 const Detail = () => {
   const navigate = useNavigate();
+  const [modalView, setModalView] = useState(true);
+
   // 임시 데이터
   const gameData = {
     gameId: 1,
@@ -312,6 +316,11 @@ const Detail = () => {
           scrap_src={scrap_img}
           img_len={gameData.images.length}
         >
+          <ReviewModal
+            gameData={gameData}
+            modalView={modalView}
+            setModalView={setModalView}
+          ></ReviewModal>
           <div className="detail-main">
             <div className="main-wrapper">
               <motion.div
