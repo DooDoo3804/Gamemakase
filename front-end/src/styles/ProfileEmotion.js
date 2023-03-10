@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Common } from "../styles/Common";
+import { motion } from "framer-motion";
 
 export const ProfileBackgroundWrapper = styled.div`
   position: absolute;
@@ -215,8 +216,8 @@ export const ProfileMainStatistics = styled.div`
     }
   }
 
-    .no-data-msg {
-    color : ${Common.colors.white01};
+  .no-data-msg {
+    color: ${Common.colors.white01};
     font-size: 24px;
     font-family: "Noto Sans KR";
   }
@@ -236,14 +237,183 @@ export const ProfileScrapBook = styled.div`
   padding-bottom: 50px;
 
   .no-data-msg {
-    color : ${Common.colors.white01};
+    color: ${Common.colors.white01};
     font-size: 24px;
     font-family: "Noto Sans KR";
   }
 `;
 
-export const ProfileReviewsSection = styled.div`
+export const ProfileReviewsWrapper = styled.div`
+  margin-left: 10%;
+  margin-right: 10%;
   .review-header {
     color: ${Common.colors.white01};
+  }
+
+  .title-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    @media (min-width: 768px) {
+      font-size: 3vw;
+    }
+    @media (max-width: 768px) {
+      font-size: 3vw;
+    }
+    @media (max-width: 500px) {
+      font-size: 14px;
+    }
+  }
+
+  .title-text {
+    margin: 0;
+    font-family: "Noto Sans KR", serif;
+    font-weight: 700;
+  }
+
+  .review-wrapper {
+    display: flex;
+
+    flex-wrap: wrap;
+    padding-bottom: 10rem;
+
+    @media (min-width: 1000px) {
+      margin-top: 2rem;
+      justify-content: space-between;
+    }
+    @media (max-width: 1000px) {
+      margin-top: 1.5rem;
+      justify-content: space-between;
+    }
+    @media (max-width: 620px) {
+      justify-content: center;
+      margin-top: 1rem;
+    }
+  }
+
+  .no-review {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media (min-width: 768px) {
+      height: 25rem;
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) {
+      height: 20rem;
+      font-size: 0.8rem;
+    }
+    @media (max-width: 500px) {
+      height: 15rem;
+      font-size: 0.6rem;
+    }
+  }
+`;
+
+
+export const SingleReview = styled(motion.div)`
+  background-color: rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease-in-out;
+  height: 14rem;
+  overflow: hidden;
+  border: 1.5px solid ${Common.colors.white01};
+  font-family: "Noto Sans KR", serif;
+
+  @media (min-width: 1000px) {
+    width: 22rem;
+    margin: 1rem 0.5rem;
+    border-radius: 2.5rem;
+    padding: 1.8rem;
+  }
+  @media (max-width: 1000px) {
+    width: 40%;
+    margin: 1rem 0rem;
+    border-radius: 2rem;
+    padding: 1.5rem;
+  }
+  @media (max-width: 620px) {
+    width: 95%;
+    border-radius: 2rem;
+    margin: 0.5rem 0rem;
+    padding: 1.5rem;
+  }
+
+  .game-wrapper {
+    display: flex;
+  }
+
+  .game-img-wrapper {
+    overflow: hidden;
+    cursor: pointer;
+
+    @media (min-width: 1000px) {
+      width: auto;
+      height: 4rem;
+    }
+    @media (max-width: 1000px) {
+      width: auto;
+      height: 3.5rem;
+    }
+    @media (max-width: 620px) {
+      width: auto;
+      height: 3rem;
+    }
+  }
+
+  .game-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .star-wrapper {
+    display: flex;
+  }
+
+  .game-content-wrapper {
+    margin: 0rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+
+  .game-title {
+    margin: 0;
+    font-weight: 700;
+
+    @media (min-width: 620px) {
+      font-size: 1rem;
+    }
+    @media (max-width: 620px) {
+      font-size: 0.8rem;
+    }
+  }
+
+  .review-title {
+    font-weight: 700;
+
+    @media (min-width: 620px) {
+      font-size: 1rem;
+      margin: 0.5rem 0rem;
+    }
+    @media (max-width: 620px) {
+      font-size: 0.8rem;
+      margin: 0.5rem 0rem;
+    }
+  }
+
+  .review-content {
+    margin: 0;
+
+    @media (min-width: 620px) {
+      line-height: 1.3rem;
+      font-size: 0.8rem;
+    }
+    @media (max-width: 620px) {
+      line-height: 1rem;
+      font-size: 0.6rem;
+    }
   }
 `;

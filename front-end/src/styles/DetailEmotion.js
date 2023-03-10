@@ -494,10 +494,6 @@ export const SingleReview = styled(motion.div)`
     display: flex;
   }
 
-  .game-wrapper {
-    display: flex;
-  }
-
   .profile-img-wrapper {
     border-radius: 70%;
     overflow: hidden;
@@ -517,31 +513,7 @@ export const SingleReview = styled(motion.div)`
     }
   }
 
-  .game-img-wrapper {
-    overflow: hidden;
-    cursor: pointer;
-
-    @media (min-width: 1000px) {
-      width: auto;
-      height: 4rem;
-    }
-    @media (max-width: 1000px) {
-      width: auto;
-      height: 3.5rem;
-    }
-    @media (max-width: 620px) {
-      width: auto;
-      height: 3rem;
-    }
-  }
-
   .profile-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .game-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -558,26 +530,7 @@ export const SingleReview = styled(motion.div)`
     justify-content: space-evenly;
   }
 
-  .game-content-wrapper {
-    margin: 0rem 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-  }
-
   .user-name {
-    margin: 0;
-    font-weight: 700;
-
-    @media (min-width: 620px) {
-      font-size: 1rem;
-    }
-    @media (max-width: 620px) {
-      font-size: 0.8rem;
-    }
-  }
-
-  .game-title {
     margin: 0;
     font-weight: 700;
 
