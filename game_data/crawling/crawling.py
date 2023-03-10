@@ -8,13 +8,17 @@ base_url = "https://store.steampowered.com/appreviews/"
 total_game_data = []
 tc = 1
 info = []
-with open(".\\exceptions.json", 'r', encoding='UTF-8') as f:
+no_reviews = []
+with open("final\\exceptions.json", 'r', encoding='UTF-8') as f:
     raw_data = json.load(f)
 for data in raw_data:
     # 각 게임 데이터
     each_game_data = []
     c = 0
     game_id = data["fields"]["gameid"]
+
+    # if game_id == "1015730":
+    #     break
 
     # 게임 아이디로 폴더 없으면 생성
     if not os.path.exists(f"crawling\\{game_id}"):
@@ -23,14 +27,20 @@ for data in raw_data:
     params_id = f"{game_id}/"
     params_cursor = "*"
     max_reviews = 0
+    page_count = 0
 
     while True:
 
-        nuns = 0
         # API 호출
-        requestData = requests.get(
-            f"{base_url}"+f"{params_id}"+"?json=1&num_per_page=100&filter=recent&cursor="+f"{params_cursor}").json()
+        try:
+            requestData = requests.get(
+                f"{base_url}"+f"{params_id}"+"?json=1&num_per_page=100&filter=recent&cursor="+f"{params_cursor}").json()
+        except:
+            print(
+                f"{base_url}"+f"{params_id}"+"?json=1&num_per_page=100&filter=recent&cursor="+f"{params_cursor}")
+
         nums = requestData["query_summary"]["num_reviews"]
+
         if params_cursor == "*":
             max_reviews = requestData["query_summary"]["total_reviews"]
         # 다음 커서 만들기
@@ -43,7 +53,11 @@ for data in raw_data:
                 params_cursor += char
 
         for r in requestData["reviews"]:
+            # 리뷰 20개 미만 컷
             c += 1
+            if r["author"]["num_reviews"] < 20:
+                continue
+
             review_field = {
                 "gameid": game_id,
                 "steamid": r["author"]["steamid"],
@@ -56,18 +70,26 @@ for data in raw_data:
             }
             each_game_data.append(review_data)
             total_game_data.append(review_data)
-            print(c)
+            print(c, end="\r")
+
+        # 리뷰 없는 게임
+        if max_reviews == 0:
+            no_reviews.append({
+                "id": game_id,
+            })
 
         # 100개 단위인데 내용물이 100개가 안된다면 마지막페이지이므로 종료
-
-        if c >= max_reviews-5:
+        if c >= max_reviews-10:
             break
 
+        if page_count == 10:
+            break
+        page_count += 1
     info.append([game_id, c])
     print(f"{game_id} : {c}개")
 
     # 각 게임의 리뷰 데이터
-    with open(f"crawling\\{game_id}\\each_game_reviews.json", 'w', encoding="UTF-8") as make_file:
+    with open(f"crawling\\{game_id}\\{game_id}.json", 'w', encoding="UTF-8") as make_file:
         json.dump(each_game_data, make_file,
                   ensure_ascii=False, indent="\t")
 
@@ -78,4 +100,9 @@ with open("crawling\\total_game_reviews.json", 'w', encoding="UTF-8") as make_fi
 
 with open("crawling\\info.json", 'w', encoding="UTF-8") as make_file:
     json.dump(info, make_file,
+              ensure_ascii=False, indent="\t")
+
+# 없는 리뷰 목록
+with open("crawling\\no_reviews.json", 'w', encoding="UTF-8") as make_file:
+    json.dump(no_reviews, make_file,
               ensure_ascii=False, indent="\t")
