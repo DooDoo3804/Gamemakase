@@ -315,7 +315,6 @@ const Detail = () => {
   const handleOpen = () => {
     setScrollPosition(lockScroll());
     setModalView(true);
-    console.log(scrollPosition);
   };
 
   return (
