@@ -363,7 +363,7 @@ const Detail = () => {
               <p className="screenshot-text">스크린샷</p>
               <Swiper
                 modules={[Navigation, Pagination]}
-                spaceBetween={50}
+                spaceBetween={20}
                 slidesPerView={2}
                 navigation
                 pagination={{ clickable: true }}
