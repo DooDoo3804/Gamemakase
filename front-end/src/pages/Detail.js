@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ReviewModal from "../components/ReviewModal";
 import {
   ChatBtn,
   DetailWrapper,
@@ -26,9 +28,15 @@ import {
 
 import { motion } from "framer-motion";
 import TranslucentBtn from "../components/TranslucentBtn";
+import useBodyScrollLock from "../components/ScrollLock";
 
 const Detail = () => {
   const navigate = useNavigate();
+  const [modalView, setModalView] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const { lockScroll } = useBodyScrollLock();
+
   // 임시 데이터
   const gameData = {
     gameId: 1,
@@ -304,6 +312,11 @@ const Detail = () => {
     return result;
   };
 
+  const handleOpen = () => {
+    setScrollPosition(lockScroll());
+    setModalView(true);
+  };
+
   return (
     <div>
       {gameData ? (
@@ -312,6 +325,12 @@ const Detail = () => {
           scrap_src={scrap_img}
           img_len={gameData.images.length}
         >
+          <ReviewModal
+            gameData={gameData}
+            modalView={modalView}
+            setModalView={setModalView}
+            scrollPosition={scrollPosition}
+          ></ReviewModal>
           <div className="detail-main">
             <div className="main-wrapper">
               <motion.div
@@ -392,7 +411,10 @@ const Detail = () => {
             <div className="title-wrapper">
               <p className="title-text">리뷰</p>
               {/* 로그인했을 때만 노출 */}
-              <TranslucentBtn text="작성하기"></TranslucentBtn>
+              <TranslucentBtn
+                text="작성하기"
+                onClick={() => handleOpen()}
+              ></TranslucentBtn>
             </div>
             {reviewData ? (
               // 리뷰 내용 많을 때 처리해야 함
