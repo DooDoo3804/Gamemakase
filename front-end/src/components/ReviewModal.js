@@ -1,10 +1,11 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import styled from "@emotion/styled";
 import { motion } from "framer-motion";
 import { Common } from "../styles/Common";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faXmark } from "@fortawesome/free-solid-svg-icons";
 import TranslucentBtn from "./TranslucentBtn";
+import useBodyScrollLock from "./ScrollLock";
 
 const ReviewModalWrapper = styled.div`
   z-index: 999;
@@ -61,8 +62,14 @@ const ReviewModalBody = styled(motion.div)`
   }
 `;
 
-const ReviewModal = ({ gameData, modalView, setModalView }) => {
+const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
   const outSection = useRef();
+  const { openScroll } = useBodyScrollLock();
+
+  const handleClose = () => {
+    openScroll(scrollPosition);
+    setModalView(false);
+  };
 
   return (
     <>
@@ -71,7 +78,7 @@ const ReviewModal = ({ gameData, modalView, setModalView }) => {
           ref={outSection}
           onClick={(e) => {
             if (outSection.current === e.target) {
-              setModalView(false);
+              handleClose();
             }
           }}
         >
@@ -86,7 +93,7 @@ const ReviewModal = ({ gameData, modalView, setModalView }) => {
             <div className="review-content"></div>
             <TranslucentBtn
               text={"작성하기"}
-              onClick={() => setModalView(false)}
+              onClick={() => handleClose()}
             ></TranslucentBtn>
           </ReviewModalBody>
         </ReviewModalWrapper>
