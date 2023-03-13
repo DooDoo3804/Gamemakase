@@ -28,9 +28,11 @@ const Sidebar = ({ gameData, sideView, setSideView }) => {
             initial={{ x: "-75%" }}
             animate={{
               x: 0,
+              opacity: 1,
             }}
             exit={{
               x: "-75%",
+              opacity: 0,
             }}
             transition={{ type: "spring", bounce: 0, duration: 0.4 }}
           >
@@ -94,12 +96,19 @@ const Sidebar = ({ gameData, sideView, setSideView }) => {
 const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
   const [sideView, setSideView] = useState(false);
   const outSection = useRef();
+  const message = useRef(null);
 
   const { openScroll } = useBodyScrollLock();
 
   const handleClose = () => {
     openScroll(scrollPosition);
     setChatView(false);
+    message.current = null;
+  };
+
+  const handleChange = (e) => {
+    message.current = e.target.value;
+    // console.log(message.current);
   };
 
   return (
@@ -130,22 +139,28 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
                 sideView={sideView}
                 setSideView={setSideView}
               ></Sidebar>
-              <SmallSidebar>
-                <FontAwesomeIcon
-                  icon={faBars}
-                  onClick={() => setSideView((sideView) => !sideView)}
-                  className="menubar"
-                />
-              </SmallSidebar>
+
               <ChatRoomBody>
-                <FontAwesomeIcon
-                  icon={faXmark}
-                  className="x-mark"
-                  onClick={() => handleClose()}
-                />
-                <div className="chat-logs">냐냥</div>
+                <SmallSidebar>
+                  <FontAwesomeIcon
+                    icon={faBars}
+                    onClick={() => setSideView((sideView) => !sideView)}
+                    className="menubar"
+                  />
+                  <FontAwesomeIcon
+                    icon={faXmark}
+                    className="x-mark"
+                    onClick={() => handleClose()}
+                  />
+                </SmallSidebar>
+                <div className="chat-logs"></div>
+                {/* todo : 메시지바는 로그인했을 때만 노출 */}
                 <div className="messagebar-wrapper">
-                  <input type="text" />
+                  <input
+                    type="text"
+                    placeholder="Type your message..."
+                    onChange={handleChange}
+                  />
                   <div className="send-btn">
                     <FontAwesomeIcon icon={faPaperPlane} />
                   </div>

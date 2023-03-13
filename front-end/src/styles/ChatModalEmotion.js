@@ -18,7 +18,6 @@ export const ChatModalWrapper = styled(motion.div)`
 
 export const ChatModalBody = styled(motion.div)`
   display: flex;
-
   align-items: center;
   height: 80%;
   min-height: 30rem;
@@ -44,7 +43,7 @@ export const ChatModalBody = styled(motion.div)`
     border-radius: 1.5rem;
   }
   @media (max-width: 500px) {
-    width: 85%;
+    width: 95%;
     height: 90%;
     max-height: 52rem;
     border-radius: 1rem;
@@ -52,25 +51,62 @@ export const ChatModalBody = styled(motion.div)`
 `;
 
 export const SmallSidebar = styled.div`
+  width: 100%;
   background-color: ${Common.colors.mainColor01};
-  border-right: 2px solid ${Common.colors.white01};
-
-  height: 100%;
+  border-bottom: 2px solid ${Common.colors.white01};
+  display: flex;
+  justify-content: space-between;
+  z-index: 98;
 
   .menubar {
     cursor: pointer;
-    padding: 1.5rem;
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      padding: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      padding: 1rem;
+    }
+    @media (max-width: 500px) {
+      padding: 1rem;
+    }
+  }
+
+  .x-mark {
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      padding: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      padding: 1rem;
+    }
+    @media (max-width: 500px) {
+      padding: 1rem;
+    }
+  }
+
+  @media (min-width: 768px) {
     font-size: 2rem;
+  }
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+  @media (max-width: 500px) {
+    font-size: 1.2rem;
   }
 `;
 
 export const SideBarBody = styled(motion.div)`
   position: absolute;
+  z-index: 99;
   display: flex;
   flex-direction: column;
   background-color: ${Common.colors.mainColor01};
   border-right: 2px solid ${Common.colors.white01};
-  width: 20rem;
+  width: 18rem;
   height: 100%;
 
   .channel-title-wrapper {
@@ -81,13 +117,23 @@ export const SideBarBody = styled(motion.div)`
   .menubar-wrapper {
     display: flex;
     justify-content: end;
-    padding: 1.5rem;
-
-    font-size: 2rem;
   }
 
   .menubar {
     cursor: pointer;
+
+    @media (min-width: 768px) {
+      font-size: 2rem;
+      padding: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+      padding: 1rem;
+    }
+    @media (max-width: 500px) {
+      font-size: 1.2rem;
+      padding: 1rem;
+    }
   }
 
   .channel-name-wrapper {
@@ -136,15 +182,6 @@ export const ChatRoomBody = styled.div`
     rgba(55, 51, 77, 1)
   );
 
-  .x-mark {
-    position: absolute;
-    cursor: pointer;
-    padding: 1rem;
-    font-size: 2rem;
-    top: 0.5rem;
-    right: 1rem;
-  }
-
   .chat-logs {
     height: 100%;
   }
@@ -152,25 +189,64 @@ export const ChatRoomBody = styled.div`
   .messagebar-wrapper {
     position: absolute;
     width: 100%;
-    bottom: 2rem;
     display: flex;
     justify-content: center;
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      bottom: 2rem;
+    }
+    @media (max-width: 768px) {
+      bottom: 2rem;
+    }
+    @media (max-width: 500px) {
+      bottom: 1rem;
+    }
 
     input {
-      width: 30rem;
-      height: 1.5rem;
-      margin: 0rem 0.5rem;
-      padding: 0.7rem 1rem;
       background: rgba(255, 255, 255, 0.2);
       border: 1.5px solid ${Common.colors.white01};
       border-radius: 2rem;
       color: ${Common.colors.white01};
       font-family: "Noto Sans KR", serif;
+      transition: all 0.3s ease-in-out;
+
+      @media (min-width: 768px) {
+        width: 30rem;
+        height: 1.5rem;
+        margin: 0rem 0.5rem;
+        margin-left: 0.5rem;
+        padding: 0.7rem 1rem;
+      }
+      @media (max-width: 768px) {
+        width: 25rem;
+        height: 1.5rem;
+        margin: 0rem 0.5rem;
+        margin-left: 1rem;
+        padding: 0.7rem 1rem;
+      }
+      @media (max-width: 500px) {
+        width: 30rem;
+        height: 1.5rem;
+        margin: 0rem;
+        margin-left: 0.5rem;
+        padding: 0.7rem 1rem;
+      }
     }
 
     input:focus {
       outline: none;
       border: 2px solid ${Common.colors.white01};
+    }
+
+    input::placeholder {
+      color: ${Common.colors.white01};
+    }
+    input::-webkit-input-placeholder {
+      color: ${Common.colors.white01};
+    }
+    input:-ms-input-placeholder {
+      color: ${Common.colors.white01};
     }
   }
 
@@ -178,13 +254,29 @@ export const ChatRoomBody = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0rem 0.5rem;
-    padding: 0.7rem 1.7rem;
     background-color: ${Common.colors.white01};
     border: 1.5px solid ${Common.colors.white01};
     border-radius: 2rem;
     color: ${Common.colors.mainColor02};
     font-size: 1.3rem;
     cursor: pointer;
+
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      font-size: 1.2rem;
+      margin: 0rem 0.5rem;
+      padding: 0.7rem 1.7rem;
+    }
+    @media (max-width: 768px) {
+      font-size: 1.2rem;
+      margin: 0rem 1rem;
+      padding: 0.7rem 1.7rem;
+    }
+    @media (max-width: 500px) {
+      font-size: 1rem;
+      margin: 0rem 0.5rem;
+      padding: 0.5rem 1rem;
+    }
   }
 `;
