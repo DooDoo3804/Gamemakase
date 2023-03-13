@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import TranslucentBtn from "./TranslucentBtn";
+import StarRating from "./StarRating";
 import useBodyScrollLock from "./ScrollLock";
 
 import {
@@ -11,6 +12,7 @@ import {
 
 const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
   const [contentLength, setContentLength] = useState(0);
+  const [rating, setRating] = useState(1);
   const outSection = useRef();
   const reviewContent = useRef(null);
 
@@ -21,6 +23,10 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
     setContentLength(0);
     openScroll(scrollPosition);
     setModalView(false);
+  };
+
+  const handleRating = (newValue) => {
+    setRating(newValue);
   };
 
   const onChange = (e) => {
@@ -57,13 +63,11 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
               />
             </div>
             <p className="game-title">{gameData.gameName}에 관한 리뷰 쓰기</p>
+
             <div className="game-title rating-container">
               {/* todo : 별점 기능 구현 */}
-              <FontAwesomeIcon icon={faStar} />
-              <FontAwesomeIcon icon={faStar} />
-              <FontAwesomeIcon icon={faStar} />
-              <FontAwesomeIcon icon={faStar} />
-              <FontAwesomeIcon icon={faStar} />
+              <StarRating handleRating={handleRating} />
+              {/* {StarRating()} */}
             </div>
             <div className="review-content-box">
               <textarea

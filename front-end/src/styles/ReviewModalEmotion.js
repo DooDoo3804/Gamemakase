@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import { Common } from "./Common";
 
@@ -178,6 +179,45 @@ export const ReviewModalBody = styled(motion.div)`
         font-family: "Sarpanch", serif;
         display: flex;
         margin: 0;
+      }
+    }
+  }
+
+  .star-rating {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center center;
+
+    .stars-container {
+      display: flex;
+      font-size: 3rem;
+      color: gold;
+
+      .star-wrapper {
+        position: relative;
+        width: 3.4rem;
+        margin: 0 1rem;
+        display: grid;
+        place-items: center center;
+
+        .star-background {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          height: 1.5rem;
+          width: 1.5rem;
+          border-radius: 50%;
+          background: #aaa;
+          cursor: pointer;
+        }
+
+        .star-icon {
+          position: relative;
+          z-index: 10;
+          cursor: pointer;
+        }
       }
     }
   }
