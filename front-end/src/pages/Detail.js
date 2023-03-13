@@ -339,6 +339,7 @@ const Detail = () => {
             scrollPosition={scrollPosition}
           ></ReviewModal>
           <ChatModal
+            gameData={gameData}
             chatView={chatView}
             setChatView={setChatView}
             scrollPosition={scrollPosition}
