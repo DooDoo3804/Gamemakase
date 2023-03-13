@@ -9,6 +9,7 @@ import {
   ReviewModalBody,
   ReviewModalWrapper,
 } from "../styles/ReviewModalEmotion";
+import { AnimatePresence } from "framer-motion";
 
 const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
   const [contentLength, setContentLength] = useState(0);
@@ -37,58 +38,63 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
 
   return (
     <>
-      {modalView ? (
-        <ReviewModalWrapper
-          ref={outSection}
-          onClick={(e) => {
-            if (outSection.current === e.target) {
-              handleClose();
-            }
-          }}
-          exit={{ opacity: 0 }}
-        >
-          <ReviewModalBody
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{
-              opacity: 1,
-              y: 0,
-              transition: {},
+      <AnimatePresence>
+        {modalView ? (
+          <ReviewModalWrapper
+            ref={outSection}
+            onClick={(e) => {
+              if (outSection.current === e.target) {
+                handleClose();
+              }
             }}
+            key="modal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <div className="icon-container">
-              <FontAwesomeIcon
-                icon={faXmark}
-                onClick={() => handleClose()}
-                className="x-mark"
-              />
-            </div>
-            <p className="game-title">{gameData.gameName}에 관한 리뷰 쓰기</p>
+            <ReviewModalBody
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+                transition: {},
+              }}
+            >
+              <div className="icon-container">
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  onClick={() => handleClose()}
+                  className="x-mark"
+                />
+              </div>
+              <p className="game-title">{gameData.gameName}에 관한 리뷰 쓰기</p>
 
-            <div className="game-title rating-container">
-              {/* todo : 별점 기능 구현 */}
-              <StarRating handleRating={handleRating} />
-              {/* {StarRating()} */}
-            </div>
-            <div className="review-content-box">
-              <textarea
-                className="review-content"
-                onChange={onChange}
-                maxLength={2000}
-              />
-              <div className="count-wrapper">
-                <div className="character-counter">
-                  {contentLength}
-                  /2000
+              <div className="game-title rating-container">
+                {/* todo : 별점 기능 구현 */}
+                <StarRating handleRating={handleRating} />
+                {/* {StarRating()} */}
+              </div>
+              <div className="review-content-box">
+                <textarea
+                  className="review-content"
+                  onChange={onChange}
+                  maxLength={2000}
+                />
+                <div className="count-wrapper">
+                  <div className="character-counter">
+                    {contentLength}
+                    /2000
+                  </div>
                 </div>
               </div>
-            </div>
-            <TranslucentBtn
-              text={"작성하기"}
-              onClick={() => handleClose()}
-            ></TranslucentBtn>
-          </ReviewModalBody>
-        </ReviewModalWrapper>
-      ) : null}
+              <TranslucentBtn
+                text={"작성하기"}
+                onClick={() => handleClose()}
+              ></TranslucentBtn>
+            </ReviewModalBody>
+          </ReviewModalWrapper>
+        ) : null}
+      </AnimatePresence>
     </>
   );
 };

@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import { Common } from "./Common";
 
-export const ReviewModalWrapper = styled.div`
+export const ReviewModalWrapper = styled(motion.div)`
   z-index: 999;
   position: fixed;
   top: 0;
