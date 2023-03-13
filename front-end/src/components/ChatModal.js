@@ -1,11 +1,17 @@
 import { useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { faBars, faHashtag } from "@fortawesome/free-solid-svg-icons";
+import { AnimatePresence } from "framer-motion";
+import {
+  faBars,
+  faHashtag,
+  faPaperPlane,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
   ChatModalBody,
   ChatModalWrapper,
+  ChatRoomBody,
   SideBarBody,
   SmallSidebar,
 } from "../styles/ChatModalEmotion";
@@ -64,7 +70,7 @@ const Sidebar = ({ gameData, sideView, setSideView }) => {
                 onClick={() => setSelected(2)}
               >
                 <FontAwesomeIcon icon={faHashtag} />
-                {"  "}일반
+                {"  "}정보공유
               </p>
               <p
                 className={
@@ -75,21 +81,10 @@ const Sidebar = ({ gameData, sideView, setSideView }) => {
                 onClick={() => setSelected(3)}
               >
                 <FontAwesomeIcon icon={faHashtag} />
-                {"  "}일반
+                {"  "}친구찾기
               </p>
             </div>
           </SideBarBody>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: 1,
-            }}
-            exit={{
-              opacity: 0,
-            }}
-            transition={{ type: "spring", bounce: 0, duration: 0.2 }}
-            onClick={() => setSideView((sideBar) => !sideBar)}
-          ></motion.div>
         </>
       ) : null}
     </AnimatePresence>
@@ -109,40 +104,57 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
 
   return (
     <>
-      {chatView && (
-        <ChatModalWrapper
-          ref={outSection}
-          onClick={(e) => {
-            if (outSection.current === e.target) {
-              handleClose();
-            }
-          }}
-        >
-          <ChatModalBody
-            key={1}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{
-              opacity: 1,
-              y: 0,
-              transition: {},
+      <AnimatePresence>
+        {chatView ? (
+          <ChatModalWrapper
+            ref={outSection}
+            onClick={(e) => {
+              if (outSection.current === e.target) {
+                handleClose();
+              }
             }}
-            exit={{ opacity: 0, y: 50 }}
+            exit={{ opacity: 0 }}
           >
-            <Sidebar
-              gameData={gameData}
-              sideView={sideView}
-              setSideView={setSideView}
-            ></Sidebar>
-            <SmallSidebar>
-              <FontAwesomeIcon
-                icon={faBars}
-                onClick={() => setSideView((sideView) => !sideView)}
-                className="menubar"
-              />
-            </SmallSidebar>
-          </ChatModalBody>
-        </ChatModalWrapper>
-      )}
+            <ChatModalBody
+              key={1}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                transition: {},
+              }}
+              exit={{ opacity: 0, y: 50 }}
+            >
+              <Sidebar
+                gameData={gameData}
+                sideView={sideView}
+                setSideView={setSideView}
+              ></Sidebar>
+              <SmallSidebar>
+                <FontAwesomeIcon
+                  icon={faBars}
+                  onClick={() => setSideView((sideView) => !sideView)}
+                  className="menubar"
+                />
+              </SmallSidebar>
+              <ChatRoomBody>
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  className="x-mark"
+                  onClick={() => handleClose()}
+                />
+                <div className="chat-logs">냐냥</div>
+                <div className="messagebar-wrapper">
+                  <input type="text" />
+                  <div className="send-btn">
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                  </div>
+                </div>
+              </ChatRoomBody>
+            </ChatModalBody>
+          </ChatModalWrapper>
+        ) : null}
+      </AnimatePresence>
     </>
   );
 };
