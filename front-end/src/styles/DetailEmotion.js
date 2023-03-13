@@ -546,7 +546,7 @@ export const SingleReview = styled(motion.div)`
     height: 100%;
     object-fit: cover;
   }
-  
+
   .star-wrapper {
     display: flex;
   }
@@ -617,7 +617,8 @@ export const SingleReview = styled(motion.div)`
 `;
 
 export const FaStar = styled.div`
-  color: ${(props) => (props.active === "true" ? "#F0C322" : "#515151")};
+  color: ${(props) =>
+    props.active === "true" ? Common.colors.starColor01 : "#515151"};
 
   @media (min-width: 620px) {
     font-size: 0.8rem;

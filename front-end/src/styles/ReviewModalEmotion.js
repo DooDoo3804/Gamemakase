@@ -192,7 +192,7 @@ export const ReviewModalBody = styled(motion.div)`
 
     .stars-container {
       display: flex;
-      color: gold;
+      color: ${Common.colors.starColor01};
       transition: all 0.3s ease-in-out;
 
       @media (min-width: 768px) {
