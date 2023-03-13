@@ -99,6 +99,7 @@ export const ReviewModalBody = styled(motion.div)`
   }
 
   .rating-container {
+    transition: all 0.3s ease-in-out;
     @media (min-width: 768px) {
       margin: 1rem;
     }
@@ -188,29 +189,62 @@ export const ReviewModalBody = styled(motion.div)`
     height: 100%;
     display: grid;
     place-items: center center;
+    padding: 0.3rem 0rem;
 
     .stars-container {
       display: flex;
-      font-size: 3rem;
       color: gold;
+      transition: all 0.3s ease-in-out;
+
+      @media (min-width: 768px) {
+        font-size: 3rem;
+      }
+      @media (max-width: 768px) {
+        font-size: 2rem;
+      }
+      @media (max-width: 500px) {
+        font-size: 1.8rem;
+      }
 
       .star-wrapper {
         position: relative;
-        width: 3.4rem;
-        margin: 0 1rem;
+
+        margin: 0rem 1rem;
         display: grid;
         place-items: center center;
+        transition: all 0.3s ease-in-out;
+        @media (min-width: 768px) {
+          width: 3.4rem;
+        }
+        @media (max-width: 768px) {
+          width: 2rem;
+        }
+        @media (max-width: 500px) {
+          width: 1.5rem;
+        }
 
         .star-background {
           position: absolute;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          height: 1.5rem;
-          width: 1.5rem;
+          transition: all 0.3s ease-in-out;
           border-radius: 50%;
           background: #aaa;
           cursor: pointer;
+
+          @media (min-width: 768px) {
+            height: 1.5rem;
+            width: 1.5rem;
+          }
+          @media (max-width: 768px) {
+            height: 1rem;
+            width: 1rem;
+          }
+          @media (max-width: 500px) {
+            height: 0.8rem;
+            width: 0.8rem;
+          }
         }
 
         .star-icon {
