@@ -14,6 +14,8 @@ export const Common = {
     black01: "#000000",
 
     lavender01: "#BA76D1",
+
+    starColor01: "#F0C322",
   },
 };
 
