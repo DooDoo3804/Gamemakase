@@ -41,13 +41,14 @@ def get_secret(VAR_NAME):
         print(os.environ.get(VAR_NAME))
         for env , value in sorted(os.environ.items()):
             print(env + " : ", value )
-        return os.environ.get(VAR_NAME)
+        return os.environ[VAR_NAME]
     except KeyError:
         print("no variable")
         for env , value in sorted(os.environ.items()):
             print(env + " : ", value )
 
 SECRET_KEY = get_secret("DJANGO_SECRET_KEY")
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
