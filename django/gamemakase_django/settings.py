@@ -42,6 +42,8 @@ def get_secret(VAR_NAME):
         return os.environ.get(VAR_NAME)
     except KeyError:
         print("no variable")
+        for env , value in sorted(os.environ.items()):
+            print(env + " : ", value )
 
 SECRET_KEY = get_secret("DJANGO_SECRET_KEY")
 
