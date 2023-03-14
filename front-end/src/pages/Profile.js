@@ -4,6 +4,7 @@ import { ResponsivePie } from "@nivo/pie";
 import { Common } from "../styles/Common";
 import GameSummary from "../components/GameSummary";
 import { Paging } from "../components/Paging";
+import EditModal from "../components/EditModal";
 import {
   ProfileBackgroundWrapper,
   ProfileImgWrapper,
@@ -12,12 +13,18 @@ import {
   ProfileScrapBook,
   ProfileReviewsWrapper,
   SingleReview,
+  NoReivew,
 } from "../styles/ProfileEmotion";
-import { FaStar } from "../styles/DetailEmotion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+
+import Lottie from "react-lottie";
+import analysis from "../assets/lottie/analysis.json";
+import noReivew from "../assets/lottie/review.json";
+
+import starSvgYellow from "../assets/fontAwesomeSvg/star-yellow.svg";
+import starSvgEmpty from "../assets/fontAwesomeSvg/star-empty.svg";
+
 // 임시 import 이미지
-import exampleGameImg from "../assets/image 7.svg";
+import exampleGameImg from "../assets/임시게임이미지.svg";
 import profileImg from "../assets/profileImg.svg";
 
 const Profile = () => {
@@ -25,17 +32,16 @@ const Profile = () => {
   const userId = location.pathname.split("/").reverse()[0];
 
   const [userName, setUserName] = useState(String);
-
   const [mainContent, setMainContent] = useState(true);
   const [reviewsContent, setReviewsContent] = useState(false);
-
   const [statisticsData, setStatisticsData] = useState(Array);
   const [statisticsSum, setStatisticsSum] = useState(Number);
 
   // paging 관련 state
   const [scrapGames, setScrapGames] = useState([{},]);
   const [gamesCount, setGamesCount] = useState(0);
-  const [currentpage, setCurrentpage] = useState(1);
+  const [gameCurrentpage, setGameCurrentpage] = useState(1);
+  const [reviewCurrentpage, setReviewCurrentpage] = useState(1);
   //const [countPerPage] = useState(6);
 
   // tap 클릭시 실행될 function
@@ -50,11 +56,20 @@ const Profile = () => {
     setReviewsContent(true);
   };
 
+  const option = (data) => {
+    return {
+      loop: true,
+      autoplay: true,
+      animationData: data,
+    }
+  }
+
   ////////////////////////////////////////////
   //          HARD CODING 임시 DATA         //
   ////////////////////////////////////////////
   const setMainTapData = useCallback(() => {
-    const genre = [
+    const genre = [];
+    const genre2 = [
       { id: "Casual", value: 116 },
       { id: "Indie", value: 56 },
       { id: "RPG", value: 198 },
@@ -67,7 +82,7 @@ const Profile = () => {
         game_name: "Star Survivor adsfasdfiq,mag asdf ff",
         window: true,
         apple: false,
-        steam: true,
+        linux: true,
         price: 5.6,
       },
       {
@@ -75,7 +90,7 @@ const Profile = () => {
         game_name: "Star Survivor",
         window: true,
         apple: false,
-        steam: false,
+        linux: false,
         price: 5.6,
       },
       {
@@ -83,7 +98,7 @@ const Profile = () => {
         game_name: "Star Survivor",
         window: false,
         apple: true,
-        steam: false,
+        linux: false,
         price: 5.6,
       },
       {
@@ -91,7 +106,7 @@ const Profile = () => {
         game_name: "Star Survivor",
         window: true,
         apple: true,
-        steam: true,
+        linux: true,
         price: 5.6,
       },
       {
@@ -99,7 +114,7 @@ const Profile = () => {
         game_name: "Star Survivor",
         window: true,
         apple: false,
-        steam: true,
+        linux: true,
         price: 5.6,
       },
     ];
@@ -120,7 +135,8 @@ const Profile = () => {
     setGamesCount(8);
   }, []);
 
-  const reviewData = {
+  const reviewData = {};
+  const reviewDatatmp = {
     user: {
       userImagePath:
         "https://item.kakaocdn.net/do/493188dee481260d5c89790036be0e66f604e7b0e6900f9ac53a43965300eb9a",
@@ -144,18 +160,18 @@ const Profile = () => {
         reviewId: 2,
         gameId: 3,
         gameImagePath: exampleGameImg,
-        gameTitle: "Star Survivor",
+        gameTitle: "Star Survivor asdf werqdfasd fdsfsdf",
         reviewTitle: "홀리 게임이에요",
         reviewContent: "이걸 이제야 알다니",
         reviewGrade: 4,
-        createdAt: "2023-03-01",
+        createdAt: "2018-02-01",
         updatedAt: "0000-00-00",
       },
       {
         reviewId: 3,
         gameId: 4,
         gameImagePath: exampleGameImg,
-        gameTitle: "Star Survivor",
+        gameTitle: "Star Survivor af asdfads sdfew",
         reviewTitle: "재밌는 게임이에요",
         reviewContent: "이걸 이제야 알다니",
         reviewGrade: 5,
@@ -171,13 +187,49 @@ const Profile = () => {
         reviewContent:
           "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text",
         reviewGrade: 4,
+        createdAt: "2023-04-01",
+        updatedAt: "0000-00-00",
+      },
+      {
+        reviewId: 5,
+        gameId: 6,
+        gameImagePath: exampleGameImg,
+        gameTitle: "Star Survivor",
+        reviewTitle: "홀리 게임이에요",
+        reviewContent:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text",
+        reviewGrade: 4,
+        createdAt: "2021-01-01",
+        updatedAt: "0000-00-00",
+      },
+      {
+        reviewId: 6,
+        gameId: 7,
+        gameImagePath: exampleGameImg,
+        gameTitle: "Star Survivor",
+        reviewTitle: "홀리 게임이에요",
+        reviewContent:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text",
+        reviewGrade: 3,
+        createdAt: "2023-12-01",
+        updatedAt: "0000-00-00",
+      },
+      {
+        reviewId: 7,
+        gameId: 8,
+        gameImagePath: exampleGameImg,
+        gameTitle: "Star Survivor",
+        reviewTitle: "홀리 게임이에요",
+        reviewContent:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text",
+        reviewGrade: 2,
         createdAt: "2023-03-01",
         updatedAt: "0000-00-00",
       },
     ],
     page: {
       pageNum: 1,
-      size: 5,
+      size: 7,
       count: 5,
     },
   };
@@ -264,6 +316,7 @@ const Profile = () => {
         result.push(
           <div className="statistics" key="statisticsBox">
             <div className="no-data-msg">
+              <Lottie options={option(analysis)} height={300} width={300}></Lottie>
               아직 플레이 기록이 없어요 : (
             </div>
           </div>
@@ -274,9 +327,23 @@ const Profile = () => {
 
     const result = [];
     result.push(<div key="mainContent">
-      <ProfileMainStatistics>{statisticsRend()}</ProfileMainStatistics>
-      <div className="scrap-header">ScrapBook</div>
-      <ProfileScrapBook>{scrapGamesRend()}</ProfileScrapBook>
+      <ProfileMainStatistics
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+          transition: { delay: 0.1 },
+        }}>{statisticsRend()}</ProfileMainStatistics>
+      <ProfileScrapBook
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+          transition: { delay: 0.1 },
+        }}>
+        <div className="scrap-header">ScrapBook</div>
+        {scrapGamesRend()}
+      </ProfileScrapBook>
     </div>);
     return result;
   }
@@ -293,7 +360,7 @@ const Profile = () => {
             title={e.game_name}
             window={e.window}
             apple={e.apple}
-            steam={e.steam}
+            linux={e.linux}
             price={e.price}
           ></GameSummary>
         );
@@ -302,18 +369,20 @@ const Profile = () => {
       return result;
     };
     const setPage = (e) => {
-      setCurrentpage(e);
+      setGameCurrentpage(e);
     };
     const result = [];
     if (scrapGames && scrapGames.length > 0) {
       result.push((
         <div key={"scrapGames"}>
           <div className="box">{singleScrapDataRend()}</div>
-          {gamesCount > 6 ? (<Paging
-            page={currentpage}
-            count={gamesCount}
-            setPage={setPage}
-          />) : ""}
+          {gamesCount > 6 ? (
+            <Paging
+              page={gameCurrentpage}
+              count={gamesCount}
+              setPage={setPage}
+              countPerPage={6}
+            />) : ""}
         </div>));
     } else {
       result.push(
@@ -329,17 +398,29 @@ const Profile = () => {
     const starsRend = (rating) => {
       const result = [];
       for (let i = 0; i < 5; i++) {
-        result.push(
-          <FaStar active={(i < rating).toString()} key={i}>
-            <FontAwesomeIcon icon={faStar} className="fa-star" />
-          </FaStar>
-        );
+        if (i < rating) {
+          result.push(
+            <img src={starSvgYellow} alt="starSvg" key={i} />
+          );
+        } else {
+          result.push(
+            <img src={starSvgEmpty} alt="starEmptySvg" key={i} />
+          )
+        }
       }
       return result;
     };
+
     const reivewRend = () => {
+      const month = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
       const result = [];
       reviewData.result.forEach((e) => {
+        const dateArr = e.createdAt.split("-");
+        const year = Number(dateArr[0]);
+        const monthIdx = Number(dateArr[1]);
+        const dateNum = Number(dateArr[2]);
+        const dateString = dateNum + " " + month[monthIdx] + ", " + year;
+
         result.push(
           <SingleReview
             key={e.reviewId}
@@ -363,8 +444,9 @@ const Profile = () => {
                 <div className="star-wrapper">
                   {starsRend(e.reviewGrade)}
                 </div>
+                <div className="create-date">{dateString}</div>
               </div>
-              <FontAwesomeIcon icon={faPenToSquare} className="fa-star" />
+              <EditModal></EditModal>
             </div>
             <p className="review-title">{e.reviewTitle}</p>
             <p className="review-content">{e.reviewContent}</p>
@@ -373,18 +455,61 @@ const Profile = () => {
       });
       return result;
     };
+
+    const reviewPaging = () => {
+      const result = [];
+      if (reviewData.result.length > 3) {
+        const setPage = (e) => {
+          setReviewCurrentpage(e);
+        };
+        result.push(<Paging
+          key="reviewPaging"
+          page={reviewCurrentpage}
+          count={reviewData.page.size}
+          setPage={setPage}
+          countPerPage={6}
+        />);
+      }
+      return result;
+    };
+
     const result = [];
     result.push(
       <ProfileReviewsWrapper key="reviewTapData">
-        <div className="review-header">내가 작성한 리뷰 모아보기</div>
-        {reviewData ? (<div className="review-wrapper">{reivewRend()}</div>)
-          : (<div className="no-review"><p>작성된 리뷰가 없습니다.</p></div>)}
+        {reviewData != null && reviewData.result != null ? (
+          <>
+            <div className="review-header">My Reviews</div>
+            <div className="review-wrapper">
+              {reivewRend()}
+            </div>
+            {reviewPaging()}
+          </>
+        )
+          : (
+            <NoReivew
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+                transition: { delay: 0.1 },
+              }}>
+              <div className="no-review-wrapper">
+                <div>
+                  <Lottie options={option(noReivew)} height={300} width={300}></Lottie>
+                  아직 작성한 리뷰가 없어요 : (
+                </div>
+              </div>
+            </NoReivew>)}
       </ProfileReviewsWrapper>
     );
     return result;
   };
 
   useEffect(mainDataSetting, [userId, setMainTapData]);
+
+
+  ///////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////
 
   return (
     <ProfileBackgroundWrapper>

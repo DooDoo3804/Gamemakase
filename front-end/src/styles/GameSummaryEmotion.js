@@ -99,7 +99,6 @@ export const GameSummaryClip = styled.div`
       height: 100%;
       max-height: 20px;
       margin-right: 5px;
-      color: ${Common.colors.lightGray01};
     }
   }
   .price {
