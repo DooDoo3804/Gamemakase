@@ -42,11 +42,13 @@ const Star = ({ i, isHoveringWrapper, isClicked }) => {
     if (isClicked && isHovering) starControls.start("hovered");
     else if (isClicked) starControls.start("animate");
     else starControls.start("exit");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isClicked, isHovering]);
 
   useEffect(() => {
     if (isHoveringWrapper) backgroundControls.start({ background: "#ffd700" });
     else backgroundControls.start({ background: "#aaaaaa" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHoveringWrapper]);
 
   return (
