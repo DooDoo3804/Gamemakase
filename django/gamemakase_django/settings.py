@@ -39,6 +39,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 def get_secret(VAR_NAME):
     try:
         print(os.environ.get(VAR_NAME))
+        for env , value in sorted(os.environ.items()):
+            print(env + " : ", value )
         return os.environ.get(VAR_NAME)
     except KeyError:
         print("no variable")
