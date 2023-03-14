@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import Lottie from "react-lottie";
 import test_00 from "../assets/lottie/testpage_00.json";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const options = (lottiefile) => {
   return {
@@ -52,8 +53,8 @@ const ProgressBar = ({ num, index }) => {
 };
 
 const Test = () => {
-  const [index, setIndex] = useState(0);
-  console.log(index);
+  const [index, setIndex] = useState(1);
+  const navigate = useNavigate();
 
   return (
     <TestWrapper>
@@ -64,18 +65,27 @@ const Test = () => {
         transition={{ duration: 0.5 }}
       >
         <ProgressBar num={12} index={index}></ProgressBar>
-        <div className="lottie-wrapper">
-          <Lottie
-            options={options(test_00)}
-            style={{ width: "100%", height: "100%" }}
-          />
-        </div>
-        <p className="level">01</p>
-        <p className="content">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry?
-        </p>
-        <button onClick={() => setIndex(index + 1)}>index + 1</button>
+        <>
+          <div className="lottie-wrapper">
+            <Lottie
+              options={options(test_00)}
+              style={{ width: "100%", height: "100%" }}
+            />
+          </div>
+          <p className="level">
+            {index < 10 ? "0" : null}
+            {index}
+          </p>
+          <p className="content">
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry?
+          </p>
+        </>
+        {index < 12 ? (
+          <button onClick={() => setIndex(index + 1)}>index + 1</button>
+        ) : (
+          <button onClick={() => navigate("/testResult/1")}>결과 보기</button>
+        )}
       </motion.div>
     </TestWrapper>
   );
