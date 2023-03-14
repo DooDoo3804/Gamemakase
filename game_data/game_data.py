@@ -35,7 +35,9 @@ def get_game_data():
 
             is_korean = False
             if "Korean" in temp["supported_languages"]:
-                is_korean = True        
+                is_korean = True   
+
+            score = int (100 * temp['positive'] / (temp['positive'] + temp['negative']))
 
 
             fields = {
@@ -44,7 +46,7 @@ def get_game_data():
                 'game_price': temp['price'],
                 'released_date': formatted_date,
                 'game_description': temp['short_description'],
-                'metacritic_score': temp['metacritic_score'],
+                'score': score,
                 'average_playtime': temp['average_playtime_forever'],
                 'publisher': temp['publishers'][0],
                 'is_korean': is_korean
