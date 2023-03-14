@@ -38,7 +38,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 def get_secret(VAR_NAME):
     try:
-        return os.environ[VAR_NAME]
+        print(os.environ.get(VAR_NAME))
+        return os.environ.get(VAR_NAME)
     except KeyError:
         print("no variable")
 
