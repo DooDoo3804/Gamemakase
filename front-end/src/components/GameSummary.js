@@ -1,10 +1,7 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faApple,
-  faSteam,
-  faWindows,
-} from "@fortawesome/free-brands-svg-icons";
 import { GameSummaryClip } from "../styles/GameSummaryEmotion";
+import appleSvg from "../assets/fontAwesomeSvg/apple.svg";
+import windowSvg from "../assets/fontAwesomeSvg/windows.svg";
+import linuxSvg from "../assets/fontAwesomeSvg/linux.svg";
 
 const GameSummary = (props) => {
   return (
@@ -14,17 +11,17 @@ const GameSummary = (props) => {
         <div className="title">{props.title}</div>
         <div className="logo-box">
           {props.window ? (
-            <FontAwesomeIcon className="brand-logo" icon={faWindows} />
+            <img src={windowSvg} className="brand-logo" alt="windowSvg"/>
           ) : (
             ""
           )}
           {props.apple ? (
-            <FontAwesomeIcon className="brand-logo" icon={faApple} />
+            <img src={appleSvg} className="brand-logo" alt="appleSvg" />
           ) : (
             ""
           )}
-          {props.steam ? (
-            <FontAwesomeIcon className="brand-logo" icon={faSteam} />
+          {props.linux ? (
+            <img src={linuxSvg} className="brand-logo" alt="linuxSvg" />
           ) : (
             ""
           )}

@@ -3,12 +3,12 @@ import {
   PagingBar
 } from "../styles/PagingEmotion";
 
-export const Paging = ({ page, count, setPage }) => {
+export const Paging = ({ page, count, setPage, countPerPage }) => {
   return (
     <PagingBar>
       <Pagination
         activePage={page}
-        itemsCountPerPage={6}
+        itemsCountPerPage={countPerPage}
         totalItemsCount={count}
         pageRangeDisplayed={5}
         prevPageText={'‹'}
