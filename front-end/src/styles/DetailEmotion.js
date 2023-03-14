@@ -8,7 +8,7 @@ export const DetailWrapper = styled.div`
   .detail-main {
     display: flex;
     margin-top: -3.9rem;
-    width: 100vw;
+    width: 100%;
     height: 56vw;
     background-image: linear-gradient(
         to bottom,
@@ -570,7 +570,8 @@ export const SingleReview = styled(motion.div)`
 `;
 
 export const FaStar = styled.div`
-  color: ${(props) => (props.active === "true" ? "#F0C322" : "#515151")};
+  color: ${(props) =>
+    props.active === "true" ? Common.colors.starColor01 : "#515151"};
 
   @media (min-width: 620px) {
     font-size: 0.8rem;

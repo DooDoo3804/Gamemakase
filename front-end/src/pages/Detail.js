@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ReviewModal from "../components/ReviewModal";
 import {
   ChatBtn,
   DetailWrapper,
@@ -26,9 +28,17 @@ import {
 
 import { motion } from "framer-motion";
 import TranslucentBtn from "../components/TranslucentBtn";
+import useBodyScrollLock from "../components/ScrollLock";
+import ChatModal from "../components/ChatModal";
 
 const Detail = () => {
   const navigate = useNavigate();
+  const [modalView, setModalView] = useState(false);
+  const [chatView, setChatView] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const { lockScroll } = useBodyScrollLock();
+
   // 임시 데이터
   const gameData = {
     gameId: 1,
@@ -304,6 +314,16 @@ const Detail = () => {
     return result;
   };
 
+  const handleModalOpen = () => {
+    setScrollPosition(lockScroll());
+    setModalView(true);
+  };
+
+  const handleChatOpen = () => {
+    setScrollPosition(lockScroll());
+    setChatView(true);
+  };
+
   return (
     <div>
       {gameData ? (
@@ -312,6 +332,18 @@ const Detail = () => {
           scrap_src={scrap_img}
           img_len={gameData.images.length}
         >
+          <ReviewModal
+            gameData={gameData}
+            modalView={modalView}
+            setModalView={setModalView}
+            scrollPosition={scrollPosition}
+          ></ReviewModal>
+          <ChatModal
+            gameData={gameData}
+            chatView={chatView}
+            setChatView={setChatView}
+            scrollPosition={scrollPosition}
+          ></ChatModal>
           <div className="detail-main">
             <div className="main-wrapper">
               <motion.div
@@ -392,7 +424,10 @@ const Detail = () => {
             <div className="title-wrapper">
               <p className="title-text">리뷰</p>
               {/* 로그인했을 때만 노출 */}
-              <TranslucentBtn text="작성하기"></TranslucentBtn>
+              <TranslucentBtn
+                text="작성하기"
+                onClick={() => handleModalOpen()}
+              ></TranslucentBtn>
             </div>
             {reviewData ? (
               // 리뷰 내용 많을 때 처리해야 함
@@ -408,7 +443,7 @@ const Detail = () => {
         // CSS 수정 필요함
         <DetailWrapper>존재하지 않는 게임입니다.</DetailWrapper>
       )}
-      <ChatBtn>
+      <ChatBtn onClick={() => handleChatOpen()}>
         <FontAwesomeIcon icon={faCommentDots} />
       </ChatBtn>
     </div>
