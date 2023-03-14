@@ -4,7 +4,7 @@ DATABASES = {
         'NAME': "gamemakase",
         "USER": "root",
         "PASSWORD": "banapresso77",
-        "HOST": "http://j8a106.p.ssafy.io",
+        "HOST": "localhost",
         "PORT": '3306'
     }
 }
