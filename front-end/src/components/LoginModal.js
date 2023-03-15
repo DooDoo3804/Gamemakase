@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRef } from "react";
-import useBodyScrollLock from "./ScrollLock";
+// import useBodyScrollLock from "./ScrollLock";
 import { Common } from "../styles/Common";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -120,13 +120,13 @@ const LoginModalBody = styled(motion.div)`
   }
 `;
 
-const LoginModal = ({ loginView, setLoginView, scrollPosition }) => {
+const LoginModal = ({ loginView, setLoginView }) => {
   const outSection = useRef();
 
-  const { openScroll } = useBodyScrollLock();
+  // const { openScroll } = useBodyScrollLock();
 
   const handleClose = () => {
-    openScroll(scrollPosition);
+    // openScroll(scrollPosition);
     setLoginView(false);
   };
 

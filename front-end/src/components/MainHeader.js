@@ -5,16 +5,16 @@ import Logo from "../assets/gamemakase_logo.svg";
 import FontLogo from "../assets/font_logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
-import useBodyScrollLock from "./ScrollLock";
+// import useBodyScrollLock from "./ScrollLock";
 import LoginModal from "./LoginModal";
 
 const MainHeader = () => {
   const navigate = useNavigate();
   const [hover, setHover] = useState();
   const [loginView, setLoginView] = useState(false);
-  const [scrollPosition, setScrollPosition] = useState(0);
+  // const [scrollPosition, setScrollPosition] = useState(0);
 
-  const { lockScroll } = useBodyScrollLock();
+  // const { lockScroll } = useBodyScrollLock();
   const keyword = useRef();
 
   const searchBarHandler = (e) => {
@@ -22,7 +22,7 @@ const MainHeader = () => {
   };
 
   const handleLoginOpen = () => {
-    setScrollPosition(lockScroll());
+    // setScrollPosition(lockScroll());
     setLoginView(true);
   };
 
@@ -31,7 +31,7 @@ const MainHeader = () => {
       <LoginModal
         loginView={loginView}
         setLoginView={setLoginView}
-        scrollPosition={scrollPosition}
+        // scrollPosition={scrollPosition}
       ></LoginModal>
       <MainHeaderWrapper>
         <div
