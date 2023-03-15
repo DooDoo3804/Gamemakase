@@ -21,14 +21,14 @@ const TranslucentBtnEmotion = styled.div`
     font-size: 1rem;
   }
   @media (max-width: 768px) {
-    width: 6rem;
-    height: 1.8rem;
+    width: 7rem;
+    height: 2.2rem;
     font-size: 0.8rem;
   }
   @media (max-width: 500px) {
-    width: 4rem;
-    height: 1.2rem;
-    font-size: 0.6rem;
+    width: 6rem;
+    height: 2rem;
+    font-size: 0.8rem;
   }
 
   :hover {
@@ -45,7 +45,7 @@ const TranslucentBtnEmotion = styled.div`
       font-size: 0.85rem;
     }
     @media (max-width: 500px) {
-      font-size: 0.65rem;
+      font-size: 0.85rem;
     }
   }
 `;
