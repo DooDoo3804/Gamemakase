@@ -19,50 +19,28 @@ def find_closest_user(df, steamid, gameid, playtime):
 
 
 def get_recommend(user, neighbor_list, df):
-    # which games the user already has
     user_games = df[df['steamid'] == user]
     candidates = []
-    # go through all the neighbors
     for neighbor in neighbor_list:
-        # make a temporary table containing all of the games that the neighbor has but the user does not
         temp = df[(df['steamid'] == neighbor) & (
             ~df['gameid'].isin(user_games['gameid']))]
-        # loop through the games in temp
         for index, game in temp.iterrows():
-            # add the game and its rating to the dissimilar games list
             candidates.append((int(game['gameid']), game['rating']))
-    # sort the dissimilar games list by the game name
     candidates.sort(key=lambda x: x[0])
-    # flag to see if moved on to a new game
     flag = ""
-    # running sum of all the ratings
     running_sum = 0
-    # list we will add the recomendations to
     rec_list = []
-    # count of how many times the game was in candidates
     count = 0
-    # loop through all of the games
     for dis in candidates:
-        # if it's the first time the game has come up in the loop
         if flag != dis[0]:
-            # if it's not the first time the loop has run
-            # if it was then we do not want to append anything
             if flag != "":
-                # append the last game name and the average rating
                 rec_list.append((flag, running_sum/count))
-            # set the flag to the new gae
             flag = dis[0]
-            # set the running sum to the current rating
             running_sum = dis[1]
-            # reset the counter
             count = 1
-        # multiple ratings for the same game
         else:
-            # add the current rating to the running sum
             running_sum += dis[1]
-            # increment the counter
             count += 1
-    # sort the list of recommended games with the highest rating first
     sort_list = sorted(rec_list, key=lambda x: x[1], reverse=True)
     return (sort_list)
 

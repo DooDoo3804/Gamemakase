@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+app_name = "recommendation"
+
 urlpatterns = [
-    path('recommend/games/<int:user_id>', views.get_recommended_games , name='recommend_games')
+    path('games/<int:userid>', views.get_recommended_games , name='recommend_games'),
 ]
