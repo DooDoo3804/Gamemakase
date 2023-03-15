@@ -115,3 +115,56 @@ def get_recommended_games(request, userid):
 
     return Response(serializer.data)
 
+
+def get_recommended_games_small(request, userid):
+    # 데이터 불러와서 테이블 만들기
+    conn = pymysql.connect(
+        host="43.201.61.185",
+        user="root",
+        password="banapresso77",
+        db="gamemakase",
+        charset="utf8",
+        cursorclass=pymysql.cursors.DictCursor        
+    )
+    cursor = conn.cursor()
+    sql = "select * from gamemakase.rating_small"
+    cursor.execute(sql)
+    result = cursor.fetchall()
+
+    df = pd.DataFrame(result)
+
+    # 가까운 유저 찾아서 테이블에 반영
+    print(df.tail(10))
+    df = A(df, userid)
+    print(df.tail(10))
+
+    pivot_table = pd.pivot_table(df, values='rating', index=[
+                                 'steam_id'], columns=['game_id'])
+    print(f"pivot_table:{pivot_table}")
+    cos_sim_matrix = cosine_similarity(pivot_table.fillna(0))
+    print(f"cos_sim_matrix:{cos_sim_matrix}")
+    cos_sim_df = pd.DataFrame(
+        cos_sim_matrix, columns=pivot_table.index, index=pivot_table.index)
+    print(f"cos_sim_df:{cos_sim_df}")
+    knn = cos_sim_df[userid].sort_values(ascending=False)[:30]
+    knn = list(knn.index)
+    print(knn)
+
+    json_data_2 = df
+    json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
+    print(json_data_2)
+    recommend = get_recommend(userid, knn, json_data_2)
+    print(recommend[:5])
+
+    games = []
+    for game_id, rating in recommend[:5]:
+        game = Game.objects.get(game_id=game_id)
+        game.score=rating
+        games.append(game)
+    print(games)
+    serializer = GameRecommendationSerializer(games, many=True)
+
+    print(serializer.data)
+
+    return Response(serializer.data)
+
