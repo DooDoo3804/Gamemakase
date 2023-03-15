@@ -3,8 +3,10 @@ import pandas as pd
 import numpy as np
 import pymysql
 import pymysql.cursors
-from .models import GameHistory
+
+from .models import GameHistory, Game, Image
 from sklearn.metrics.pairwise import cosine_similarity
+from .serializers import *
 
 
 def A(df, steamid):
@@ -99,4 +101,16 @@ def get_recommended_games(request, userid):
     print(json_data_2)
     recommend = get_recommend(userid, knn, json_data_2)
     print(recommend[:5])
+
+    games = []
+    for game_id, rating in recommend:
+        game = Game.objects.get(game_id=game_id)
+        game.score=rating
+        games.append(game)
+    print(g)
+    serializer = GameRecommendationSerializer(games, many=True)
+
+    print(serializer.data)
+
     pass
+

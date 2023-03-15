@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Rating, Image
+from .models import Rating, Image, Game
 
 
 # 특정 필드만 선택
@@ -30,14 +30,19 @@ class GameImageSerialzer(DynamicFieldsModelSerializer):
         model = Image
         fields = ["image_path"]
 
+class GameNameSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Game
+        fields = ["game_name"]
+
 
 # 게임 추천 결과
 class GameRecommendationSerializer(DynamicFieldsModelSerializer):
 
-    gameImage = GameImageSerialzer(many=True, read_only=True)
+    # gameImage = GameImageSerialzer(many=True, read_only=True)
     gameId = serializers.IntegerField(source="game_id")
-    steamId = serializers.IntegerField(source="steam_id")
+    gameName = GameNameSerializer()
 
     class Meta:
         model = Rating
-        fields = ["gameId", "steamId", "gameImage"]
+        fields = ["gameId", "gameName" "score"]
