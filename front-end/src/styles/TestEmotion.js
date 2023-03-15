@@ -1,13 +1,5 @@
 import styled from "@emotion/styled";
-import { motion } from "framer-motion";
 import { Common } from "./Common";
-import Lottie from "react-lottie";
-
-export const StyledLottie = styled(Lottie)`
-  /* width: ${(props) => props.width}px;
-  height: ${(props) => props.height}px; */
-  transition: all 0.5s ease-in-out;
-`;
 
 export const ProgressBarWrapper = styled.div`
   display: flex;

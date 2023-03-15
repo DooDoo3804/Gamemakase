@@ -20,14 +20,6 @@ const options = (lottiefile) => {
   };
 };
 
-// 아래와 같이 사용
-{
-  /* <Lottie
-  options={options(lottiefile2)}
-  style={{ width: "100%", height: "100%" }}
-/>; */
-}
-
 const ProgressBar = ({ num, index }) => {
   const renderBars = () => {
     const result = [];
