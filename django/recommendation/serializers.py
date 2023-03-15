@@ -39,10 +39,10 @@ class GameNameSerializer(DynamicFieldsModelSerializer):
 # 게임 추천 결과
 class GameRecommendationSerializer(DynamicFieldsModelSerializer):
 
-    # gameImage = GameImageSerialzer(many=True, read_only=True)
-    gameId = serializers.IntegerField(source="game_id")
-    gameName = GameNameSerializer()
+    # # gameImage = GameImageSerialzer(many=True, read_only=True)
+    # gameId = serializers.IntegerField(source="game_id")
+    # gameName = serializers.CharField(source = "game_name")
 
     class Meta:
-        model = Rating
-        fields = ["gameId", "gameName" "score"]
+        model = Game
+        fields = ["game_id", "game_name", "score"]
