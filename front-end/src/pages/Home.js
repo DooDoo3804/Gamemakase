@@ -229,9 +229,8 @@ const Home = () => {
         slidesPerView={1}
         navigation
         pagination={{ clickable: true }}
+        // todo : 다 만들고 주석처리 해제하기
         // autoplay={{ delay: 4000, disableOnInteraction: false }}
-        // onSwiper={(swiper) => console.log(swiper)}
-        // onSlideChange={() => console.log("slide change")}
       >
         <SwiperSlide>
           <Banner>
