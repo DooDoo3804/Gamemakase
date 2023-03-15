@@ -42,7 +42,7 @@ public class SteamRestController{
 
   private static final String STEAM_OPENID = "http://steamcommunity.com/openid";
   @PostMapping(value = "/member/{steamID}")
-  public static Map<String, Object> getMemberData(@PathVariable("steamID") String steamID) throws NullPointerException, IOException, ParseException {
+  public static JSONArray getMemberData(@PathVariable("steamID") String steamID) throws NullPointerException, IOException, ParseException {
     Map<String, Object> responseData = new HashMap<>();
     StringBuilder urlBuilder = new StringBuilder();
     urlBuilder
@@ -72,15 +72,15 @@ public class SteamRestController{
       }
       JSONObject playerInfoJson = (JSONObject) playerInfoJsons.get(0);
       System.out.println(playerInfoJson.toString());
+      return playerInfoJsons;
 //
 //      responseData.put("steamNickname", playerInfoJson.get("personaname"));
 //      responseData.put("avatarUrl", playerInfoJson.get("avatarfull"));
 //      System.out.println(responseData);
     } else {
 //      throw new CustomException("[Error] api connection url : " + urlBuilder, ErrorStatus.API_NOT_CONNECTION);
+      return null;
     }
-
-    return responseData;
   }
 
   private static String getResponse(HttpURLConnection conn, boolean isSuccess) throws IOException {
