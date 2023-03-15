@@ -158,22 +158,15 @@ const Home = () => {
     },
   ];
 
-  const option1 = {
-    loop: true,
-    autoplay: true,
-    animationData: banner_img,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
-
-  const option2 = {
-    loop: true,
-    autoplay: true,
-    animationData: banner_img2,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
+  const options = (lottiefile) => {
+    return {
+      loop: true,
+      autoplay: true,
+      animationData: lottiefile,
+      rendererSettings: {
+        preserveAspectRatio: "xMidYMid slice",
+      },
+    };
   };
 
   const renderTodayGames = () => {
@@ -258,11 +251,19 @@ const Home = () => {
             <div className="banner2">
               <div className="lottie-wrapper">
                 <div className="single-lottie">
-                  <Lottie options={option2} height={300} width={300} />
+                  <Lottie
+                    options={options(banner_img2)}
+                    height={300}
+                    width={300}
+                  />
                 </div>
 
                 <div className="single-lottie">
-                  <Lottie options={option1} height={180} width={180} />
+                  <Lottie
+                    options={options(banner_img)}
+                    height={180}
+                    width={180}
+                  />
                 </div>
               </div>
               <div className="text-wrapper">
