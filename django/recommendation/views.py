@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import pandas as pd
+import numpy as np
 import pymysql
 import pymysql.cursors
 from .models import GameHistory
@@ -9,6 +10,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 def A(df, steamid):
     user_game = GameHistory.objects.filter(user=steamid)
     # 순회를 돌면서 모든 게임
+    dtypes = {'steam_id': int, 'game_id': int,
+                'playtime': int}
     for game in user_game:
         gameid = game.game.game_id
         playtime = game.total_play_game
@@ -18,11 +21,16 @@ def A(df, steamid):
         game_df_sorted = game_df.sort_values('playtime_diff')
         closest_rating = game_df_sorted[game_df_sorted['steam_id']
                                         != steamid].iloc[0]['rating']
+        
         # 기존 테이블에 추가
         new_row = {'steam_id': steamid, 'game_id': gameid,
                 'playtime': playtime, 'rating': closest_rating}
-        # print(new_row)
-        df = df.append(new_row, ignore_index=True)
+        
+        df = df.astype(dtypes).append(new_row, ignore_index=True)
+
+    df = df.astype({'steam_id': int, 'game_id': int,
+        'playtime': int})
+    return df
 
 
 def get_recommend(user, neighbor_list, df):
@@ -68,18 +76,24 @@ def get_recommended_games(request, userid):
     result = cursor.fetchall()
 
     df = pd.DataFrame(result)
-    print(df.head(10))
 
     # 가까운 유저 찾아서 테이블에 반영
-    A(df, userid)
+    print(df.tail(10))
+    df = A(df, userid)
+    print(df.tail(10))
 
     pivot_table = pd.pivot_table(df, values='rating', index=[
                                  'steam_id'], columns=['game_id'])
+    print(f"pivot_table:{pivot_table}")
     cos_sim_matrix = cosine_similarity(pivot_table.fillna(0))
+    print(f"cos_sim_matrix:{cos_sim_matrix}")
     cos_sim_df = pd.DataFrame(
         cos_sim_matrix, columns=pivot_table.index, index=pivot_table.index)
-    knn = cos_sim_df[userid].sort_values(ascending=False)[1:30]
+    print(f"cos_sim_df:{cos_sim_df}")
+    knn = cos_sim_df[userid].sort_values(ascending=False)[:30]
     knn = list(knn.index)
+    print(knn)
+
     json_data_2 = df
     json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
     print(json_data_2)
