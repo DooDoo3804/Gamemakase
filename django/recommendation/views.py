@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from .models import GameHistory, Game, Image, GameSmall
 from sklearn.metrics.pairwise import cosine_similarity
 from .serializers import *
+from django.core.paginator import Paginator
 
 
 def A(df, steamid):
@@ -41,7 +42,7 @@ def A(df, steamid):
     df = df.astype({'steam_id': int, 'game_id': int,
         'playtime': int})
     return df
-
+ 
 
 def get_recommend(user, neighbor_list, df):
     user_games = df[df['steam_id'] == user]
@@ -70,6 +71,7 @@ def get_recommend(user, neighbor_list, df):
     return (sort_list)
 
 
+# big 데이터 추천 결과
 def get_recommended_games(request, userid):
     # 데이터 불러와서 테이블 만들기
     conn = pymysql.connect(
@@ -123,6 +125,7 @@ def get_recommended_games(request, userid):
     return Response(serializer.data)
 
 
+# small 데이터 추천 결과
 def get_recommended_games_small(request, userid):
     # 데이터 불러와서 테이블 만들기
     conn = pymysql.connect(
@@ -164,7 +167,7 @@ def get_recommended_games_small(request, userid):
     # print(recommend[:5])
 
     games = []
-    for game_id, rating in recommend[:5]:
+    for game_id, rating in recommend[:10]:
         game = Game.objects.get(game_id=game_id)
         images = Image.objects.filter(type_id = game_id)
         new_game = {
@@ -175,6 +178,18 @@ def get_recommended_games_small(request, userid):
         }
         games.append(new_game)
     serializer = GameRecommendationSerializer(games, many=True)
-
-    print(serializer.data)
-    return JsonResponse(serializer.data, safe=False)
+    
+    # pagination
+    p = Paginator(serializer.data, 5)
+    page = {
+        'pageNum' : 1,
+        'size' : 5,
+        'count' : len(p.page(1)),
+    }
+    
+    context = {
+        'results' : serializer.data,
+        'page' : page
+    }
+    print(context)
+    return JsonResponse(context, safe=False)
