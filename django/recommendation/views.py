@@ -4,7 +4,7 @@ import numpy as np
 import pymysql
 import pymysql.cursors
 from rest_framework.response import Response
-
+from django.http import JsonResponse
 from .models import GameHistory, Game, Image, GameSmall
 from sklearn.metrics.pairwise import cosine_similarity
 from .serializers import *
@@ -166,11 +166,15 @@ def get_recommended_games_small(request, userid):
     games = []
     for game_id, rating in recommend[:5]:
         game = Game.objects.get(game_id=game_id)
-        game.score=rating
-        games.append(game)
-    print(games)
+        images = Image.objects.filter(type_id = game_id)
+        new_game = {
+            'game_id' : game_id,
+            "game_name" : game.game_name, 
+            "score" : rating,
+            "game_image" : images
+        }
+        games.append(new_game)
     serializer = GameRecommendationSerializer(games, many=True)
 
     print(serializer.data)
-
-    return Response(serializer.data)
+    return JsonResponse(serializer.data, safe=False)
