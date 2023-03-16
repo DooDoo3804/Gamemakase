@@ -172,24 +172,6 @@ class Game(models.Model):
         managed = False
         db_table = 'game'
 
-class GameSmall(models.Model):
-    game_id = models.BigAutoField(primary_key=True)
-    game_name = models.CharField(max_length=200)
-    game_price = models.IntegerField()
-    release_date = models.DateTimeField()
-    game_description = models.TextField()
-    score = models.IntegerField()
-    average_playtime = models.IntegerField(blank=True, null=True)
-    publisher = models.CharField(max_length=100, blank=True, null=True)
-    is_korean = models.IntegerField(blank=True, null=True)
-    windows = models.IntegerField(blank=True, null=True)
-    mac = models.IntegerField(blank=True, null=True)
-    linux = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'game_small'
-
 
 class GameHistory(models.Model):
     game_history_id = models.BigAutoField(primary_key=True)
@@ -282,7 +264,7 @@ class Recommendation(models.Model):
     steam_id = models.BigIntegerField()
     game = models.ForeignKey(Game, models.DO_NOTHING)
     rating = models.FloatField()
-    recommendation_id = models.AutoField(primary_key=True)
+    recommendation_id = models.BigAutoField(primary_key=True)
 
     class Meta:
         managed = False
