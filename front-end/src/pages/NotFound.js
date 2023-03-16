@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Common } from "../styles/Common";
 import { useNavigate } from "react-router-dom";
 
-const NotFoundWrapper = styled.div`
+export const NotFoundWrapper = styled.div`
   width: 100%;
   height: calc(100vh - 3.9rem);
 
