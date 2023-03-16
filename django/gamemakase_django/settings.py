@@ -26,6 +26,7 @@ DEBUG = False
 ALLOWED_HOSTS = ['43.201.61.185', 'gamemakase.com']
 # ALLOWED_HOSTS = ['*']
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,8 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    "recommendation"
+    "recommendation",
+    'django_apscheduler',
+
 ]
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"  # Default
+
+SCHEDULER_DEFAULT = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
