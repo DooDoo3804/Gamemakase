@@ -26,9 +26,10 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
 
 # 게임 이미지
 class GameImageSerialzer(DynamicFieldsModelSerializer):
+    imagePath = serializers.CharField(source = "image_path")
     class Meta:
         model = Image
-        fields = ["image_path"]
+        fields = ["imagePath"]
 
 class GameNameSerializer(DynamicFieldsModelSerializer):
     class Meta:
@@ -39,10 +40,10 @@ class GameNameSerializer(DynamicFieldsModelSerializer):
 # 게임 추천 결과
 class GameRecommendationSerializer(DynamicFieldsModelSerializer):
 
-    # # gameImage = GameImageSerialzer(many=True, read_only=True)
-    # gameId = serializers.IntegerField(source="game_id")
-    # gameName = serializers.CharField(source = "game_name")
+    gameImage = GameImageSerialzer(many=True, read_only=True, source="game_image")
+    gameId = serializers.IntegerField(source="game_id")
+    gameName = serializers.CharField(source = "game_name")
 
     class Meta:
         model = Game
-        fields = ["game_id", "game_name", "score"]
+        fields = ["gameId", "gameName", "score", "gameImage"]
