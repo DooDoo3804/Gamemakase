@@ -1,9 +1,8 @@
 package com.gamemakase.global.config;
 
-import com.gamemakase.global.config.jwt.JwtAccessDeniedHandler;
-import com.gamemakase.global.config.jwt.JwtAuthenticationEntryPoint;
-import com.gamemakase.global.config.jwt.JwtSecurityConfig;
-import com.gamemakase.global.config.jwt.JwtTokenProvider;
+import com.gamemakase.domain.model.service.auth.CustomOAuthUserService;
+import com.gamemakase.global.config.jwt.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -21,22 +20,14 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
   private final JwtTokenProvider jwtTokenProvider;
   private final CorsFilter corsFilter;
   private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-  public SecurityConfig(JwtTokenProvider jwtTokenProvider,
-                        CorsFilter corsFilter,
-                        JwtAccessDeniedHandler jwtAccessDeniedHandler,
-                        JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
-    this.corsFilter = corsFilter;
-    this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-    this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-    this.jwtTokenProvider = jwtTokenProvider;
-  }
+  private final CustomOAuthUserService oAuthUserService;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -83,4 +74,5 @@ public class SecurityConfig {
     return (web) ->
             web.ignoring().antMatchers("/h2-console/**" ,"/favicon.ico");
   }
+
 }
