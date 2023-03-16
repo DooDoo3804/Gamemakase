@@ -5,7 +5,7 @@ import pymysql
 import pymysql.cursors
 from rest_framework.response import Response
 from django.http import JsonResponse
-from .models import GameHistory, Game, Image, GameSmall
+from .models import GameHistory, Game, Image, GameSmall, User
 from sklearn.metrics.pairwise import cosine_similarity
 from .serializers import *
 from django.core.paginator import Paginator
@@ -113,16 +113,32 @@ def get_recommended_games(request, userid):
     print(recommend[:5])
 
     games = []
-    for game_id, rating in recommend[:5]:
+    for game_id, rating in recommend[:15]:
         game = Game.objects.get(game_id=game_id)
-        game.score=rating
-        games.append(game)
-    print(games)
+        images = Image.objects.filter(type_id = game_id)
+        new_game = {
+            'game_id' : game_id,
+            "game_name" : game.game_name, 
+            "score" : rating,
+            "game_image" : images
+        }
+        games.append(new_game)
     serializer = GameRecommendationSerializer(games, many=True)
-
-    print(serializer.data)
-
-    return Response(serializer.data)
+    
+    # pagination
+    p = Paginator(serializer.data, 5)
+    page = {
+        'pageNum' : 1,
+        'size' : 5,
+        'count' : len(p.page(1)),
+    }
+    
+    context = {
+        'results' : serializer.data,
+        'page' : page
+    }
+    print(context)
+    return JsonResponse(context, safe=False)
 
 
 # small 데이터 추천 결과
@@ -167,7 +183,7 @@ def get_recommended_games_small(request, userid):
     # print(recommend[:5])
 
     games = []
-    for game_id, rating in recommend[:10]:
+    for game_id, rating in recommend[:15]:
         game = Game.objects.get(game_id=game_id)
         images = Image.objects.filter(type_id = game_id)
         new_game = {
@@ -193,3 +209,12 @@ def get_recommended_games_small(request, userid):
     }
     print(context)
     return JsonResponse(context, safe=False)
+
+
+def schedule_api():
+    
+    print("start big data recommend start")
+    users = User.objects.order_by('user_id').distinct()
+    print(users)
+    for user in users:
+        get_recommended_games(user.user_steam_id)
