@@ -1,11 +1,11 @@
-from django.shortcuts import render
 import pandas as pd
 import numpy as np
 import pymysql
 import pymysql.cursors
 from rest_framework.response import Response
-from django.http import JsonResponse
-from .models import GameHistory, Game, Image, GameSmall, User
+from rest_framework.status import HTTP_201_CREATED
+from django.http import HttpResponse, JsonResponse
+from .models import GameHistory, Game, Image, GameSmall, Recommendation, User
 from sklearn.metrics.pairwise import cosine_similarity
 from .serializers import *
 from django.core.paginator import Paginator
@@ -183,7 +183,7 @@ def get_recommended_games_small(request, userid):
     # print(recommend[:5])
 
     games = []
-    for game_id, rating in recommend[:15]:
+    for game_id, rating in recommend[:10]:
         game = Game.objects.get(game_id=game_id)
         images = Image.objects.filter(type_id = game_id)
         new_game = {
@@ -192,23 +192,30 @@ def get_recommended_games_small(request, userid):
             "score" : rating,
             "game_image" : images
         }
-        games.append(new_game)
-    serializer = GameRecommendationSerializer(games, many=True)
+        # games.append(new_game)
+
+        # recommendation 테이블에 저장
+        recommendation = Recommendation(steam_id = userid, game_id = game.game_id, rating = rating)
+        recommendation.save()
+
+
+# 주석 처리
+    # serializer = GameRecommendationSerializer(games, many=True)
     
-    # pagination
-    p = Paginator(serializer.data, 5)
-    page = {
-        'pageNum' : 1,
-        'size' : 5,
-        'count' : len(p.page(1)),
-    }
+    # # pagination
+    # p = Paginator(serializer.data, 5)
+    # page = {
+    #     'pageNum' : 1,
+    #     'size' : 5,
+    #     'count' : len(p.page(1)),
+    # }
     
-    context = {
-        'results' : serializer.data,
-        'page' : page
-    }
-    print(context)
-    return JsonResponse(context, safe=False)
+    # context = {
+    #     'results' : serializer.data,
+    #     'page' : page
+    # }
+    # print(context)
+    return HttpResponse(status=HTTP_201_CREATED)
 
 
 def schedule_api():
