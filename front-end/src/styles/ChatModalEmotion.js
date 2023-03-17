@@ -58,6 +58,12 @@ export const SmallSidebar = styled.div`
   justify-content: space-between;
   z-index: 98;
 
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+
   .menubar {
     cursor: pointer;
     transition: all 0.3s ease-in-out;
@@ -108,6 +114,12 @@ export const SideBarBody = styled(motion.div)`
   border-right: 2px solid ${Common.colors.white01};
   width: 18rem;
   height: 100%;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 
   .channel-title-wrapper {
     width: 100%;
