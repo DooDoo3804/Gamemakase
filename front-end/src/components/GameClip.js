@@ -71,6 +71,9 @@ cursor: pointer;
       @media (max-width: 870px) {
         align-items: center;
       } 
+      @media (max-width: 550px) {
+        display: none;
+      }
     }
     .brand-logo {
       position: relative;
@@ -78,7 +81,7 @@ cursor: pointer;
       max-width: 20px;
       height: 100%;
       max-height: 20px;
-      margin-right: 5px;
+      margin-right: 13px;
     }
   }
   .price {
