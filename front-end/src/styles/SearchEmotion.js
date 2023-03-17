@@ -77,8 +77,13 @@ export const SearchResultsWrapper = styled(motion.div)`
     min-width: 20%;
     max-width: 20%;
     @media (min-width: 1560px) {
-      min-width: 30%;
-      max-width: 30%;
+      min-width: 17%;
+      max-width: 17%;
+      margin-right: 4%;
+    }
+    @media (max-width: 1000px) {
+      min-width: 25%;
+      max-width: 25%;
       margin-right: 4%;
     }
     @media (max-width: 870px) {
@@ -197,6 +202,9 @@ export const SearchResultsWrapper = styled(motion.div)`
     width: 100%;
     @media (max-width: 1160px) {
       width: 70%;
+    }
+    @media (max-width: 1000px) {
+      width: 65%;
     }
     @media (max-width: 870px) {
       min-width: 100%;
