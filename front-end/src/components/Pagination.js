@@ -1,7 +1,11 @@
+import Pagination from "react-js-pagination";
 import styled from "@emotion/styled";
-import { Common } from "./Common";
+import { Common } from "../styles/Common";
 
-export const PagingBar = styled.div`
+const PagingBar = styled.div`
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   .pagination {
     display: flex;
     justify-content: center;
@@ -54,5 +58,20 @@ export const PagingBar = styled.div`
   ul.pagination li a:hover {
     color: ${Common.colors.mainColor04};
   }
-
 `;
+
+export const Paging = ({ page, count, setPage, countPerPage }) => {
+  return (
+    <PagingBar>
+      <Pagination
+        activePage={page}
+        itemsCountPerPage={countPerPage}
+        totalItemsCount={count}
+        pageRangeDisplayed={5}
+        prevPageText={"‹"}
+        nextPageText={"›"}
+        onChange={setPage}
+      />
+    </PagingBar>
+  );
+};
