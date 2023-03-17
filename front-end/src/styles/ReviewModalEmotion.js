@@ -29,6 +29,12 @@ export const ReviewModalBody = styled(motion.div)`
   border: 2px solid ${Common.colors.white01};
   transition: all 0.5s ease-in-out;
 
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+
   @media (min-width: 1024px) {
     width: 48rem;
     min-height: 35rem;
