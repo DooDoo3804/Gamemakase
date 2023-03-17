@@ -11,6 +11,14 @@ from .serializers import *
 from django.core.paginator import Paginator
 
 
+'''
+steam_id user_steam_id user_id
+스팀 아이디와 스팀아이디, 유저스팀 아이디
+이거 해결해야함
+단단히 꼬임
+'''
+
+
 def A(df, steamid):
     user_game = GameHistory.objects.filter(user=steamid)
     print(user_game)
@@ -73,7 +81,7 @@ def get_recommend(user, neighbor_list, df):
 
 # big 데이터 추천 결과
 def get_recommended_games(userid):
-    check1 = Recommendation(steam_id = 1, game_id = 0, rating = 6.0)
+    check1 = Recommendation(steam_id = 1, game_id = 10, rating = 6.0)
     check1.save()
 
     # 데이터 불러와서 테이블 만들기
@@ -92,7 +100,7 @@ def get_recommended_games(userid):
 
     df = pd.DataFrame(result)
 
-    check2 = Recommendation(steam_id = 2, game_id = 0, rating = 6.0)
+    check2 = Recommendation(steam_id = 2, game_id = 10, rating = 6.0)
     check2.save()
 
 
@@ -102,7 +110,7 @@ def get_recommended_games(userid):
     df = A(df, userid)
     print(df.tail(10))
 
-    check3 = Recommendation(steam_id = 3, game_id = 0, rating = 6.0)
+    check3 = Recommendation(steam_id = 3, game_id = 10, rating = 6.0)
     check3.save()
 
     pivot_table = pd.pivot_table(df, values='rating', index=[
@@ -117,7 +125,7 @@ def get_recommended_games(userid):
     knn = list(knn.index)
     print(knn)
 
-    check4 = Recommendation(steam_id = 4, game_id = 0, rating = 6.0)
+    check4 = Recommendation(steam_id = 4, game_id = 10, rating = 6.0)
     check4.save()
 
     json_data_2 = df

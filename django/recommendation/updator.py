@@ -11,3 +11,4 @@ def start():
     def auto_update():
         schedule_api()
     scheduler.start()
+    print("started")
