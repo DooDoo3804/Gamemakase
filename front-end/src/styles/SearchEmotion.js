@@ -9,6 +9,7 @@ export const SearchWrapper = styled.div`
   margin-top: 20px;
   margin-left: 40px;
   margin-right: 40px;
+  padding-bottom: 50px;
   @media (min-width: 1560px) {
     margin-left: 60px;
     margin-right: 60px;
@@ -240,9 +241,10 @@ export const UserSearchResultsWrapper = styled.div`
       display: flex;
       width: 100%;
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: center;
     }
     .profile-circle {
+      max-width: 700px;
       width: 100%;
       justify-content: center;
       margin: 0px 0px 20px 0px;
@@ -263,6 +265,7 @@ export const UserSearchResultsWrapper = styled.div`
       font-style: normal;
       font-weight: 400;
       text-decoration: none;
+      margin-top: 30px;
       margin-bottom: 35px;
     }
     font-size: 18px;
