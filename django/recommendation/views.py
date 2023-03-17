@@ -113,32 +113,22 @@ def get_recommended_games(userid):
     print(recommend[:5])
 
     games = []
-    for game_id, rating in recommend[:15]:
+    Recommendation.objects.filter(steam_id=userid).delete()
+    for game_id, rating in recommend[:10]:
         game = Game.objects.get(game_id=game_id)
         images = Image.objects.filter(type_id = game_id)
-        new_game = {
-            'game_id' : game_id,
-            "game_name" : game.game_name, 
-            "score" : rating,
-            "game_image" : images
-        }
-        games.append(new_game)
-    serializer = GameRecommendationSerializer(games, many=True)
-    
-    # pagination
-    p = Paginator(serializer.data, 5)
-    page = {
-        'pageNum' : 1,
-        'size' : 5,
-        'count' : len(p.page(1)),
-    }
-    
-    context = {
-        'results' : serializer.data,
-        'page' : page
-    }
-    print(context)
-    return JsonResponse(context, safe=False)
+        # new_game = {
+        #     'game_id' : game_id,
+        #     "game_name" : game.game_name, 
+        #     "score" : rating,
+        #     "game_image" : images
+        # }
+        # games.append(new_game)
+
+        # recommendation 테이블에 저장
+        recommendation = Recommendation(steam_id = userid, game_id = game.game_id, rating = rating)
+        print(recommendation)
+        recommendation.save()
 
 
 # small 데이터 추천 결과
@@ -221,8 +211,7 @@ def get_recommended_games_small(request, userid):
 def schedule_api():
     
     print("start big data recommend start")
-    users = User.objects.all()
-    # users = User.objects.order_by('user_id').distinct()
+    users = User.objects.order_by('user_id').distinct()
     print(users)
     for user in users:
         get_recommended_games(user.user_steam_id)
