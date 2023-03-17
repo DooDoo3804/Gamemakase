@@ -182,7 +182,7 @@ def get_recommended_games_small(request, userid):
     recommend = get_recommend(userid, knn, json_data_2)
     # print(recommend[:5])
 
-    Recommendation.objects.all().delete()
+    Recommendation.objects.filter(steam_id=userid).delete()
     for game_id, rating in recommend[:10]:
         game = Game.objects.get(game_id=game_id)
         images = Image.objects.filter(type_id = game_id)
