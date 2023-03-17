@@ -1,6 +1,7 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from .jobs.jobs import schedule_api
+from .views import schedule_api
 from django_apscheduler.jobstores import register_events, DjangoJobStore
+
 def start():
     print("start schedule")
     scheduler = BackgroundScheduler()
