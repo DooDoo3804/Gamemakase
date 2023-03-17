@@ -73,8 +73,8 @@ def get_recommend(user, neighbor_list, df):
 
 # big 데이터 추천 결과
 def get_recommended_games(userid):
-     check1 = Recommendation(steam_id = 1, game_id = 0, rating = 6.0)
-     check1.save()
+    check1 = Recommendation(steam_id = 1, game_id = 0, rating = 6.0)
+    check1.save()
 
     # 데이터 불러와서 테이블 만들기
     conn = pymysql.connect(
