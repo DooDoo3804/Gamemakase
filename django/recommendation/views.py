@@ -72,7 +72,7 @@ def get_recommend(user, neighbor_list, df):
 
 
 # big 데이터 추천 결과
-def get_recommended_games(request, userid):
+def get_recommended_games(userid):
     # 데이터 불러와서 테이블 만들기
     conn = pymysql.connect(
         host="43.201.61.185",
