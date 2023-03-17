@@ -5,6 +5,10 @@ export const EllipsisWrapper = styled.div`
   padding-right: 5px;
 
   .ellipsis-button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     margin-left: auto;
   }
 
@@ -21,10 +25,31 @@ export const EllipsisWrapper = styled.div`
 export const EditModalWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-end;
   margin-left: auto;
+  align-items: flex-end;
+  font-size: 16px;
+
+  .xmark-svg {
+    height: 15px;
+    margin-bottom: 7px;
+  }
+
+  .modal-inner {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
   .delete {
+    cursor: pointer;
     color: #ffa7a7;
+  }
+
+  .edit {
+    cursor: pointer;
   }
 `;

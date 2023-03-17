@@ -1,10 +1,9 @@
-import { useState, useRef } from "react"
-import { 
-    EllipsisWrapper,
-    EditModalWrapper, } from "../styles/EditModalEmotion";
-import ellipsis from "../assets/fontAwesomeSvg/ellipsis-vertical-solid.svg";
+import { useState, useRef } from "react";
+import { EllipsisWrapper, EditModalWrapper } from "../styles/EditModalEmotion";
+import ellipsisSvg from "../assets/fontAwesomeSvg/ellipsis-vertical-solid.svg";
+import xmarkSvg from "../assets/fontAwesomeSvg/xmark.svg";
 
-const EditModal = () => {
+const EditModal = (props) => {
     const [showModal, setShowModal] = useState(false);
 
     const wrapperRef = useRef();
@@ -14,26 +13,34 @@ const EditModal = () => {
 
     if (!showModal) {
         return (
-            <EllipsisWrapper className="ellipsis-button"
-                onClick={() => { setShowModal(!showModal) }}>
-                <img src={ellipsis} alt="ellipsis" className="ellipsis" />
+            <EllipsisWrapper
+                className="ellipsis-button"
+                onClick={() => {
+                    setShowModal(!showModal);
+                }}
+            >
+                <img src={ellipsisSvg} alt="ellipsis" className="ellipsis" />
             </EllipsisWrapper>
-        )
-    };
-    
+        );
+    }
+
     return (
-        <EditModalWrapper
-            className="editModal"
-            ref={wrapperRef}
-            onClick={(e) => {
-                if (wrapperRef.current !== e.target) {
-                    handleClose();
-                }
-            }}
-            exit={{ opacity: 0 }}
-        >
-            <span className="edit">edit</span>
-            <span className="delete">delete</span>
+        <EditModalWrapper className="editModal" exit={{ opacity: 0 }}>
+            <img
+                src={xmarkSvg}
+                alt="xmarkSvg"
+                className="xmark-svg"
+                ref={wrapperRef}
+                onClick={(e) => {
+                    if (wrapperRef.current === e.target) {
+                        handleClose();
+                    }
+                }}
+            />
+            <div className="modal-inner">
+                <span onClick={props.editFunction} className="edit">edit</span>
+                <span onClick={props.deleteFunction} className="delete">delete</span>
+            </div>
         </EditModalWrapper>
     );
 };
