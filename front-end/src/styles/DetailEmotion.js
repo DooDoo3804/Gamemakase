@@ -141,6 +141,12 @@ export const DetailWrapper = styled.div`
     align-items: center;
     font-family: "Noto Serif KR", serif;
 
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
     @media (min-width: 768px) {
       width: 20vw;
       height: 20vw;
@@ -213,6 +219,12 @@ export const DetailWrapper = styled.div`
 
   .screenshot-text {
     margin: 0;
+
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   .swiper-pagination-bullet {
@@ -276,6 +288,12 @@ export const RecommendUsers = styled.div`
     margin: 0;
     font-family: "Noto Sans KR", serif;
     font-weight: 700;
+
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 
     @media (min-width: 768px) {
       padding: 0rem 4rem;
@@ -421,6 +439,12 @@ export const ReviewWrapper = styled.div`
     margin: 0;
     font-family: "Noto Sans KR", serif;
     font-weight: 700;
+
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   .review-wrapper {
@@ -518,7 +542,7 @@ export const SingleReview = styled(motion.div)`
     height: 100%;
     object-fit: cover;
   }
-  
+
   .star-wrapper {
     display: flex;
   }
