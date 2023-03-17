@@ -5,13 +5,16 @@ import linuxSvg from "../assets/fontAwesomeSvg/linux.svg";
 
 const GameSummary = (props) => {
   return (
-    <GameSummaryClip key={props.idx}>
+    <GameSummaryClip
+      whileHover={{ scale: 1.03 }}
+      transition={{ type: "spring", stiffness: 400, damping: 12 }}
+    >
       <img src={props.imgUrl} alt="gameImage"></img>
       <div className="game-explain">
         <div className="title">{props.title}</div>
         <div className="logo-box">
           {props.window ? (
-            <img src={windowSvg} className="brand-logo" alt="windowSvg"/>
+            <img src={windowSvg} className="brand-logo" alt="windowSvg" />
           ) : (
             ""
           )}

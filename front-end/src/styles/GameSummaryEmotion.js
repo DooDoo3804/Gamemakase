@@ -1,10 +1,14 @@
 import styled from "@emotion/styled";
+import { motion } from "framer-motion";
 import { Common } from "./Common";
 
-export const GameSummaryClip = styled.div`
+export const GameSummaryClip = styled(motion.div)`
+  cursor: pointer;
+  height: auto;
   background: rgba(217, 217, 217, 0.2);
-  border-radius: 10px;
+  border-radius: 15px;
   margin-bottom: 20px;
+  filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
 
   display: flex;
   justify-content: flex-start;
@@ -15,7 +19,7 @@ export const GameSummaryClip = styled.div`
     min-width: 360px;
     flex-direction: column;
   }
-  
+
   @media (max-width: 700px) {
     height: 120px;
   }
@@ -32,7 +36,9 @@ export const GameSummaryClip = styled.div`
 
   height: 132px;
   img {
-    cursor: pointer;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     @media (max-width: 550px) {
       margin-top: 15px;
       min-height: 120px;
@@ -63,10 +69,9 @@ export const GameSummaryClip = styled.div`
     }
 
     .title {
-      cursor: pointer;
       font-family: "Noto Sans KR";
       font-style: normal;
-      font-size: 22px;
+      font-size: 18px;
       line-height: 30px;
 
       position: relative;
@@ -102,6 +107,9 @@ export const GameSummaryClip = styled.div`
     }
   }
   .price {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     height: 20px;
     color: ${Common.colors.lightGray01};
     position: relative;
@@ -110,7 +118,7 @@ export const GameSummaryClip = styled.div`
     right: 1rem;
     margin-left: auto;
     font-size: 18px;
-    
+
     @media (max-width: 550px) {
       top: -1.5rem;
     }
@@ -123,5 +131,5 @@ export const GameSummaryClip = styled.div`
       font-size: 15px;
       top: 75%;
     }
-}
+  }
 `;

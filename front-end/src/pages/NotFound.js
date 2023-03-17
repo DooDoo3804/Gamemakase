@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Common } from "../styles/Common";
 import { useNavigate } from "react-router-dom";
 
-const NotFoundWrapper = styled.div`
+export const NotFoundWrapper = styled.div`
   width: 100%;
   height: calc(100vh - 3.9rem);
 
@@ -17,6 +17,12 @@ const NotFoundWrapper = styled.div`
   );
 
   transition: all 0.3s ease-in-out;
+
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 
   .notfound-body {
     display: flex;

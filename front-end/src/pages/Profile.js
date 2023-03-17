@@ -2,9 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { ResponsivePie } from "@nivo/pie";
 import { Common } from "../styles/Common";
+import { motion } from "framer-motion";
+//Components
 import GameSummary from "../components/GameSummary";
-import { Paging } from "../components/Paging";
+import { Paging } from "../components/Pagination";
 import EditModal from "../components/EditModal";
+//Emotions
 import {
   ProfileBackgroundWrapper,
   ProfileImgWrapper,
@@ -15,61 +18,52 @@ import {
   SingleReview,
   NoReivew,
 } from "../styles/ProfileEmotion";
-
+//Lottie
 import Lottie from "react-lottie";
 import analysis from "../assets/lottie/analysis.json";
 import noReivew from "../assets/lottie/review.json";
-
+//Svg
 import starSvgYellow from "../assets/fontAwesomeSvg/star-yellow.svg";
 import starSvgEmpty from "../assets/fontAwesomeSvg/star-empty.svg";
-
-// 임시 import 이미지
+//임시
 import exampleGameImg from "../assets/임시게임이미지.svg";
 import profileImg from "../assets/profileImg.svg";
 
 const Profile = () => {
   const location = useLocation();
   const userId = location.pathname.split("/").reverse()[0];
-
-  const [userName, setUserName] = useState(String);
-  const [mainContent, setMainContent] = useState(true);
-  const [reviewsContent, setReviewsContent] = useState(false);
-  const [statisticsData, setStatisticsData] = useState(Array);
-  const [statisticsSum, setStatisticsSum] = useState(Number);
-
-  // paging 관련 state
-  const [scrapGames, setScrapGames] = useState([{},]);
+  //state
+  const [userName, setUserName] = useState("");
+  const [isMainTap, setIsMainTap] = useState(true);
+  const [statisticsData, setStatisticsData] = useState([]);
+  const [statisticsSum, setStatisticsSum] = useState(0);
+  // paging state
+  const [scrapGames, setScrapGames] = useState([{}]);
   const [gamesCount, setGamesCount] = useState(0);
   const [gameCurrentpage, setGameCurrentpage] = useState(1);
   const [reviewCurrentpage, setReviewCurrentpage] = useState(1);
   //const [countPerPage] = useState(6);
 
-  // tap 클릭시 실행될 function
+  // tap switching func
   const clickMainTap = () => {
-    setMainContent(true);
-    setReviewsContent(false);
-    mainDataSetting();
+    setIsMainTap(true);
   };
-
   const clickReviewsTap = () => {
-    setMainContent(false);
-    setReviewsContent(true);
+    setIsMainTap(false);
   };
 
+  // lottie option
   const option = (data) => {
     return {
       loop: true,
       autoplay: true,
       animationData: data,
-    }
-  }
+    };
+  };
 
-  ////////////////////////////////////////////
-  //          HARD CODING 임시 DATA         //
-  ////////////////////////////////////////////
+  // Data setting at mount
   const setMainTapData = useCallback(() => {
-    const genre = [];
-    const genre2 = [
+    const genre = [
       { id: "Casual", value: 116 },
       { id: "Indie", value: 56 },
       { id: "RPG", value: 198 },
@@ -134,9 +128,7 @@ const Profile = () => {
     setStatisticsSum(calStatisticsSum(genre));
     setGamesCount(8);
   }, []);
-
-  const reviewData = {};
-  const reviewDatatmp = {
+  const reviewData = {
     user: {
       userImagePath:
         "https://item.kakaocdn.net/do/493188dee481260d5c89790036be0e66f604e7b0e6900f9ac53a43965300eb9a",
@@ -242,6 +234,7 @@ const Profile = () => {
   /////////////////////////////////////////////
   /////         rending function         //////
   /////////////////////////////////////////////
+
   const mainTapRend = () => {
     const statisticsRend = () => {
       const result = [];
@@ -256,9 +249,7 @@ const Profile = () => {
                 padAngle={4}
                 cornerRadius={10}
                 arcLabel={(e) => {
-                  return (
-                    Math.ceil((e.value / statisticsSum) * 100) + "%"
-                  );
+                  return Math.ceil((e.value / statisticsSum) * 100) + "%";
                 }}
                 colors={[
                   `${Common.colors.mainColor02}`,
@@ -307,46 +298,64 @@ const Profile = () => {
               <h2>{statisticsData[0].id} 게임을 선호하시는군요!</h2>
               {statisticsData.length > 2 ? (
                 <h4>
-                  {statisticsData[1].id}, {statisticsData[2].id}{" "}
-                  장르도 선호하는 장르입니다.
-                </h4>) : ""}
+                  {statisticsData[1].id}, {statisticsData[2].id} 장르도 선호하는
+                  장르입니다.
+                </h4>
+              ) : (
+                ""
+              )}
             </div>
-          </div>);
+          </div>
+        );
       } else {
         result.push(
           <div className="statistics" key="statisticsBox">
-            <div className="no-data-msg">
-              <Lottie options={option(analysis)} height={300} width={300}></Lottie>
+            <motion.div
+              className="no-data-msg"
+              whileHover={{ scale: 1.03 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <Lottie
+                options={option(analysis)}
+                height={300}
+                width={300}
+              ></Lottie>
               아직 플레이 기록이 없어요 : (
-            </div>
+            </motion.div>
           </div>
         );
       }
       return result;
-    }
+    };
 
     const result = [];
-    result.push(<div key="mainContent">
-      <ProfileMainStatistics
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-          transition: { delay: 0.1 },
-        }}>{statisticsRend()}</ProfileMainStatistics>
-      <ProfileScrapBook
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-          transition: { delay: 0.1 },
-        }}>
-        <div className="scrap-header">ScrapBook</div>
-        {scrapGamesRend()}
-      </ProfileScrapBook>
-    </div>);
+    result.push(
+      <div key="mainContent">
+        <ProfileMainStatistics
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+            transition: { delay: 0.1 },
+          }}
+        >
+          {statisticsRend()}
+        </ProfileMainStatistics>
+        <ProfileScrapBook
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+            transition: { delay: 0.1 },
+          }}
+        >
+          <div className="scrap-header">ScrapBook</div>
+          {scrapGamesRend()}
+        </ProfileScrapBook>
+      </div>
+    );
     return result;
-  }
+  };
 
   const scrapGamesRend = () => {
     const singleScrapDataRend = () => {
@@ -373,7 +382,7 @@ const Profile = () => {
     };
     const result = [];
     if (scrapGames && scrapGames.length > 0) {
-      result.push((
+      result.push(
         <div key={"scrapGames"}>
           <div className="box">{singleScrapDataRend()}</div>
           {gamesCount > 6 ? (
@@ -382,8 +391,12 @@ const Profile = () => {
               count={gamesCount}
               setPage={setPage}
               countPerPage={6}
-            />) : ""}
-        </div>));
+            />
+          ) : (
+            ""
+          )}
+        </div>
+      );
     } else {
       result.push(
         <div className="no-data-msg" key="noGameData">
@@ -399,20 +412,37 @@ const Profile = () => {
       const result = [];
       for (let i = 0; i < 5; i++) {
         if (i < rating) {
-          result.push(
-            <img src={starSvgYellow} alt="starSvg" key={i} />
-          );
+          result.push(<img src={starSvgYellow} alt="starSvg" key={i} />);
         } else {
-          result.push(
-            <img src={starSvgEmpty} alt="starEmptySvg" key={i} />
-          )
+          result.push(<img src={starSvgEmpty} alt="starEmptySvg" key={i} />);
         }
       }
       return result;
     };
 
+    const reviewEdit = () => {
+      console.log("edit!");
+    };
+    const reviewDelete = () => {
+      console.log("delete!");
+    };
+
     const reivewRend = () => {
-      const month = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const month = [
+        "",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
       const result = [];
       reviewData.result.forEach((e) => {
         const dateArr = e.createdAt.split("-");
@@ -433,20 +463,17 @@ const Profile = () => {
           >
             <div className="game-wrapper">
               <div className="game-img-wrapper">
-                <img
-                  src={e.gameImagePath}
-                  alt="profile"
-                  className="game-img"
-                />
+                <img src={e.gameImagePath} alt="profile" className="game-img" />
               </div>
               <div className="game-content-wrapper">
                 <p className="game-title">{e.gameTitle}</p>
-                <div className="star-wrapper">
-                  {starsRend(e.reviewGrade)}
-                </div>
+                <div className="star-wrapper">{starsRend(e.reviewGrade)}</div>
                 <div className="create-date">{dateString}</div>
               </div>
-              <EditModal></EditModal>
+              <EditModal
+                editFunction={reviewEdit}
+                deleteFunction={reviewDelete}
+              ></EditModal>
             </div>
             <p className="review-title">{e.reviewTitle}</p>
             <p className="review-content">{e.reviewContent}</p>
@@ -462,13 +489,15 @@ const Profile = () => {
         const setPage = (e) => {
           setReviewCurrentpage(e);
         };
-        result.push(<Paging
-          key="reviewPaging"
-          page={reviewCurrentpage}
-          count={reviewData.page.size}
-          setPage={setPage}
-          countPerPage={6}
-        />);
+        result.push(
+          <Paging
+            key="reviewPaging"
+            page={reviewCurrentpage}
+            count={reviewData.page.size}
+            setPage={setPage}
+            countPerPage={6}
+          />
+        );
       }
       return result;
     };
@@ -479,27 +508,34 @@ const Profile = () => {
         {reviewData != null && reviewData.result != null ? (
           <>
             <div className="review-header">My Reviews</div>
-            <div className="review-wrapper">
-              {reivewRend()}
-            </div>
+            <div className="review-wrapper">{reivewRend()}</div>
             {reviewPaging()}
           </>
-        )
-          : (
-            <NoReivew
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-                transition: { delay: 0.1 },
-              }}>
-              <div className="no-review-wrapper">
-                <div>
-                  <Lottie options={option(noReivew)} height={300} width={300}></Lottie>
-                  아직 작성한 리뷰가 없어요 : (
-                </div>
-              </div>
-            </NoReivew>)}
+        ) : (
+          <NoReivew
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+              transition: { delay: 0.1 },
+            }}
+          >
+            <div className="no-review-wrapper">
+              <motion.div
+                className="lottie-wrapper"
+                whileHover={{ scale: 1.03 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <Lottie
+                  options={option(noReivew)}
+                  height={300}
+                  width={300}
+                ></Lottie>
+                아직 작성한 리뷰가 없어요 : (
+              </motion.div>
+            </div>
+          </NoReivew>
+        )}
       </ProfileReviewsWrapper>
     );
     return result;
@@ -507,9 +543,9 @@ const Profile = () => {
 
   useEffect(mainDataSetting, [userId, setMainTapData]);
 
-
-  ///////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////
+  /////              return              //////
+  /////////////////////////////////////////////
 
   return (
     <ProfileBackgroundWrapper>
@@ -517,22 +553,22 @@ const Profile = () => {
         <div>
           <ProfileImgWrapper>
             <img src={profileImg} alt="profileImage" />
-            {userName != null ? (
-              <p className="profile-name">{userName}</p>
-            ) : ""}
+            {userName != null ? <p className="profile-name">{userName}</p> : ""}
           </ProfileImgWrapper>
         </div>
         <nav>
           <ProfileNavWrapper>
             <div className="flex">
               <div
-                className={`${mainContent === true ? "nav-tap-clicked" : "nav-tap"}`}
-                onClick={() => clickMainTap()}>
+                className={`${isMainTap ? "nav-tap-clicked" : "nav-tap"}`}
+                onClick={() => clickMainTap()}
+              >
                 Main
               </div>
               <div
-                className={`${reviewsContent === true ? "nav-tap-clicked" : "nav-tap"}`}
-                onClick={() => clickReviewsTap()}>
+                className={`${!isMainTap ? "nav-tap-clicked" : "nav-tap"}`}
+                onClick={() => clickReviewsTap()}
+              >
                 Reviews
               </div>
             </div>
@@ -540,9 +576,7 @@ const Profile = () => {
           </ProfileNavWrapper>
         </nav>
         <section>
-          {mainContent === true ? mainTapRend()
-            : reviewsContent === true ? reviewTapRend()
-              : ""}
+          {isMainTap ? mainTapRend() : reviewTapRend()}
           <div></div>
         </section>
       </div>

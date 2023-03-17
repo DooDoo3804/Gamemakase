@@ -13,17 +13,25 @@ export const MainHeaderWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
 
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+
   .logo-wrapper {
     display: flex;
-    width: 5rem;
+    width: 4rem;
     height: 3rem;
+    align-items: center;
+    margin: 0rem 0.5rem;
     cursor: pointer;
   }
 
   .logo-img {
     object-fit: contain;
     position: absolute;
-    height: 3rem;
+    height: 2.5rem;
     opacity: 1;
   }
 
