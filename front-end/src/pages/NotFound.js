@@ -18,6 +18,12 @@ export const NotFoundWrapper = styled.div`
 
   transition: all 0.3s ease-in-out;
 
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+
   .notfound-body {
     display: flex;
     flex-wrap: wrap;
