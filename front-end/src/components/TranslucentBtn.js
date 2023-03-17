@@ -15,6 +15,12 @@ const TranslucentBtnEmotion = styled.div`
 
   transition: all 0.3s ease-in-out;
 
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+
   @media (min-width: 768px) {
     width: 8rem;
     height: 2.5rem;

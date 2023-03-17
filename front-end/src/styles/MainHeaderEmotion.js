@@ -13,6 +13,12 @@ export const MainHeaderWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
 
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+
   .logo-wrapper {
     display: flex;
     width: 5rem;
