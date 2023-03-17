@@ -73,6 +73,9 @@ def get_recommend(user, neighbor_list, df):
 
 # big 데이터 추천 결과
 def get_recommended_games(userid):
+     check1 = Recommendation(steam_id = 1, game_id = 0, rating = 6.0)
+     check1.save()
+
     # 데이터 불러와서 테이블 만들기
     conn = pymysql.connect(
         host="43.201.61.185",
@@ -89,10 +92,18 @@ def get_recommended_games(userid):
 
     df = pd.DataFrame(result)
 
+    check2 = Recommendation(steam_id = 2, game_id = 0, rating = 6.0)
+    check2.save()
+
+
+
     # 가까운 유저 찾아서 테이블에 반영
     print(df.tail(10))
     df = A(df, userid)
     print(df.tail(10))
+
+    check3 = Recommendation(steam_id = 3, game_id = 0, rating = 6.0)
+    check3.save()
 
     pivot_table = pd.pivot_table(df, values='rating', index=[
                                  'steam_id'], columns=['game_id'])
@@ -105,6 +116,9 @@ def get_recommended_games(userid):
     knn = cos_sim_df[userid].sort_values(ascending=False)[:30]
     knn = list(knn.index)
     print(knn)
+
+    check4 = Recommendation(steam_id = 4, game_id = 0, rating = 6.0)
+    check4.save()
 
     json_data_2 = df
     json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
