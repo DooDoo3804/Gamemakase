@@ -182,16 +182,16 @@ def get_recommended_games_small(request, userid):
     recommend = get_recommend(userid, knn, json_data_2)
     # print(recommend[:5])
 
-    games = []
+    Recommendation.objects.all().delete()
     for game_id, rating in recommend[:10]:
         game = Game.objects.get(game_id=game_id)
         images = Image.objects.filter(type_id = game_id)
-        new_game = {
-            'game_id' : game_id,
-            "game_name" : game.game_name, 
-            "score" : rating,
-            "game_image" : images
-        }
+        # new_game = {
+        #     'game_id' : game_id,
+        #     "game_name" : game.game_name, 
+        #     "score" : rating,
+        #     "game_image" : images
+        # }
         # games.append(new_game)
 
         # recommendation 테이블에 저장
