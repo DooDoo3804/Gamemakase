@@ -53,7 +53,8 @@ export const TestWrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 5rem 0rem;
+    margin: 3rem 0rem;
+    padding: 2rem 0rem;
     max-width: 60rem;
 
     background-color: rgba(255, 255, 255, 0.2);
@@ -63,6 +64,12 @@ export const TestWrapper = styled.div`
     font-family: "Noto Sans KR", serif;
 
     transition: all 0.3s ease-in-out;
+
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 
     @media (min-width: 768px) {
       width: 80%;
@@ -80,7 +87,7 @@ export const TestWrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 5rem 0rem;
+    margin: 3rem 0rem;
     max-width: 60rem;
 
     background-color: rgba(255, 255, 255, 0.2);
@@ -137,6 +144,13 @@ export const TestWrapper = styled.div`
 
   .type-text {
     font-weight: 700;
+
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
     @media (min-width: 768px) {
       font-size: 2rem;
     }
@@ -162,6 +176,13 @@ export const TestWrapper = styled.div`
 
   .rcm-text {
     font-weight: 700;
+
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
     @media (min-width: 768px) {
       font-size: 1.5rem;
     }
@@ -191,6 +212,12 @@ export const TestWrapper = styled.div`
       justify-content: center;
       align-items: center;
       border-radius: 2rem;
+
+      -ms-user-select: none;
+      -moz-user-select: -moz-none;
+      -khtml-user-select: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     .game-img {
