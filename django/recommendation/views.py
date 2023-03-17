@@ -221,7 +221,8 @@ def get_recommended_games_small(request, userid):
 def schedule_api():
     
     print("start big data recommend start")
-    users = User.objects.order_by('user_id').distinct()
+    users = User.objects.all()
+    # users = User.objects.order_by('user_id').distinct()
     print(users)
     for user in users:
         get_recommended_games(user.user_steam_id)
