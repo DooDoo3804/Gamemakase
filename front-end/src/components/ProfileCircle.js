@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
+import { motion } from "framer-motion";
 
-const StyleProfileCirlce = styled.div`
+const StyleProfileCirlce = styled(motion.div)`
   display: flex;
   margin : 15px;
   .profile-img-wrapper {
@@ -60,7 +61,9 @@ const StyleProfileCirlce = styled.div`
 
 const ProfileCircle = (props) => {
     return (
-        <StyleProfileCirlce>
+        <StyleProfileCirlce className="profile-circle"
+        whileHover={{ scale: 1.03 }}
+        transition={{ type: "spring", stiffness: 400, damping: 10 }}>
             <div className="profile-img-wrapper">
                 <img className="profile-img" src={props.profileImg} alt="profileImg" />
             </div>

@@ -7,7 +7,7 @@ const GameSummary = (props) => {
   return (
     <GameSummaryClip
       whileHover={{ scale: 1.03 }}
-      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+      transition={{ type: "spring", stiffness: 400, damping: 12 }}
     >
       <img src={props.imgUrl} alt="gameImage"></img>
       <div className="game-explain">

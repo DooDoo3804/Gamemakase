@@ -6,8 +6,13 @@ import { motion } from "framer-motion";
 export const SearchWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 4%;
-  margin-right: 4%;
+  margin-top: 20px;
+  margin-left: 40px;
+  margin-right: 40px;
+  @media (min-width: 1560px) {
+    margin-left: 60px;
+    margin-right: 60px;
+  }
 
   .game-search-results-header {
     color: ${Common.colors.white01};
@@ -15,6 +20,9 @@ export const SearchWrapper = styled.div`
     font-style: normal;
     font-weight: 400;
     font-size: 22px;
+    @media (max-width: 1160px) {
+      font-size: 19px;
+    }
     line-height: 35px;
     display: flex;
     align-items: center;
@@ -41,8 +49,8 @@ export const SearchHistoryWrapper = styled.div`
     margin-top: 15px;
     margin-bottom: 15px;
     width: 50%;
-    @media (max-width: 500px) {
-      width: 93%;
+    @media (max-width: 700px) {
+      width: 100%;
     }
     height: 2px;
     background-color: ${Common.colors.white01};
@@ -55,13 +63,31 @@ export const SearchResultsWrapper = styled(motion.div)`
   justify-content: space-between;
   align-items: flex-start;
 
+  @media (max-width: 1160px) {
+    flex-wrap: wrap;
+  }
+
   ////////////////////////////
   // filter
   .filter-wrapper {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-right: 3%;
+    min-width: 20%;
+    max-width: 20%;
+    @media (min-width: 1560px) {
+      min-width: 30%;
+      max-width: 30%;
+      margin-right: 4%;
+    }
+    @media (max-width: 870px) {
+      display: none;
+    }
+
     background-color: rgba(217, 217, 217, 0.18);
     padding: 20px 18px 20px 18px;
     border-radius: 10px;
-    min-width: 200px;
     color: ${Common.colors.white01};
 
     .filter-header {
@@ -85,7 +111,6 @@ export const SearchResultsWrapper = styled(motion.div)`
         margin-bottom: 12px;
       }
     }
-
     .range-wrapper {
       display: flex;
       flex-direction: column;
@@ -169,9 +194,14 @@ export const SearchResultsWrapper = styled(motion.div)`
   // game
 
   .results-wrapper {
-    margin-left: 3%;
-    margin-right: 3%;
     width: 100%;
+    @media (max-width: 1160px) {
+      width: 70%;
+    }
+    @media (max-width: 870px) {
+      min-width: 100%;
+      max-width: 100%;
+    }
   }
 `;
 
@@ -180,6 +210,7 @@ export const UserSearchResultsWrapper = styled.div`
   flex-direction: column;
   border-radius: 30px;
   padding: 20px;
+  margin-left: 30px;
   background: linear-gradient(
     180deg,
     rgba(184, 162, 207, 0.36) 0%,
@@ -188,10 +219,44 @@ export const UserSearchResultsWrapper = styled.div`
   );
   filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
   color: ${Common.colors.white01};
-
+  @media (min-width: 1560px) {
+    margin-left: 60px;
+  }
+  @media (max-width: 1160px) {
+    margin-left: 0px;
+    margin-top: 30px;
+    width: 100%;
+    padding: 0;
+    background: transparent;
+    .user-results {
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .profile-circle {
+      width: 100%;
+      justify-content: center;
+      margin: 0px 0px 20px 0px;
+      padding: 20px;
+      background: rgba(217, 217, 217, 0.08);
+    }
+  }
+  .profile-circle {
+    border-radius: 40px;
+  }
   .user-search-results-header {
     display: flex;
     justify-content: center;
+    @media (max-width: 1160px) {
+      justify-content: flex-start;
+      font-size: 22px;
+      font-family: "Noto Sans KR";
+      font-style: normal;
+      font-weight: 400;
+      text-decoration: none;
+      margin-bottom: 35px;
+    }
     font-size: 18px;
     font-style: normal;
     text-decoration: underline;

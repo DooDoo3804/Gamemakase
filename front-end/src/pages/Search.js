@@ -395,7 +395,7 @@ const Search = () => {
       }
       return result;
     };
-    result.push(<div key="userResults">{userResultsRend()}</div>);
+    result.push(<div key="userResults" className="user-results">{userResultsRend()}</div>);
     return result;
   };
 
