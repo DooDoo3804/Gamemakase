@@ -8,7 +8,6 @@ import { Common } from "../styles/Common";
 
 export const StyleGameClip = styled(motion.div)`
 cursor: pointer;
-  height: auto;
   background: rgba(217, 217, 217, 0.08);
   border-radius: 15px;
   margin-bottom: 20px;
@@ -18,9 +17,28 @@ cursor: pointer;
   justify-content: flex-start;
   flex-direction: row;
   height: 120px;
+  min-width: 500px;
   width: 100%;
-  img {
+
+  @media (min-width: 1560px) {
+    height: 155px;
+  }
+
+  @media (max-width: 870px) {
+    min-height: 180px;
+    min-width: 360px;
+    flex-direction: column;
+  }
+  .gameImg {
     height: 120px;
+    @media (min-width: 1560px) {
+      height: 155px;
+    }
+    @media (max-width: 870px) {
+      margin-top: 15px;
+      min-height: 120px;
+      min-width: 260px;
+    }
     width: auto;
   }
   .game-explain {
@@ -29,7 +47,17 @@ cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+
+    @media (max-width: 870px) {
+      flex-direction: row;
+      padding-top: 10px;
+      justify-content: flex-start;
+    }
+
     .title {
+      @media (max-width: 870px) {
+        padding-right: 20px;
+      } 
       font-family: "Noto Sans KR";
       font-style: normal;
       font-size: 18px;
@@ -40,7 +68,9 @@ cursor: pointer;
     }
     .logo-box {
       display: flex;
-      margin-top: 10px;
+      @media (max-width: 870px) {
+        align-items: center;
+      } 
     }
     .brand-logo {
       position: relative;
@@ -55,8 +85,10 @@ cursor: pointer;
     height: 20px;
     color: ${Common.colors.lightGray01};
     position: relative;
-
-    top: 75%;
+    top: 70%;
+    @media (max-width: 870px) {
+      top: -1.7rem;
+    }
     right: 1rem;
     margin-left: auto;
     font-size: 18px;
@@ -69,7 +101,7 @@ const GameClip = (props) => {
       whileHover={{ scale: 1.03 }}
       transition={{ type: "spring", stiffness: 400, damping: 10 }}
     >
-      <img src={props.imgUrl} alt="gameImage"></img>
+      <img src={props.imgUrl} className="gameImg" alt="gameImage"></img>
       <div className="game-explain">
         <div className="title">{props.title}</div>
         <div className="logo-box">
