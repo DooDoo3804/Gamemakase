@@ -30,6 +30,10 @@ export const ProfileBackgroundWrapper = styled.div`
 `;
 
 export const ProfileImgWrapper = styled.div`
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   position: absolute;
   margin-left: 10%;
   margin-top: -3rem;
@@ -69,6 +73,10 @@ export const ProfileImgWrapper = styled.div`
 `;
 
 export const ProfileNavWrapper = styled.div`
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -140,6 +148,11 @@ export const ProfileNavWrapper = styled.div`
 
 export const ProfileMainStatistics = styled(motion.div)`
   transition: all 0.3s ease-in-out;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 
   position: relative;
   margin-left: 10%;
@@ -218,6 +231,9 @@ export const ProfileScrapBook = styled(motion.div)`
   padding-bottom: 40px;
 
   .scrap-header {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     position: relative;
     margin-top: 30px;
     margin-bottom: 40px;
@@ -259,6 +275,10 @@ export const ProfileReviewsWrapper = styled.div`
   padding-bottom: 40px;
 
   .review-header {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     margin-top: 30px;
     color: ${Common.colors.white01};
     font-family: "Noto Sans KR";
@@ -344,6 +364,10 @@ export const SingleReview = styled(motion.div)`
   }
 
   .game-img-wrapper {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     overflow: hidden;
     cursor: pointer;
     width: 40%;
@@ -356,6 +380,10 @@ export const SingleReview = styled(motion.div)`
   }
 
   .star-wrapper {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     display: flex;
     @media (min-width: 620px) {
       width: 0.8rem;
@@ -390,6 +418,10 @@ export const SingleReview = styled(motion.div)`
   }
 
   .create-date {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     font-family: "Noto Sans KR";
     font-style: normal;
     font-size: 13px;
@@ -400,23 +432,40 @@ export const SingleReview = styled(motion.div)`
     font-family: "Noto Sans KR";
     font-style: normal;
     font-weight: 500;
+    font-size: 15px;
 
     @media (min-width: 800px) {
-      font-size: 15px;
-      margin: 0.5rem 0rem;
+      margin: 0.7rem 0rem;
     }
     @media (max-width: 800px) {
-      font-size: 13px;
       margin: 0.5rem 0rem;
     }
   }
 
+  .review-content {
+    font-size: 14px;
+  }
+
   .ellipsis-button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     margin-left: auto;
+  }
+
+  .xmark-svg {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
   }
 `;
 
 export const NoReivew = styled(motion.div)`
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   transition: all 0.3s ease-in-out;
   margin-top: 2.5rem;
   margin-bottom: 2.5rem;
