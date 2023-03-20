@@ -1,128 +1,306 @@
 import styled from "@emotion/styled";
 import { useRef } from "react";
-// import { AnimatePresence, motion } from "framer-motion";
+import { Common } from "../styles/Common";
+import plate from "../assets/banner_plate.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const Wrapper = styled.div`
-  body {
-    background: #333;
-    padding: 70px 0;
-    font: 15px/20px Arial, sans-serif;
-  }
+  display: flex;
+  flex-direction: column;
 
   .container {
     margin: 0 auto;
-    width: 250px;
-    height: 200px;
+    width: 150px;
+    height: 120px;
     position: relative;
-    perspective: 1000px;
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 1024px) {
+      perspective: 50rem;
+    }
+    @media (max-width: 1024px) {
+      perspective: 50rem;
+    }
+    @media (max-width: 768px) {
+      perspective: 50rem;
+    }
   }
 
   .carousel {
     height: 100%;
     width: 100%;
     position: absolute;
+
     transform-style: preserve-3d;
     transition: transform 1s;
   }
 
   .item {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     position: absolute;
-    background: #000;
-    width: 150px;
-    height: 120px;
-    /* line-height: 200px; */
-    font-size: 2em;
-    text-align: center;
-    color: #fff;
     opacity: 0.95;
-    border-radius: 10px;
+
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 1024px) {
+      width: 15rem;
+      height: 10rem;
+    }
+    @media (max-width: 1024px) {
+      width: 15rem;
+      height: 10rem;
+    }
+    @media (max-width: 768px) {
+      width: 15rem;
+      height: 10rem;
+    }
+  }
+
+  .img-container {
+    margin-top: 1rem;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 1024px) {
+      width: 12rem;
+      border-radius: 2rem;
+    }
+    @media (max-width: 1024px) {
+      width: 10rem;
+      border-radius: 2rem;
+    }
+    @media (max-width: 768px) {
+      width: 8rem;
+      border-radius: 2rem;
+    }
+  }
+
+  .game-plate-img {
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .plate-container {
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 1024px) {
+      max-height: 7rem;
+      margin-top: -4rem;
+    }
+    @media (max-width: 1024px) {
+      max-height: 6rem;
+      margin-top: -3rem;
+    }
+    @media (max-width: 768px) {
+      max-height: 5rem;
+      margin-top: -3rem;
+    }
+  }
+
+  .plate-img {
+    height: 100%;
+    object-fit: contain;
+    transition: all 0.3s ease-in-out;
   }
 
   .a {
-    transform: rotateY(0deg) translateZ(250px);
-    background: #ed1c24;
+    @media (min-width: 1024px) {
+      transform: rotateY(0deg) translateZ(200px);
+    }
+    @media (max-width: 1024px) {
+      transform: rotateY(0deg) translateZ(150px);
+    }
+    @media (max-width: 768px) {
+      transform: rotateY(0deg) translateZ(100px);
+    }
   }
   .b {
-    transform: rotateY(72deg) translateZ(250px);
-    background: #0072bc;
+    /* transform: rotateY(72deg) translateZ(150px); */
+    @media (min-width: 1024px) {
+      transform: rotateY(72deg) translateZ(200px);
+    }
+    @media (max-width: 1024px) {
+      transform: rotateY(72deg) translateZ(150px);
+    }
+    @media (max-width: 768px) {
+      transform: rotateY(72deg) translateZ(100px);
+    }
   }
   .c {
-    transform: rotateY(144deg) translateZ(250px);
-    background: #39b54a;
+    /* transform: rotateY(144deg) translateZ(150px); */
+    @media (min-width: 1024px) {
+      transform: rotateY(144deg) translateZ(200px);
+    }
+    @media (max-width: 1024px) {
+      transform: rotateY(144deg) translateZ(150px);
+    }
+    @media (max-width: 768px) {
+      transform: rotateY(144deg) translateZ(100px);
+    }
   }
   .d {
-    transform: rotateY(216deg) translateZ(250px);
-    background: #f26522;
+    /* transform: rotateY(216deg) translateZ(150px); */
+    @media (min-width: 1024px) {
+      transform: rotateY(216deg) translateZ(200px);
+    }
+    @media (max-width: 1024px) {
+      transform: rotateY(216deg) translateZ(150px);
+    }
+    @media (max-width: 768px) {
+      transform: rotateY(216deg) translateZ(100px);
+    }
   }
   .e {
-    transform: rotateY(288deg) translateZ(250px);
-    background: #630460;
+    /* transform: rotateY(288deg) translateZ(150px); */
+    @media (min-width: 1024px) {
+      transform: rotateY(288deg) translateZ(200px);
+    }
+    @media (max-width: 1024px) {
+      transform: rotateY(288deg) translateZ(150px);
+    }
+    @media (max-width: 768px) {
+      transform: rotateY(288deg) translateZ(100px);
+    }
+  }
+
+  .btns-wrapper {
+    display: flex;
+    justify-content: space-between;
+    z-index: 3;
   }
 
   .next,
   .prev {
-    color: #444;
-    position: absolute;
-    top: 100px;
-    padding: 1em 2em;
+    /* position: absolute; */
+    color: ${Common.colors.white01};
+
     cursor: pointer;
-    background: #ccc;
-    border-radius: 5px;
-    border-top: 1px solid #fff;
-    box-shadow: 0 5px 0 #999;
-    transition: box-shadow 0.1s, top 0.1s;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 2rem;
+    border: 1px solid ${Common.colors.white01};
+
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 1024px) {
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+    }
+    @media (max-width: 1024px) {
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+    }
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.8rem;
+    }
   }
   .next:hover,
   .prev:hover {
-    color: #000;
-  }
-  .next:active,
-  .prev:active {
-    top: 104px;
-    box-shadow: 0 1px 0 #999;
-  }
-  .next {
-    right: 5em;
-  }
-  .prev {
-    left: 5em;
+    background: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease-in-out;
   }
 `;
 
 const GameCarousel = () => {
-  // var carousel = $(".carousel"),
   const carousel = useRef(null);
+  const itemAngle = 72;
   let currdeg = 0;
 
-  const rotate = (e) => {
-    if (carousel.current) {
-      if (e.d === "n") {
-        currdeg = currdeg - 72;
-      }
-      if (e.d === "p") {
-        currdeg = currdeg + 72;
-      }
-      carousel.current.style.transform = `rotateY(${currdeg}deg)`;
-    }
+  const rotate = (deltaDeg) => {
+    currdeg = currdeg + deltaDeg;
+    carousel.current.style.transform = `rotateY(${currdeg}deg)`;
+  };
+
+  const handleNextClick = () => {
+    rotate(-itemAngle);
+  };
+
+  const handlePrevClick = () => {
+    rotate(itemAngle);
   };
 
   return (
     <Wrapper>
-      <div class="container">
-        <div class="carousel" ref={carousel}>
-          <div class="item a">A</div>
-          <div class="item b">B</div>
-          <div class="item c">C</div>
-          <div class="item d">D</div>
-          <div class="item e">E</div>
+      <div className="container">
+        <div className="carousel" ref={carousel}>
+          <div className="item a">
+            <div className="img-container">
+              <img
+                className="game-plate-img"
+                alt="game-img"
+                src="https://cdn.cloudflare.steamstatic.com/steam/apps/1868140/header.jpg?t=1678794959"
+              />
+            </div>
+            <div className="plate-container">
+              <img className="plate-img" alt="plate-img" src={plate} />
+            </div>
+          </div>
+          <div className="item b">
+            <div className="img-container">
+              <img
+                className="game-plate-img"
+                alt="game-img"
+                src="https://cdn.cloudflare.steamstatic.com/steam/apps/1210320/header.jpg?t=1671467586"
+              />
+            </div>
+            <div className="plate-container">
+              <img className="plate-img" alt="plate-img" src={plate} />
+            </div>
+          </div>
+          <div className="item c">
+            <div className="img-container">
+              <img
+                className="game-plate-img"
+                alt="game-img"
+                src="https://cdn.cloudflare.steamstatic.com/steam/apps/1868140/header.jpg?t=1678794959"
+              />
+            </div>
+            <div className="plate-container">
+              <img className="plate-img" alt="plate-img" src={plate} />
+            </div>
+          </div>
+          <div className="item d">
+            <div className="img-container">
+              <img
+                className="game-plate-img"
+                alt="game-img"
+                src="https://cdn.akamai.steamstatic.com/steam/apps/1557780/header_292x136_koreana.jpg?t=1640234732"
+              />
+            </div>
+            <div className="plate-container">
+              <img className="plate-img" alt="plate-img" src={plate} />
+            </div>
+          </div>
+          <div className="item e">
+            <div className="img-container">
+              <img
+                className="game-plate-img"
+                alt="game-img"
+                src="https://cdn.cloudflare.steamstatic.com/steam/apps/1210320/header.jpg?t=1671467586"
+              />
+            </div>
+            <div className="plate-container">
+              <img className="plate-img" alt="plate-img" src={plate} />
+            </div>
+          </div>
         </div>
       </div>
-      <div class="next" onClick={() => rotate({ d: "n" })}>
-        Next
-      </div>
-      <div class="prev" onClick={() => rotate({ d: "p" })}>
-        Prev
+      <div className="btns-wrapper">
+        <div className="prev" onClick={handlePrevClick}>
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </div>
+        <div className="next" onClick={handleNextClick}>
+          <FontAwesomeIcon icon={faArrowRight} />
+        </div>
       </div>
     </Wrapper>
   );
