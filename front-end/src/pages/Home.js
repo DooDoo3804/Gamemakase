@@ -242,7 +242,6 @@ const Home = () => {
               </div>
               <div className="games-wrapper">
                 <GameCarousel></GameCarousel>
-                {/* {todayGames ? renderTodayGames() : null} */}
               </div>
             </div>
           </Banner>
