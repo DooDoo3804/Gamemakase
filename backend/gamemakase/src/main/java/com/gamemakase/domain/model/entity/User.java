@@ -3,11 +3,6 @@ package com.gamemakase.domain.model.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -15,8 +10,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Getter
@@ -44,9 +39,11 @@ public class User {
   private String userName;
 
   @Column(name = "created_at")
+  @CreatedDate
   private LocalDateTime createdAt;
 
   @Column(name = "updated_at")
+  @LastModifiedDate
   private LocalDateTime updatedAt;
 
   @OneToOne

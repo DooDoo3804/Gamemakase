@@ -1,6 +1,10 @@
 package com.gamemakase.domain.controller;
 
+import com.gamemakase.domain.model.dto.LoginRequestDto;
+import com.gamemakase.domain.model.dto.SignUpRequestDto;
 import com.gamemakase.domain.model.dto.SteamLoginRequestDto;
+import com.gamemakase.domain.model.entity.User;
+import com.gamemakase.domain.model.service.UserService;
 import com.gamemakase.global.config.OpenIdAuthentication;
 import io.swagger.annotations.Api;
 import java.net.URI;
@@ -38,6 +42,7 @@ public class SteamController {
 
     private ConsumerManager consumerManager = new ConsumerManager();
     private static final Logger logger = LoggerFactory.getLogger(SteamController.class);
+    private final UserService userService;
 
     @GetMapping("/api/login/steam") // 스팀 로그인 이미지랑 연동
     public String steamLogin(HttpServletResponse response) throws IOException{
@@ -48,25 +53,25 @@ public class SteamController {
     }
 
     @GetMapping("/login/steam/callback")
-    public ResponseEntity<?> steamLoginCallBack(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ResponseEntity<?> steamLoginCallBack(HttpServletRequest request, HttpServletResponse response, SignUpRequestDto signUpRequestDto, LoginRequestDto loginRequestDto) throws Exception {
         ParameterList res = new ParameterList(request.getParameterMap());
-        Map<String, String> identity = new HashMap<>();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("http://www.gamemakase.com:3000"));
 
         String steamId = res.getParameters().get(4).toString().substring(53);
+        long steamIdNum = Long.parseLong(steamId);
 
-        if(steamId != null || steamId.length() != 0){
-            //로그인, 토큰발급
+        if (userService.isUser(steamIdNum)) {
+            //로그인
+
+            headers.setLocation(URI.create("http://www.gamemakase.com:3000"));
         } else {
-            // 회원가입
+            //회원가입
+            userService.signUp(signUpRequestDto, steamIdNum);
+            headers.setLocation(URI.create("http://www.gamemakase.com:3000/profile/1"));
         }
-
-        identity.put("steamId", steamId);
-
-        logger.info(identity.get("steamId"));
-        return new ResponseEntity<>(identity.get("steamId"), headers, HttpStatus.MOVED_PERMANENTLY);
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @GetMapping(value = "/login/social")

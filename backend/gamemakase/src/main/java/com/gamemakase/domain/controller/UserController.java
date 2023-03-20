@@ -27,17 +27,17 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "OK"),
-            @ApiResponse(code = 400, message = "ERROR")
-    })
-    @PostMapping("/api/user/join")
-    public ResponseEntity<?> signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
-        User user = userService.signUp(signUpRequestDto);
-        System.out.println("회원가입 완료");
-        System.out.println(user.toString());
-        return ResponseEntity.status(201).build();
-    }
+//    @ApiResponses({
+//            @ApiResponse(code = 200, message = "OK"),
+//            @ApiResponse(code = 400, message = "ERROR")
+//    })
+//    @PostMapping("/api/user/join")
+//    public ResponseEntity<?> signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
+//        User user = userService.signUp(signUpRequestDto);
+//        System.out.println("회원가입 완료");
+//        System.out.println(user.toString());
+//        return ResponseEntity.status(201).build();
+//    }
 
     // 로그인
     @PostMapping("/api/user/login")
