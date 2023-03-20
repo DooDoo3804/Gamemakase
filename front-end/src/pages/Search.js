@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 //Components
 import Tag from "../components/Tag";
 import CheckBox from "../components/CheckBox";
@@ -15,7 +16,6 @@ import {
 
 //임시
 import gameImg from "../assets/임시게임이미지.svg";
-import axios from "axios";
 
 const Search = () => {
   const [userName, setUserName] = useState(String);
@@ -83,24 +83,24 @@ const Search = () => {
         },
       ],
       users: [
-        {
-          userId: 1,
-          profileImg: { gameImg },
-          name: "star",
-          online: true,
-        },
-        {
-          userId: 2,
-          profileImg: { gameImg },
-          name: "starload",
-          online: false,
-        },
-        {
-          userId: 3,
-          profileImg: { gameImg },
-          name: "starking",
-          online: true,
-        },
+        // {
+        //   userId: 1,
+        //   profileImg: { gameImg },
+        //   name: "star",
+        //   online: true,
+        // },
+        // {
+        //   userId: 2,
+        //   profileImg: { gameImg },
+        //   name: "starload",
+        //   online: false,
+        // },
+        // {
+        //   userId: 3,
+        //   profileImg: { gameImg },
+        //   name: "starking",
+        //   online: true,
+        // },
       ],
     });
     setSearchHistory(getSeachHistory);
@@ -200,6 +200,9 @@ const Search = () => {
         );
         idx++;
       });
+      if (searchHistory.length <= 0) {
+        result.push(<div className="no-history-msg" key={idx}>아직 검색 내역이 없어요.</div>);
+      }
       return result;
     };
     result.push(
@@ -335,7 +338,7 @@ const Search = () => {
         });
       } else {
         result.push(
-          <div key="noGameResults" className="no-game-results">
+          <div key="noGameResults" className="no-game-results-msg">
             Sorry 0 results match your search. : (
           </div>
         );
