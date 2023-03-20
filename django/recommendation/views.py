@@ -76,6 +76,19 @@ def get_recommend(user, neighbor_list, df):
     sort_list = sorted(rec_list, key=lambda x: x[1], reverse=True)
     return (sort_list)
 
+def cal_recommendation(df, steam_id):
+
+    pivot_table = pd.pivot_table(df, values='rating', index=[
+                                 'steam_id'], columns=['game_id'])
+    print(f"pivot_table:{pivot_table}")
+    cos_sim_matrix = cosine_similarity(pivot_table.fillna(0))
+    print(f"cos_sim_matrix:{cos_sim_matrix}")
+    cos_sim_df = pd.DataFrame(
+        cos_sim_matrix, columns=pivot_table.index, index=pivot_table.index)
+    print(f"cos_sim_df:{cos_sim_df}")
+    knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
+    knn = list(knn.index)
+    return knn
 
 # big 데이터 추천 결과
 def get_recommended_games(steam_id):
@@ -111,17 +124,7 @@ def get_recommended_games(steam_id):
     check3 = Recommendation(steam_id = 333, game_id = 10, rating = 6.0)
     check3.save()
 
-    pivot_table = pd.pivot_table(df, values='rating', index=[
-                                 'steam_id'], columns=['game_id'])
-    print(f"pivot_table:{pivot_table}")
-    cos_sim_matrix = cosine_similarity(pivot_table.fillna(0))
-    print(f"cos_sim_matrix:{cos_sim_matrix}")
-    cos_sim_df = pd.DataFrame(
-        cos_sim_matrix, columns=pivot_table.index, index=pivot_table.index)
-    print(f"cos_sim_df:{cos_sim_df}")
-    knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
-    knn = list(knn.index)
-    print(knn)
+    knn = cal_recommendation(df, steam_id)
 
     check4 = Recommendation(steam_id = 444, game_id = 10, rating = 6.0)
     check4.save()
