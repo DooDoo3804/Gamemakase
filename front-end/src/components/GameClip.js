@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-
+import { Common } from "../styles/Common";
 import appleSvg from "../assets/fontAwesomeSvg/apple.svg";
 import windowSvg from "../assets/fontAwesomeSvg/windows.svg";
 import linuxSvg from "../assets/fontAwesomeSvg/linux.svg";
-import { Common } from "../styles/Common";
 
 export const StyleGameClip = styled(motion.div)`
 cursor: pointer;
@@ -24,9 +24,9 @@ cursor: pointer;
     height: 155px;
   }
 
-  @media (max-width: 870px) {
+  @media (max-width: 550px) {
     min-height: 180px;
-    min-width: 360px;
+    min-width: 100%;
     flex-direction: column;
   }
   .gameImg {
@@ -34,7 +34,7 @@ cursor: pointer;
     @media (min-width: 1560px) {
       height: 155px;
     }
-    @media (max-width: 870px) {
+    @media (max-width: 550px) {
       margin-top: 15px;
       min-height: 120px;
       min-width: 260px;
@@ -48,15 +48,20 @@ cursor: pointer;
     flex-direction: column;
     justify-content: space-around;
 
-    @media (max-width: 870px) {
+    @media (max-width: 550px) {
       flex-direction: row;
       padding-top: 10px;
       justify-content: flex-start;
     }
 
     .title {
-      @media (max-width: 870px) {
+      @media (max-width: 550px) {
         padding-right: 20px;
+        max-width: 200px;
+        min-width: 200px;
+        height: 30px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       } 
       font-family: "Noto Sans KR";
       font-style: normal;
@@ -68,9 +73,6 @@ cursor: pointer;
     }
     .logo-box {
       display: flex;
-      @media (max-width: 870px) {
-        align-items: center;
-      } 
       @media (max-width: 550px) {
         display: none;
       }
@@ -89,7 +91,7 @@ cursor: pointer;
     color: ${Common.colors.lightGray01};
     position: relative;
     top: 70%;
-    @media (max-width: 870px) {
+    @media (max-width: 550px) {
       top: -1.7rem;
     }
     right: 1rem;
@@ -99,8 +101,10 @@ cursor: pointer;
 `;
 
 const GameClip = (props) => {
+  const navigate = useNavigate();
   return (
     <StyleGameClip
+      onClick={() => {navigate(`/detail/${props.gameId}`)}}
       whileHover={{ scale: 1.03 }}
       transition={{ type: "spring", stiffness: 400, damping: 10 }}
     >

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { ResponsivePie } from "@nivo/pie";
 import { Common } from "../styles/Common";
 import { motion } from "framer-motion";
@@ -28,8 +28,10 @@ import starSvgEmpty from "../assets/fontAwesomeSvg/star-empty.svg";
 //임시
 import exampleGameImg from "../assets/임시게임이미지.svg";
 import profileImg from "../assets/profileImg.svg";
+import AlertModal from "../components/AlertModal";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const userId = location.pathname.split("/").reverse()[0];
   //state
@@ -37,6 +39,8 @@ const Profile = () => {
   const [isMainTap, setIsMainTap] = useState(true);
   const [statisticsData, setStatisticsData] = useState([]);
   const [statisticsSum, setStatisticsSum] = useState(0);
+  const [scrapDeleteAlertView, setScrapDeleteAlertView] = useState(false);
+  const [reviewDeleteAlertView, setReviewDeleteAlertView] = useState(false);
   // paging state
   const [scrapGames, setScrapGames] = useState([{}]);
   const [gamesCount, setGamesCount] = useState(0);
@@ -72,6 +76,7 @@ const Profile = () => {
     ];
     const scrap = [
       {
+        gameId: 1,
         image_path: exampleGameImg,
         game_name: "Star Survivor adsfasdfiq,mag asdf ff",
         window: true,
@@ -80,6 +85,7 @@ const Profile = () => {
         price: 5.6,
       },
       {
+        gameId: 2,
         image_path: exampleGameImg,
         game_name: "Star Survivor",
         window: true,
@@ -88,6 +94,7 @@ const Profile = () => {
         price: 5.6,
       },
       {
+        gameId: 3,
         image_path: exampleGameImg,
         game_name: "Star Survivor",
         window: false,
@@ -96,6 +103,7 @@ const Profile = () => {
         price: 5.6,
       },
       {
+        gameId: 4,
         image_path: exampleGameImg,
         game_name: "Star Survivor",
         window: true,
@@ -104,6 +112,7 @@ const Profile = () => {
         price: 5.6,
       },
       {
+        gameId: 5,
         image_path: exampleGameImg,
         game_name: "Star Survivor",
         window: true,
@@ -229,6 +238,18 @@ const Profile = () => {
   const mainDataSetting = () => {
     setMainTapData();
     setUserName("Username");
+  };
+
+  const reviewEdit = () => {
+    console.log("edit!");
+  };
+
+  const reviewDelete = () => {
+    console.log("리뷰 삭제!");
+  };
+
+  const scrapDelete = () => {
+    console.log("스크랩 삭제");
   };
 
   /////////////////////////////////////////////
@@ -371,6 +392,8 @@ const Profile = () => {
             apple={e.apple}
             linux={e.linux}
             price={e.price}
+            gameId={e.gameId}
+            setAlertView={setScrapDeleteAlertView}
           ></GameSummary>
         );
         idx++;
@@ -420,13 +443,6 @@ const Profile = () => {
       return result;
     };
 
-    const reviewEdit = () => {
-      console.log("edit!");
-    };
-    const reviewDelete = () => {
-      console.log("delete!");
-    };
-
     const reivewRend = () => {
       const month = [
         "",
@@ -463,7 +479,7 @@ const Profile = () => {
           >
             <div className="game-wrapper">
               <div className="game-img-wrapper">
-                <img src={e.gameImagePath} alt="profile" className="game-img" />
+                <img onClick={() => {navigate(`/detail/${e.gameId}`)}} src={e.gameImagePath} alt="profile" className="game-img" />
               </div>
               <div className="game-content-wrapper">
                 <p className="game-title">{e.gameTitle}</p>
@@ -472,7 +488,7 @@ const Profile = () => {
               </div>
               <EditModal
                 editFunction={reviewEdit}
-                deleteFunction={reviewDelete}
+                deleteFunction={() => {setReviewDeleteAlertView(true)}}
               ></EditModal>
             </div>
             <p className="review-title">{e.reviewTitle}</p>
@@ -549,6 +565,22 @@ const Profile = () => {
 
   return (
     <ProfileBackgroundWrapper>
+       <AlertModal
+        alertView={scrapDeleteAlertView}
+        setAlertView={setScrapDeleteAlertView}
+        msg="해당 스크랩을 삭제하시겠습니까?"
+        confrimMsg="삭제"
+        cancelMsg="취소"
+        goFunction={scrapDelete}
+      ></AlertModal>
+       <AlertModal
+        alertView={reviewDeleteAlertView}
+        setAlertView={setReviewDeleteAlertView}
+        msg="해당 리뷰를 삭제하시겠습니까?"
+        confrimMsg="삭제"
+        cancelMsg="취소"
+        goFunction={reviewDelete}
+      ></AlertModal>
       <div className="profile-box">
         <div>
           <ProfileImgWrapper>
