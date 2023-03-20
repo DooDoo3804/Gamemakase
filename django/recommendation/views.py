@@ -18,14 +18,46 @@ import logging
 # rating steam_id, game_id
 
 
-def A(df, steamid):
-    user_game = GameHistory.objects.filter(user=steamid)
+def A(df, userid, steamid):
+    user_game = GameHistory.objects.filter(user=userid)
     print(user_game)
     # 순회를 돌면서 모든 게임
     dtypes = {'steam_id': int, 'game_id': int,
                 'playtime': int}
     for game in user_game:
         exists_game = GameSmall.objects.filter(game_id=game.game.game_id)
+        print(exists_game)
+        # 없는 게임에 대한 예외처리
+        if exists_game:
+            gameid = game.game.game_id
+            playtime = game.total_play_game
+            # 가까운 유저 찾기
+            game_df = df[df['game_id'] == gameid]
+            game_df['playtime_diff'] = abs(game_df['playtime'] - playtime)
+            game_df_sorted = game_df.sort_values('playtime_diff')
+            closest_rating = game_df_sorted[game_df_sorted['steam_id']
+                                            != steamid].iloc[0]['rating']
+            
+            # 기존 테이블에 추가
+            new_row = {'steam_id': steamid, 'game_id': gameid,
+                    'playtime': playtime, 'rating': closest_rating}
+            
+            df = df.astype(dtypes).append(new_row, ignore_index=True)
+        else:
+            print(f"None : {exists_game}")
+
+    df = df.astype({'steam_id': int, 'game_id': int,
+        'playtime': int})
+    return df
+
+def B(df, userid, steamid):
+    user_game = GameHistory.objects.filter(user=userid)
+    print(user_game)
+    # 순회를 돌면서 모든 게임
+    dtypes = {'steam_id': int, 'game_id': int,
+                'playtime': int}
+    for game in user_game:
+        exists_game = Game.objects.filter(game_id=game.game.game_id)
         print(exists_game)
         # 없는 게임에 대한 예외처리
         if exists_game:
@@ -78,6 +110,8 @@ def get_recommend(user, neighbor_list, df):
     return (sort_list)
 
 def cal_recommendation(df, steam_id):
+    print("get recommendation")
+    print("--------------------------------------------------------------------------------------------------------------------------------")
 
     pivot_table = pd.pivot_table(df, values='rating', index=[
                                  'steam_id'], columns=['game_id'])
@@ -86,7 +120,7 @@ def cal_recommendation(df, steam_id):
     print(f"cos_sim_matrix:{cos_sim_matrix}")
     cos_sim_df = pd.DataFrame(
         cos_sim_matrix, columns=pivot_table.index, index=pivot_table.index)
-    print(f"cos_sim_df:{cos_sim_df}")
+    print(f"cos_sim_df:{cos_sim_df[:30]}")
     knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
     knn = list(knn.index)
     return knn
@@ -119,7 +153,8 @@ def get_recommended_games(steam_id):
 
     # 가까운 유저 찾아서 테이블에 반영
     print(df.tail(10))
-    df = A(df, steam_id)
+    userid = User.objects.get(user_steam_id = steam_id).user_id
+    df = B(df, userid, steam_id)
     print(df.tail(10))
 
     check3 = Recommendation(steam_id = 333, game_id = 10, rating = 6.0)
@@ -167,7 +202,8 @@ def get_recommended_games_small(request, steam_id):
 
     # 가까운 유저 찾아서 테이블에 반영
     print(df.tail(10))
-    df = A(df, steam_id)
+    userid = User.objects.get(user_steam_id = steam_id).user_id
+    df = A(df, userid, steam_id)
     print(df.tail(10))
 
     pivot_table = pd.pivot_table(df, values='rating', index=[
