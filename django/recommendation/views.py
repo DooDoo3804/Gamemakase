@@ -9,6 +9,7 @@ from .models import GameHistory, Game, Image, GameSmall, Recommendation, User
 from sklearn.metrics.pairwise import cosine_similarity
 from .serializers import *
 from django.core.paginator import Paginator
+import logging
 
 # user_id : 유저 모델 의 아이디 값
 # user_steam_id : 유저 스팀 아이디
@@ -229,4 +230,7 @@ def schedule_api():
     users = User.objects.order_by('user_id').distinct()
     print(users)
     for user in users:
-        get_recommended_games(user.user_steam_id)
+        try:
+            get_recommended_games(user.user_steam_id)
+        except Exception as e:
+            logging.exception(f"Error in background job: {str(e)}")
