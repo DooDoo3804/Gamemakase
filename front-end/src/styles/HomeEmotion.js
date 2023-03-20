@@ -31,7 +31,7 @@ export const Banner = styled.div`
   .banner1 {
     display: flex;
     height: 100%;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
   }
 

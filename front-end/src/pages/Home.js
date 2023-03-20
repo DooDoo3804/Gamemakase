@@ -18,6 +18,7 @@ import banner_plate from "../assets/banner_plate.svg";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import GameCarousel from "../components/GameCarousel";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -240,7 +241,8 @@ const Home = () => {
                 <p className="title">오늘의 게임 5선</p>
               </div>
               <div className="games-wrapper">
-                {todayGames ? renderTodayGames() : null}
+                <GameCarousel></GameCarousel>
+                {/* {todayGames ? renderTodayGames() : null} */}
               </div>
             </div>
           </Banner>
