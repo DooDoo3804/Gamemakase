@@ -31,8 +31,22 @@ export const Banner = styled.div`
   .banner1 {
     display: flex;
     height: 100%;
-    justify-content: space-evenly;
     align-items: center;
+
+    @media (min-width: 530px) {
+      justify-content: space-evenly;
+    }
+    @media (max-width: 530px) {
+      flex-direction: column;
+
+      .subtitle {
+        display: none;
+      }
+
+      .text-wrapper {
+        margin-top: 1.3rem;
+      }
+    }
   }
 
   .banner2 {
@@ -165,9 +179,9 @@ export const Banner = styled.div`
     display: flex;
     justify-content: space-around;
 
-    @media (max-width: 500px) {
+    /* @media (max-width: 500px) {
       display: none;
-    }
+    } */
   }
 
   .single-game {
