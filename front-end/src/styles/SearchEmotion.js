@@ -14,7 +14,10 @@ export const SearchWrapper = styled.div`
     margin-left: 60px;
     margin-right: 60px;
   }
-
+  -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   .game-search-results-header {
     color: ${Common.colors.white01};
     font-family: "Noto Sans KR";
@@ -32,6 +35,7 @@ export const SearchWrapper = styled.div`
   }
 `;
 
+// 검색내역
 export const SearchHistoryWrapper = styled.div`
   position: relative;
   margin-top: 15px;
@@ -56,9 +60,16 @@ export const SearchHistoryWrapper = styled.div`
     height: 2px;
     background-color: ${Common.colors.white01};
   }
+  .no-history-msg {
+    margin-top: 10px;
+  }
 `;
 
 export const SearchResultsWrapper = styled(motion.div)`
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   display: flex;
   position: relative;
   justify-content: space-between;
@@ -212,6 +223,14 @@ export const SearchResultsWrapper = styled(motion.div)`
       max-width: 100%;
     }
   }
+  .no-game-results-msg {
+    color: ${Common.colors.white01};
+    font-family: "Sarpanch";
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
 `;
 
 export const UserSearchResultsWrapper = styled.div`
@@ -280,9 +299,10 @@ export const UserSearchResultsWrapper = styled.div`
 
   .no-user-results {
     display: flex;
-    font-size: 16px;
-    font-family: "Noto Sans KR";
-    font-style: normal;
-    font-weight: 400;
+    font-size: 15px;
+    width: 270px;
+    height: 200px;
+    align-items: center;
+    justify-content: center;
   }
 `;
