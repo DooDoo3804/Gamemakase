@@ -230,8 +230,7 @@ const Home = () => {
         slidesPerView={1}
         navigation
         pagination={{ clickable: true }}
-        // todo : 다 만들고 주석처리 해제하기
-        // autoplay={{ delay: 4000, disableOnInteraction: false }}
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
       >
         <SwiperSlide>
           <Banner>
