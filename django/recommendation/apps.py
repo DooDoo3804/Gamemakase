@@ -12,7 +12,7 @@ class RecommendationConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'recommendation'
 
-    def ready(self):
-        if settings.SCHEDULER_DEFAULT:
-            from . import updator
-            updator.start()
+    # def ready(self):
+    #     if settings.SCHEDULER_DEFAULT:
+    #         from . import updator
+    #         updator.start()

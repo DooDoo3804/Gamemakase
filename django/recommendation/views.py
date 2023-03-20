@@ -3,14 +3,18 @@ import numpy as np
 import pymysql
 import pymysql.cursors
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.status import HTTP_201_CREATED
+from rest_framework.views import APIView
 from django.http import HttpResponse, JsonResponse
 from .models import GameHistory, Game, Image, GameSmall, Recommendation, User
 from sklearn.metrics.pairwise import cosine_similarity
 from .serializers import *
 from django.core.paginator import Paginator
 import logging
-
+from background_task.models import Task
+from background_task import background
+from .task import update_recommed
 # user_id : 유저 모델 의 아이디 값
 # user_steam_id : 유저 스팀 아이디
 # steam_id : 스팀 아이디
@@ -271,3 +275,18 @@ def schedule_api():
         get_recommended_games(users)
     except Exception as e:
         logging.exception(f"Error in background job: {str(e)}")
+
+# @background(schedule=1)
+# def update_recommed():
+#     print("start big data recommend start")
+#     users = User.objects.order_by('user_id').distinct()
+#     try:
+#         get_recommended_games(users)
+#     except Exception as e:
+#         logging.exception(f"Error in background job: {str(e)}")
+
+
+class UpdateRecommend(APIView):
+    def get(self, request):
+        update_recommed()
+        return Response(status = status.HTTP_302_FOUND)
