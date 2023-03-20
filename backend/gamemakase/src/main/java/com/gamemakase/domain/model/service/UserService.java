@@ -6,8 +6,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 
 public interface UserService {
-    User signUp(SignUpRequestDto signUpRequestDto);
+    void signUp(SignUpRequestDto signUpRequestDto, long steamId);
 
+    boolean isUser(long steamId);
     HttpHeaders getHttpHeaders(User user, String token);
 
     User getUserProfile(String accessToken);

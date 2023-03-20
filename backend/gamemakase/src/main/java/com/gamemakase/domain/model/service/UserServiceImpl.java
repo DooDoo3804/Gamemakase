@@ -2,6 +2,7 @@ package com.gamemakase.domain.model.service;
 
 import com.gamemakase.domain.model.dto.SignUpRequestDto;
 import com.gamemakase.domain.model.entity.Authority;
+import com.gamemakase.domain.model.entity.Authority.AuthorityName;
 import com.gamemakase.domain.model.entity.User;
 import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.global.Exception.DuplicatedException;
@@ -26,16 +27,26 @@ public class UserServiceImpl implements UserService {
     private final String ACCESS_HEADER = "accessToken";
     private final String REFRESH_HEADER = "refreshToken";
     @Override
-    public User signUp(SignUpRequestDto signUpRequestDto) {
-        User user = signUpRequestDto.toEntity();
+    public void signUp(SignUpRequestDto signUpRequestDto, long steamId) {
+        User user = signUpRequestDto.toEntity(steamId);
         if(userRepository.findByUserEmail(user.getUserEmail()) != null || userRepository.findByUserSteamId(user.getUserSteamId()) != null) {
             throw new DuplicatedException("이미 있는 유저입니다.");
         }
-        Authority authority = Authority.builder().authorityName(Authority.AuthorityName.ROLE_USER).build();
+
+        Authority authority;
+        if(user.getUserName().equals("ADMIN")) authority = new Authority(AuthorityName.ROLE_ADMIN);
+        else authority = new Authority(AuthorityName.ROLE_USER);
         user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
         user.setAuthority(authority);
         userRepository.save(user);
-        return user;
+    }
+
+    @Override
+    public boolean isUser(long steamId) {
+        User user = userRepository.findByUserSteamId(steamId);
+        System.out.println(user);
+        if(user != null) return true;
+        else return false;
     }
 
     @Override
