@@ -109,8 +109,6 @@ def get_recommend(user, neighbor_list, df):
     sort_list = sorted(rec_list, key=lambda x: x[1], reverse=True)
     return (sort_list)
 
-def cal_recommendation(df, steam_id):
-
 
 # big 데이터 추천 결과
 def get_recommended_games(steam_id):
