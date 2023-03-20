@@ -31,7 +31,7 @@ export const Banner = styled.div`
   .banner1 {
     display: flex;
     height: 100%;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
   }
 
@@ -158,6 +158,61 @@ export const Banner = styled.div`
     }
     @media (max-width: 500px) {
       font-size: 0.85rem;
+    }
+  }
+
+  .games-wrapper {
+    display: flex;
+    justify-content: space-around;
+
+    @media (max-width: 500px) {
+      display: none;
+    }
+  }
+
+  .single-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 1050px) {
+      margin: 0rem 0.2rem;
+    }
+    @media (max-width: 1050px) {
+      margin: 0rem -1rem;
+    }
+    @media (max-width: 500px) {
+      margin: 0rem -1rem;
+    }
+  }
+
+  .game-img {
+    position: relative;
+    border-radius: 2rem;
+    z-index: 2;
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      width: 7rem;
+    }
+    @media (max-width: 768px) {
+      width: 4rem;
+    }
+  }
+
+  .plate {
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      width: 8rem;
+      margin-top: -2rem;
+    }
+    @media (max-width: 768px) {
+      width: 5rem;
+      margin-top: -1.5rem;
     }
   }
 `;
