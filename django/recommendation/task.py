@@ -129,7 +129,7 @@ def get_recommended_games(users):
             recommendation = Recommendation(steam_id = steam_id, game_id = game.game_id, rating = rating)
             recommendation.save()
 
-@background(schedule = 300)
+@background(schedule = 60)
 def update_recommed():
     print("start big data recommend start")
     users = User.objects.order_by('user_id').distinct()
