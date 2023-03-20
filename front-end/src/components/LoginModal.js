@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRef } from "react";
+import { useCookies } from "react-cookie";
 // import useBodyScrollLock from "./ScrollLock";
 import { Common } from "../styles/Common";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -122,12 +123,18 @@ const LoginModalBody = styled(motion.div)`
 
 const LoginModal = ({ loginView, setLoginView }) => {
   const outSection = useRef();
+  const [cookies, setCookies] = useCookies(["token"]);
 
   // const { openScroll } = useBodyScrollLock();
 
   const handleClose = () => {
     // openScroll(scrollPosition);
     setLoginView(false);
+  };
+
+  const handleLogin = () => {
+    // axios 요청해서 쿠키에 저장
+    // setCookie('token', response.data.token)
   };
 
   return (
@@ -165,7 +172,7 @@ const LoginModal = ({ loginView, setLoginView }) => {
                 <img src={gamemakase_logo} alt="logo" className="logo" />
                 <p className="welcome-text">Welcome to GameMakase !</p>
               </div>
-              <div className="login-btn">
+              <div className="login-btn" onClick={() => handleLogin()}>
                 <p className="login-text">
                   SIGN IN <FontAwesomeIcon icon={faSteam} />
                 </p>
