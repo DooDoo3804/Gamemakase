@@ -37,7 +37,7 @@ public class Game {
   @Column(name = "game_description", length = 200)
   private String gameDescription;
 
-  @Column(name = "metacritic_score")
+  @Column(name = "score")
   private int metacriticScore;
 
   @Column(name = "average_playtime")
@@ -48,4 +48,13 @@ public class Game {
 
   @Column(name = "is_korean")
   private boolean isKorean;
+  
+  @Column(name = "windows")
+  private boolean windows;
+  
+  @Column(name = "mac")
+  private boolean mac;
+  
+  @Column(name = "linux")
+  private boolean linux;
 }
