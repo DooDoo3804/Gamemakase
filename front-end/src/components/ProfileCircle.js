@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const StyleProfileCirlce = styled(motion.div)`
   display: flex;
   margin : 15px;
+  cursor: pointer;
   .profile-img-wrapper {
     margin: 0;
     width: 80px;
@@ -60,8 +62,11 @@ const StyleProfileCirlce = styled(motion.div)`
 `;
 
 const ProfileCircle = (props) => {
+  const navigate = useNavigate();
     return (
-        <StyleProfileCirlce className="profile-circle"
+        <StyleProfileCirlce
+        onClick={() => {navigate(`/profile/${props.userId}`)}}
+        className="profile-circle"
         whileHover={{ scale: 1.03 }}
         transition={{ type: "spring", stiffness: 400, damping: 10 }}>
             <div className="profile-img-wrapper">

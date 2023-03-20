@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Common } from "./Common";
 
 export const EllipsisWrapper = styled.div`
   padding-left: 15px;
@@ -46,10 +47,18 @@ export const EditModalWrapper = styled.div`
 
   .delete {
     cursor: pointer;
-    color: #ffa7a7;
+    color: ${Common.colors.cancelRedText};
+  }
+  
+  .delete:hover {
+    color: #FFA4A4;
   }
 
   .edit {
     cursor: pointer;
+  }
+
+  .edit:hover {
+    color: ${Common.colors.lightGray01};
   }
 `;

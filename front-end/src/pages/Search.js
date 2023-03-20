@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 //Components
 import Tag from "../components/Tag";
@@ -18,6 +19,7 @@ import {
 import gameImg from "../assets/임시게임이미지.svg";
 
 const Search = () => {
+  const navigate = useNavigate();
   const [userName, setUserName] = useState(String);
   const [searchHistory, setSearchHistory] = useState([]);
   const [genreCheckedList, setGenreCheckList] = useState([]);
@@ -66,6 +68,7 @@ const Search = () => {
     setSearchResults({
       games: [
         {
+          gameId: 1,
           title: "title",
           imgUrl: { gameImg },
           price: 50,
@@ -74,6 +77,7 @@ const Search = () => {
           linux: false,
         },
         {
+          gameId: 2,
           title: "title",
           imgUrl: { gameImg },
           price: 50,
@@ -83,24 +87,24 @@ const Search = () => {
         },
       ],
       users: [
-        // {
-        //   userId: 1,
-        //   profileImg: { gameImg },
-        //   name: "star",
-        //   online: true,
-        // },
-        // {
-        //   userId: 2,
-        //   profileImg: { gameImg },
-        //   name: "starload",
-        //   online: false,
-        // },
-        // {
-        //   userId: 3,
-        //   profileImg: { gameImg },
-        //   name: "starking",
-        //   online: true,
-        // },
+        {
+          userId: 1,
+          profileImg: { gameImg },
+          name: "star",
+          online: true,
+        },
+        {
+          userId: 2,
+          profileImg: { gameImg },
+          name: "starload",
+          online: false,
+        },
+        {
+          userId: 3,
+          profileImg: { gameImg },
+          name: "starking",
+          online: true,
+        },
       ],
     });
     setSearchHistory(getSeachHistory);
@@ -201,7 +205,11 @@ const Search = () => {
         idx++;
       });
       if (searchHistory.length <= 0) {
-        result.push(<div className="no-history-msg" key={idx}>아직 검색 내역이 없어요.</div>);
+        result.push(
+          <div className="no-history-msg" key={idx}>
+            아직 검색 내역이 없어요.
+          </div>
+        );
       }
       return result;
     };
@@ -327,11 +335,12 @@ const Search = () => {
             <GameClip
               key={idx}
               title={e.title}
+              gameId={e.gameId}
               imgUrl={e.imgUrl.gameImg}
               price={e.price}
               window={e.window}
               apple={e.apple}
-              linux={e.linux}              
+              linux={e.linux}
             ></GameClip>
           );
           idx++;
@@ -381,11 +390,11 @@ const Search = () => {
           result.push(
             <ProfileCircle
               key={idx}
+              userId={e.userId}
               profileImg={e.profileImg.gameImg}
               name={e.name}
               online={e.online}
-            >
-            </ProfileCircle>
+            ></ProfileCircle>
           );
           idx++;
         });
@@ -398,16 +407,18 @@ const Search = () => {
       }
       return result;
     };
-    result.push(<div key="userResults" className="user-results">{userResultsRend()}</div>);
+    result.push(
+      <div key="userResults" className="user-results">
+        {userResultsRend()}
+      </div>
+    );
     return result;
   };
 
   return (
     <SearchWrapper>
       <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
-      <div className="game-search-results-header">
-        Game search results
-      </div>
+      <div className="game-search-results-header">Game search results</div>
       {searchResultsRend()}
     </SearchWrapper>
   );
