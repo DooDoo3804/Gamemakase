@@ -183,7 +183,7 @@ def get_recommended_games(steam_id):
 # small 데이터 추천 결과
 # userid : 유저 스팀 아이디
 
-def get_recommended_games_small(request, steam_id):
+def get_recommended_games_small(request, user_id):
     # 데이터 불러와서 테이블 만들기
     conn = pymysql.connect(
         host="43.201.61.185",
@@ -202,8 +202,9 @@ def get_recommended_games_small(request, steam_id):
 
     # 가까운 유저 찾아서 테이블에 반영
     print(df.tail(10))
-    userid = User.objects.get(user_steam_id = steam_id).user_id
-    df = A(df, userid, steam_id)
+    user_steamid = User.objects.get(user_id = user_id).user_steam_id
+    print(user_steamid)
+    df = A(df, user_id, user_steamid)
     print(df.tail(10))
 
     pivot_table = pd.pivot_table(df, values='rating', index=[
@@ -214,17 +215,17 @@ def get_recommended_games_small(request, steam_id):
     cos_sim_df = pd.DataFrame(
         cos_sim_matrix, columns=pivot_table.index, index=pivot_table.index)
     # print(f"cos_sim_df:{cos_sim_df}")
-    knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
+    knn = cos_sim_df[user_steamid].sort_values(ascending=False)[:30]
     knn = list(knn.index)
     # print(knn)
 
     json_data_2 = df
     json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
     # print(json_data_2)
-    recommend = get_recommend(steam_id, knn, json_data_2)
+    recommend = get_recommend(user_steamid, knn, json_data_2)
     # print(recommend[:5])
 
-    Recommendation.objects.filter(steam_id=steam_id).delete()
+    Recommendation.objects.filter(steam_id=user_steamid).delete()
     for game_id, rating in recommend[:10]:
         game = Game.objects.get(game_id=game_id)
         images = Image.objects.filter(type_id = game_id)
@@ -237,7 +238,7 @@ def get_recommended_games_small(request, steam_id):
         # games.append(new_game)
 
         # recommendation 테이블에 저장
-        recommendation = Recommendation(steam_id = steam_id, game_id = game.game_id, rating = rating)
+        recommendation = Recommendation(steam_id = user_steamid, game_id = game.game_id, rating = rating)
         recommendation.save()
 
 
