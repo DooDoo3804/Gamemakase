@@ -16,6 +16,10 @@ export const Common = {
     lavender01: "#BA76D1",
 
     starColor01: "#F0C322",
+
+    confirmGreen: "#6CB573",
+    cancelRed : "#DB8787",
+    cancelRedText: "#FFC2C2",
   },
 };
 

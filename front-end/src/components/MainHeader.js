@@ -67,7 +67,7 @@ const MainHeader = () => {
           {/* search 페이지에서 useLocation().state.keyword 로 받아서 사용 */}
         </SearchWrapper>
         <div className="menu-wrapper">
-          <div className="profile-img">
+          <div className="profile-img" onClick={() => navigate(`/profile/1`)}>
             <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
           </div>
           {/* 아래 코드는 로그인 기능 생기고 수정 필요함 */}

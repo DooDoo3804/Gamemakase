@@ -56,6 +56,7 @@ export const MainHeaderWrapper = styled.div`
   }
 
   .profile-img {
+    cursor: pointer;
     width: 1.8rem;
     height: 1.8rem;
     background-color: ${Common.colors.mainColor03};
