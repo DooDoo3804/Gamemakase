@@ -9,11 +9,15 @@ export const SearchWrapper = styled.div`
   margin-top: 20px;
   margin-left: 40px;
   margin-right: 40px;
+  padding-bottom: 50px;
   @media (min-width: 1560px) {
     margin-left: 60px;
     margin-right: 60px;
   }
-
+  -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   .game-search-results-header {
     color: ${Common.colors.white01};
     font-family: "Noto Sans KR";
@@ -31,6 +35,7 @@ export const SearchWrapper = styled.div`
   }
 `;
 
+// 검색내역
 export const SearchHistoryWrapper = styled.div`
   position: relative;
   margin-top: 15px;
@@ -55,9 +60,16 @@ export const SearchHistoryWrapper = styled.div`
     height: 2px;
     background-color: ${Common.colors.white01};
   }
+  .no-history-msg {
+    margin-top: 10px;
+  }
 `;
 
 export const SearchResultsWrapper = styled(motion.div)`
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   display: flex;
   position: relative;
   justify-content: space-between;
@@ -77,8 +89,13 @@ export const SearchResultsWrapper = styled(motion.div)`
     min-width: 20%;
     max-width: 20%;
     @media (min-width: 1560px) {
-      min-width: 30%;
-      max-width: 30%;
+      min-width: 17%;
+      max-width: 17%;
+      margin-right: 4%;
+    }
+    @media (max-width: 1000px) {
+      min-width: 25%;
+      max-width: 25%;
       margin-right: 4%;
     }
     @media (max-width: 870px) {
@@ -198,10 +215,21 @@ export const SearchResultsWrapper = styled(motion.div)`
     @media (max-width: 1160px) {
       width: 70%;
     }
+    @media (max-width: 1000px) {
+      width: 65%;
+    }
     @media (max-width: 870px) {
       min-width: 100%;
       max-width: 100%;
     }
+  }
+  .no-game-results-msg {
+    color: ${Common.colors.white01};
+    font-family: "Sarpanch";
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
   }
 `;
 
@@ -232,9 +260,10 @@ export const UserSearchResultsWrapper = styled.div`
       display: flex;
       width: 100%;
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: center;
     }
     .profile-circle {
+      max-width: 700px;
       width: 100%;
       justify-content: center;
       margin: 0px 0px 20px 0px;
@@ -255,6 +284,7 @@ export const UserSearchResultsWrapper = styled.div`
       font-style: normal;
       font-weight: 400;
       text-decoration: none;
+      margin-top: 30px;
       margin-bottom: 35px;
     }
     font-size: 18px;
@@ -269,9 +299,10 @@ export const UserSearchResultsWrapper = styled.div`
 
   .no-user-results {
     display: flex;
-    font-size: 16px;
-    font-family: "Noto Sans KR";
-    font-style: normal;
-    font-weight: 400;
+    font-size: 15px;
+    width: 270px;
+    height: 200px;
+    align-items: center;
+    justify-content: center;
   }
 `;
