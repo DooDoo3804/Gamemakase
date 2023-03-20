@@ -112,8 +112,8 @@ def get_recommend(user, neighbor_list, df):
 
 # big 데이터 추천 결과
 def get_recommended_games(steam_id):
-    check1 = Recommendation(steam_id = 111, game_id = 10, rating = 6.0)
-    check1.save()
+    # check1 = Recommendation(steam_id = 111, game_id = 10, rating = 6.0)
+    # check1.save()
 
     # 데이터 불러와서 테이블 만들기
     conn = pymysql.connect(
@@ -131,8 +131,8 @@ def get_recommended_games(steam_id):
 
     df = pd.DataFrame(result)
 
-    check2 = Recommendation(steam_id = 222, game_id = 10, rating = 6.0)
-    check2.save()
+    # check2 = Recommendation(steam_id = 222, game_id = 10, rating = 6.0)
+    # check2.save()
 
 
 
@@ -142,8 +142,8 @@ def get_recommended_games(steam_id):
     df = B(df, userid, steam_id)
     print(df.tail(10))
 
-    check3 = Recommendation(steam_id = 333, game_id = 10, rating = 6.0)
-    check3.save()
+    # check3 = Recommendation(steam_id = 333, game_id = 10, rating = 6.0)
+    # check3.save()
 
     print("get recommendation")
     print("--------------------------------------------------------------------------------------------------------------------------------")
@@ -159,8 +159,8 @@ def get_recommended_games(steam_id):
     knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
     knn = list(knn.index)
 
-    check4 = Recommendation(steam_id = 444, game_id = 10, rating = 6.0)
-    check4.save()
+    # check4 = Recommendation(steam_id = 444, game_id = 10, rating = 6.0)
+    # check4.save()
 
     json_data_2 = df
     json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
