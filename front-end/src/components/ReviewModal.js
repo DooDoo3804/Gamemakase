@@ -15,6 +15,7 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
   const [contentLength, setContentLength] = useState(0);
   const [rating, setRating] = useState(1);
   const outSection = useRef();
+  const reviewTitle = useRef(null);
   const reviewContent = useRef(null);
 
   const { openScroll } = useBodyScrollLock();
@@ -30,10 +31,14 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
     setRating(newValue);
   };
 
-  const onChange = (e) => {
+  const handleContent = (e) => {
     reviewContent.current = e.target.value;
     setContentLength(e.target.value.length);
     // console.log(reviewContent.current);
+  };
+
+  const handleTitle = (e) => {
+    reviewTitle.current = e.target.value;
   };
 
   return (
@@ -70,15 +75,20 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
               <p className="game-title">{gameData.gameName}에 관한 리뷰 쓰기</p>
 
               <div className="game-title rating-container">
-                {/* todo : 별점 기능 구현 */}
                 <StarRating handleRating={handleRating} />
-                {/* {StarRating()} */}
               </div>
               <div className="review-content-box">
                 <textarea
+                  className="review-title"
+                  onChange={handleTitle}
+                  maxLength={20}
+                  placeholder="제목을 입력하세요."
+                />
+                <textarea
                   className="review-content"
-                  onChange={onChange}
+                  onChange={handleContent}
                   maxLength={2000}
+                  placeholder="내용을 입력하세요."
                 />
                 <div className="count-wrapper">
                   <div className="character-counter">
