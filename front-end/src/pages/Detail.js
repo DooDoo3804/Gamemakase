@@ -45,6 +45,7 @@ const Detail = () => {
   const [gameData, setGameData] = useState(null);
   const [recommendedUsers, setRecommendedUsers] = useState(null);
   const [reviewData, setReviewData] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
 
   const { lockScroll } = useBodyScrollLock();
   const location = useLocation();
@@ -207,7 +208,10 @@ const Detail = () => {
     setChatView(true);
   };
 
-  const handleScrap = () => {};
+  const handleScrap = () => {
+    console.log(!isLiked);
+    setIsLiked(!isLiked);
+  };
 
   return (
     <div>
@@ -244,13 +248,9 @@ const Detail = () => {
                 <p className="title">{gameData.gameName}</p>
                 <p className="discription">{gameData.gameDescription}</p>
               </motion.div>
-              {/* todo : 스크랩 기능 연결하기, hover시에 색상 변경 */}
+              {/* todo : 스크랩 기능 연결하기 */}
               <div className="scrap-wrapper" onClick={() => handleScrap()}>
-                {gameData.isLiked ? (
-                  <FontAwesomeIcon icon={faStar} />
-                ) : (
-                  <FontAwesomeIcon icon={faRegularStar} />
-                )}
+                <FontAwesomeIcon icon={isLiked ? faStar : faRegularStar} />
               </div>
             </div>
           </div>
