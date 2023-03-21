@@ -9,4 +9,7 @@ import com.gamemakase.domain.model.entity.Genre;
 
 public interface GenreRepository extends JpaRepository<Genre, Long>{
 	List<Genre> findAllByGame(Game game);
+
+    List<Genre> findAllByGameGameId(Long gameId);
+
 }

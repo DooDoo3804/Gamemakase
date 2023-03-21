@@ -9,4 +9,7 @@ import com.gamemakase.domain.model.entity.User;
 
 public interface GameHistoryRepository extends JpaRepository<GameHistory, Long>{
 	List<GameHistory> findAllByUser(User user);
+
+    boolean existsByGameGameIdAndUserUserId(Long gameId, Long userId);
+
 }
