@@ -53,7 +53,7 @@ public class GameServiceImpl implements GameService{
 //        System.out.println("imageList = " + imageList.toString());
         List<Review> reviewList = reviewRepository.findAllByGameGameId(gameId);
 //        System.out.println("reviewList.toString() = " + reviewList.toString());
-        List<Recommendation> recommendationList = recommendationRepository.findAllByGameIdGameIdOrderByRatingDesc(gameId);
+        List<Recommendation> recommendationList = recommendationRepository.findAllByGameGameIdOrderByRatingDesc(gameId);
 //        System.out.println("recommendationList = " + recommendationList.toString());
 
         return GameDetailResponseDto.builder()
@@ -102,9 +102,9 @@ public class GameServiceImpl implements GameService{
 //                유저 추천
                 .recommendedUsers(recommendationList.stream()
                         .map(recommendation -> GameDetailResponseDto.RecommendedUserDTO.builder()
-                                .userId(recommendation.getSteamId().getUserId())
-                                .userName(recommendation.getSteamId().getUserName())
-                                .userImagePath(imageRepository.findByTypeAndTypeId("User", recommendation.getSteamId().getUserId()).orElseGet(Image::new).getImagePath())
+                                .userId(recommendation.getUser().getUserId())
+                                .userName(recommendation.getUser().getUserName())
+                                .userImagePath(imageRepository.findByTypeAndTypeId("User", recommendation.getUser().getUserId()).orElseGet(Image::new).getImagePath())
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
