@@ -30,6 +30,7 @@ import {
   faStar as faRegularStar,
 } from "@fortawesome/free-regular-svg-icons";
 import no_game from "../assets/lottie/no-game.json";
+import Loading from "../assets/loading.gif";
 
 import TranslucentBtn from "../components/TranslucentBtn";
 import useBodyScrollLock from "../components/ScrollLock";
@@ -49,7 +50,7 @@ const Detail = () => {
   const [isLiked, setIsLiked] = useState(false);
 
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [ref, inView] = useInView();
   const pageNo = useRef(0);
 
@@ -89,11 +90,13 @@ const Detail = () => {
     setLoading(true);
 
     await axios
-      .get(`${BACKEND_URL}/home`, {
+      .get(`${BACKEND_URL}/api/reviews/${gameId}`, {
         params: {
           pageNo: pageNo.current,
         },
-        headers: {},
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
       .then((response) => {
         console.log(response.data);
@@ -355,16 +358,16 @@ const Detail = () => {
               ) : null}
             </div>
             {reviewData ? (
-              <div className="review-wrapper">
-                {renderReviews()}
+              <>
+                <div className="review-wrapper">{renderReviews()}</div>
                 {isLoading ? (
-                  <div className="tinyLoading">
+                  <div className="review-loading">
                     <img src={Loading} alt="loading..."></img>
                   </div>
                 ) : (
-                  <div ref={ref} className="scrollHandler" />
+                  <div ref={ref} className="scroll-handler" />
                 )}
-              </div>
+              </>
             ) : (
               <div className="no-review">
                 <p>작성된 리뷰가 없습니다.</p>
