@@ -22,11 +22,11 @@ public class Recommendation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "user_steam_id", name = "steam_id", nullable = false)
-    private User steamId;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="game_id", nullable = false)
-    private Game gameId;
+    private Game game;
 
     @Column(nullable = false)
     private double rating;
