@@ -38,8 +38,8 @@ const EditModal = (props) => {
                 }}
             />
             <div className="modal-inner">
-                <span onClick={props.editFunction} className="edit">edit</span>
-                <span onClick={props.deleteFunction} className="delete">delete</span>
+                <span onClick={props.editFunction} className="edit">수정</span>
+                <span onClick={props.deleteFunction} className="delete">삭제</span>
             </div>
         </EditModalWrapper>
     );
