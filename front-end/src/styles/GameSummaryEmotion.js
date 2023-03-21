@@ -41,6 +41,7 @@ export const GameSummaryClip = styled(motion.div)`
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    border-radius: 15px;
     @media (max-width: 600px) {
       margin-top: 15px;
       min-height: 120px;
