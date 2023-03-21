@@ -1,16 +1,13 @@
 package com.gamemakase.domain.controller;
 
-import com.gamemakase.domain.model.dto.LoginRequestDto;
-import com.gamemakase.domain.model.dto.SignUpRequestDto;
+import com.gamemakase.domain.model.dto.UserResponseDto;
 import com.gamemakase.domain.model.entity.User;
 import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.domain.model.service.UserService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @Api(value = "User Controller")
 @RequiredArgsConstructor
-public class UserController {
+public class UserRestController {
 
     private final UserService userService;
     private final UserRepository userRepository;
@@ -40,22 +37,23 @@ public class UserController {
 //    }
 
     // 로그인
-    @PostMapping("/api/user/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
-        System.out.println("여기옴");
-        User user = userRepository.findByUserEmail(loginRequestDto.getUserEmail());
-        if(user == null || !passwordEncoder.matches(loginRequestDto.getUserPassword(), user.getUserPassword())) {
-            return ResponseEntity.status(401).build();
-        }
-        HttpHeaders httpHeaders = userService.getHttpHeaders(user, null);
-        return ResponseEntity.status(200).headers(httpHeaders).build();
-    }
+//    @PostMapping("/api/user/login")
+//    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
+//        System.out.println("여기옴");
+//        User user = userRepository.findByUserEmail(loginRequestDto.getUserEmail());
+//        if(user == null || !passwordEncoder.matches(loginRequestDto.getUserPassword(), user.getUserPassword())) {
+//            return ResponseEntity.status(401).build();
+//        }
+////        HttpHeaders httpHeaders = userService.getHttpHeaders(user, null);
+//        return ResponseEntity.status(200).headers(httpHeaders).build();
+//    }
 
     // Acees Token을 통하여 회원 정보 조회
     @GetMapping("/auth/user")
     public ResponseEntity<?> getUserProfile(HttpServletRequest httpServletRequest) {
-        System.out.println("여기로 옵니다");
         String accessToken = httpServletRequest.getHeader("accessToken").substring(7);
+        System.out.println("Request : " + httpServletRequest.getHeader("access-token").substring(7));
+        System.out.println("user token : " + accessToken);
         User user = userService.getUserProfile(accessToken);
         return ResponseEntity.status(200).body(user);
     }

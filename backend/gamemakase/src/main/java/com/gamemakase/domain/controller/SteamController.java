@@ -6,6 +6,7 @@ import com.gamemakase.domain.model.dto.SteamLoginRequestDto;
 import com.gamemakase.domain.model.entity.User;
 import com.gamemakase.domain.model.service.UserService;
 import com.gamemakase.global.config.OpenIdAuthentication;
+import com.gamemakase.global.config.jwt.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import java.net.URI;
 import java.util.HashMap;
@@ -43,6 +44,7 @@ public class SteamController {
     private ConsumerManager consumerManager = new ConsumerManager();
     private static final Logger logger = LoggerFactory.getLogger(SteamController.class);
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/api/login/steam") // 스팀 로그인 이미지랑 연동
     public String steamLogin(HttpServletResponse response) throws IOException{
@@ -53,7 +55,7 @@ public class SteamController {
     }
 
     @GetMapping("/login/steam/callback")
-    public ResponseEntity<?> steamLoginCallBack(HttpServletRequest request, HttpServletResponse response, SignUpRequestDto signUpRequestDto, LoginRequestDto loginRequestDto) throws Exception {
+    public ResponseEntity<?> steamLoginCallBack(HttpServletRequest request, SignUpRequestDto signUpRequestDto, LoginRequestDto loginRequestDto) throws Exception {
         ParameterList res = new ParameterList(request.getParameterMap());
 
         HttpHeaders headers = new HttpHeaders();
@@ -64,14 +66,17 @@ public class SteamController {
 
         if (userService.isUser(steamIdNum)) {
             //로그인
-
+            Map<String, Object> token = userService.login(loginRequestDto);
+            String access_token = (String) token.get("access-token");
+            jwtTokenProvider.validateToken(access_token);
             headers.setLocation(URI.create("http://www.gamemakase.com:3000"));
+            return new ResponseEntity<>(token, headers, HttpStatus.MOVED_PERMANENTLY);
         } else {
             //회원가입
             userService.signUp(signUpRequestDto, steamIdNum);
             headers.setLocation(URI.create("http://www.gamemakase.com:3000/profile/1"));
+            return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
         }
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @GetMapping(value = "/login/social")
