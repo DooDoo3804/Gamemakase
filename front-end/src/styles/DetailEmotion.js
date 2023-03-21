@@ -490,8 +490,7 @@ export const ReviewWrapper = styled.div`
 export const SingleReview = styled(motion.div)`
   background-color: rgba(255, 255, 255, 0.4);
   transition: all 0.3s ease-in-out;
-  height: 14rem;
-  overflow: hidden;
+  min-height: 14rem;
   border: 1.5px solid ${Common.colors.white01};
   font-family: "Noto Sans KR", serif;
 
