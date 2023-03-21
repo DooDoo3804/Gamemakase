@@ -133,11 +133,11 @@ const Profile = () => {
         }
       })
       .catch((error) => {
-        if (error.response.status === 500) {
-          navigate("/500");
-        } else if (error.response.status === 404) {
-          navigate("/*")
-        }
+        // if (error.response.status === 500) {
+        //   navigate("/500");
+        // } else if (error.response.status === 404) {
+        //   navigate("/*")
+        // }
         // error logic
       });
   }, [userId, navigate]);
