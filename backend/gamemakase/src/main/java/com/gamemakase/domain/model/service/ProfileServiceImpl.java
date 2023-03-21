@@ -84,7 +84,7 @@ public class ProfileServiceImpl implements ProfileService {
 			}
 		});
 		List<GenreScoreVo> scoreList = new ArrayList<GenreScoreVo>();
-		for (int i = 0; i < 5 && i < scoreList.size(); i++) {
+		for (int i = 0; i < 5 && i < entryList.size(); i++) {
 			scoreList.add(
 					GenreScoreVo.builder().genre(entryList.get(i).getKey()).value(entryList.get(i).getValue()).build());
 		}
