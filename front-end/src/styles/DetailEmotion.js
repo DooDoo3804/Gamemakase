@@ -107,6 +107,8 @@ export const DetailWrapper = styled.div`
     background-repeat: no-repeat;
     transition: all 0.5s ease-in-out;
 
+    cursor: pointer;
+
     @media (min-width: 768px) {
       width: 3rem;
       height: 3.5rem;
@@ -122,6 +124,10 @@ export const DetailWrapper = styled.div`
       height: 35px;
       font-size: 10px;
     }
+  }
+
+  .scrap-wrapper:hover {
+    background-image: url(${(props) => props.scrap_hover});
   }
 
   .detail-sub {
@@ -252,12 +258,15 @@ export const DetailWrapper = styled.div`
 
   .swiper-slide {
     margin: 2rem 0rem;
+    display: flex;
+    align-items: center;
   }
 
   .swiper-slide img {
     width: 100%;
+    height: 100%;
     border-radius: 0.5rem;
-    object-fit: contain;
+    object-fit: cover;
   }
 
   .gradient {
@@ -277,6 +286,12 @@ export const DetailWrapper = styled.div`
     @media (max-width: 500px) {
       height: 3rem;
     }
+  }
+
+  .no-game {
+    display: flex;
+    justify-content: center;
+    font-family: "Noto Sans KR", serif;
   }
 `;
 
@@ -390,9 +405,9 @@ export const RecommendUsers = styled.div`
 
   .gradient {
     background-image: linear-gradient(
-      to bottom,
-      rgba(81, 81, 81, 1),
-      rgba(50, 50, 50, 1)
+      to top,
+      rgba(50, 50, 50, 1),
+      rgba(81, 81, 81, 1)
     );
     transition: all 0.5s ease-in-out;
 
@@ -404,6 +419,23 @@ export const RecommendUsers = styled.div`
     }
     @media (max-width: 500px) {
       height: 3rem;
+    }
+  }
+
+  .no-user {
+    font-family: "Noto Sans KR", serif;
+    margin: 2rem 1rem;
+
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      font-size: 1.2rem;
+    }
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+    @media (max-width: 500px) {
+      font-size: 0.7rem;
     }
   }
 `;

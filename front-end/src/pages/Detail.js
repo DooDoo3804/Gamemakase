@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import ReviewModal from "../components/ReviewModal";
 import {
   ChatBtn,
@@ -19,6 +20,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import scrap_img from "../assets/scrap_img.svg";
+import scrap_hover from "../assets/fontAwesomeSvg/scrap_hover.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -31,179 +33,41 @@ import TranslucentBtn from "../components/TranslucentBtn";
 import useBodyScrollLock from "../components/ScrollLock";
 import ChatModal from "../components/ChatModal";
 
+import { BACKEND_URL } from "../config";
+
 const Detail = () => {
   const navigate = useNavigate();
   const [modalView, setModalView] = useState(false);
   const [chatView, setChatView] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [gameData, setGameData] = useState(null);
+  const [recommendedUsers, setRecommendedUsers] = useState(null);
+  const [reviewData, setReviewData] = useState(null);
 
   const { lockScroll } = useBodyScrollLock();
+  const location = useLocation();
+  const gameId = location.pathname.split("/").reverse()[0];
 
-  // 임시 데이터
-  const gameData = {
-    gameId: 1,
-    gameName: "Melatonin",
-    gamePrice: 50000,
-    releaseDate: "2023-03-01",
-    gameDescription:
-      "Melatonin is a rhythm game about dreams and reality merging together. It uses animations and sound cues to keep you on beat without any intimidating overlays or interfaces. Harmonize through a variety of dreamy levels containing surprising challenges, hand-drawn art, and vibrant music.",
-    metacriticScore: 60,
-    averagePlaytime: 7,
-    publisher: "블리자드",
-    isKorean: true,
-    isLiked: true,
-    // isLiked: false,
-    genres: [
-      {
-        genreId: 1,
-        genreName: "전략",
-      },
-      {
-        genreId: 2,
-        genreName: "어드벤쳐",
-      },
-    ],
-    images: [
-      {
-        imageId: 1,
-        imagePath:
-          "https://cdn.akamai.steamstatic.com/steam/apps/1585220/ss_3d3dfb1e10ab6c6ae11e7f1002b89f3353344ca7.1920x1080.jpg?t=1673291010",
-      },
-      {
-        imageId: 2,
-        imagePath:
-          "https://cdn.akamai.steamstatic.com/steam/apps/1585220/ss_a556d9ce0a51e0245391ebe7b899804392c36be0.600x338.jpg?t=1673291010",
-      },
-      {
-        imageId: 3,
-        imagePath:
-          "https://cdn.akamai.steamstatic.com/steam/apps/1585220/ss_e2b8065eb4f6ad6517f4a2358684fb7a0a61da1c.600x338.jpg?t=1673291010",
-      },
-    ],
-    reviews: [
-      {
-        reviewId: 1,
-        gameId: 2,
-        reviewTitle: "재밌는 게임이에요",
-        reviewContent: "이걸 이제야 알다니",
-        reviewGrade: 5,
-        createdAt: "2023-03-01",
-        updatedAt: "2023-03-03",
-        userImagePath:
-          "https://avatars.akamai.steamstatic.com/34adcd2a2c63e40ce323f872f4781ef5ee322413.jpg",
-        userName: "홍길동",
-        userId: 3,
-      },
-      {
-        reviewId: 2,
-        gameId: 2,
-        reviewTitle: "재밌는 게임이에요",
-        reviewContent: "이걸 이제야 알다니",
-        reviewGrade: 5,
-        createdAt: "2023-03-01",
-        updatedAt: "2023-03-03",
-        userImagePath:
-          "https://avatars.akamai.steamstatic.com/34adcd2a2c63e40ce323f872f4781ef5ee322413.jpg",
-        userName: "홍길동",
-        userId: 3,
-      },
-    ],
-    recommendedUsers: [
-      {
-        userId: 3,
-        userName: "홍길동",
-        userImagePath:
-          "https://avatars.akamai.steamstatic.com/34adcd2a2c63e40ce323f872f4781ef5ee322413.jpg",
-      },
-      {
-        userId: 4,
-        userName: "강호동",
-        userImagePath:
-          "https://avatars.akamai.steamstatic.com/34adcd2a2c63e40ce323f872f4781ef5ee322413.jpg",
-      },
-    ],
-  };
-
-  const recommendedUsers = [
-    {
-      userId: 3,
-      userName: "홍길동",
-      profilePath:
-        "https://avatars.akamai.steamstatic.com/34adcd2a2c63e40ce323f872f4781ef5ee322413.jpg",
-      "2weekPlayTime": 9999,
-    },
-    {
-      userId: 1,
-      userName: "김길동",
-      profilePath:
-        "https://avatars.akamai.steamstatic.com/34adcd2a2c63e40ce323f872f4781ef5ee322413.jpg",
-      "2weekPlayTime": 8888,
-    },
-    {
-      userId: 2,
-      userName: "이길동",
-      profilePath:
-        "https://avatars.akamai.steamstatic.com/34adcd2a2c63e40ce323f872f4781ef5ee322413.jpg",
-      "2weekPlayTime": 7777,
-    },
-  ];
-
-  const reviewData = [
-    {
-      reviewId: 1,
-      gameId: 2,
-      reviewTitle: "재밌는 게임이에요",
-      reviewContent:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typeset",
-      reviewGrade: 5,
-      createdAt: "2023-03-01",
-      updatedAt: "2023-03-03",
-      userImagePath:
-        "https://item.kakaocdn.net/do/493188dee481260d5c89790036be0e66f604e7b0e6900f9ac53a43965300eb9a",
-      userName: "홍길동",
-      userId: 3,
-    },
-    {
-      reviewId: 2,
-      gameId: 2,
-      reviewTitle: "홀리 게임이에요",
-      reviewContent: "이걸 이제야 알다니",
-      reviewGrade: 4,
-      createdAt: "2023-03-01",
-      updatedAt: "0000-00-00",
-      userImagePath:
-        "https://item.kakaocdn.net/do/493188dee481260d5c89790036be0e66113e2bd2b7407c8202a97d2241a96625",
-      userName: "배고파",
-      userId: 2,
-    },
-    {
-      reviewId: 3,
-      gameId: 2,
-      reviewTitle: "재밌는 게임이에요",
-      reviewContent: "이걸 이제야 알다니",
-      reviewGrade: 5,
-      createdAt: "2023-03-01",
-      updatedAt: "2023-03-03",
-      userImagePath:
-        "https://item.kakaocdn.net/do/493188dee481260d5c89790036be0e66f604e7b0e6900f9ac53a43965300eb9a",
-      userName: "홍길동",
-      userId: 3,
-    },
-    {
-      reviewId: 4,
-      gameId: 2,
-      reviewTitle: "홀리 게임이에요",
-      reviewContent:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text",
-      reviewGrade: 4,
-      createdAt: "2023-03-01",
-      updatedAt: "0000-00-00",
-      userImagePath:
-        "https://item.kakaocdn.net/do/493188dee481260d5c89790036be0e66113e2bd2b7407c8202a97d2241a96625",
-      userName: "배고파",
-      userId: 2,
-    },
-  ];
+  useEffect(() => {
+    axios
+      .get(`${BACKEND_URL}/api/game/${gameId}`, {
+        // todo : userId 수정해야함
+        headers: { "Content-Type": "application/json", userId: 1 },
+      })
+      .then(function (response) {
+        console.log(response.data);
+        setGameData(response.data);
+        setRecommendedUsers(response.data.recommendedUsers);
+        setReviewData(response.data.reviews);
+      })
+      .catch(function (error) {
+        console.log(error);
+        // if (error.response.status === 404) {
+        //   navigate("/*");
+        // } else if (error.response.status === 401) {
+        // }
+      });
+  }, []);
 
   const renderGenres = () => {
     const result = [];
@@ -241,7 +105,7 @@ const Detail = () => {
   const renderUsers = () => {
     const result = [];
 
-    if (recommendedUsers) {
+    if (recommendedUsers && recommendedUsers.length) {
       for (let i = 0; i < recommendedUsers.length; i++) {
         result.push(
           <div className="single-user" key={recommendedUsers[i].userId}>
@@ -255,6 +119,12 @@ const Detail = () => {
           </div>
         );
       }
+    } else {
+      result.push(
+        <div key={0} className="no-user">
+          해당 게임을 좋아하는 사용자가 없습니다.
+        </div>
+      );
     }
     return result;
   };
@@ -324,12 +194,15 @@ const Detail = () => {
     setChatView(true);
   };
 
+  const handleScrap = () => {};
+
   return (
     <div>
       {gameData ? (
         <DetailWrapper
           src={gameData.images[0].imagePath}
           scrap_src={scrap_img}
+          scrap_hover={scrap_hover}
           img_len={gameData.images.length}
         >
           <ReviewModal
@@ -358,8 +231,8 @@ const Detail = () => {
                 <p className="title">{gameData.gameName}</p>
                 <p className="discription">{gameData.gameDescription}</p>
               </motion.div>
-              {/* 로그인했을 때 노출 */}
-              <div className="scrap-wrapper">
+              {/* todo : 스크랩 기능 연결하기, hover시에 색상 변경 */}
+              <div className="scrap-wrapper" onClick={() => handleScrap()}>
                 {gameData.isLiked ? (
                   <FontAwesomeIcon icon={faStar} />
                 ) : (
@@ -380,7 +253,7 @@ const Detail = () => {
             >
               <span className="single-info">
                 <p className="info-title">Preference</p>
-                <p className="info-content">{gameData.gamePrice + "%"}</p>
+                <p className="info-content">{gameData.score + "%"}</p>
               </span>
               <span className="single-info">
                 <p className="info-title">Price</p>
@@ -423,14 +296,14 @@ const Detail = () => {
           <ReviewWrapper>
             <div className="title-wrapper">
               <p className="title-text">리뷰</p>
-              {/* 로그인했을 때만 노출 */}
-              <TranslucentBtn
-                text="작성하기"
-                onClick={() => handleModalOpen()}
-              ></TranslucentBtn>
+              {gameData.canReview ? (
+                <TranslucentBtn
+                  text="작성하기"
+                  onClick={() => handleModalOpen()}
+                ></TranslucentBtn>
+              ) : null}
             </div>
             {reviewData ? (
-              // 리뷰 내용 많을 때 처리해야 함
               <div className="review-wrapper">{renderReviews()}</div>
             ) : (
               <div className="no-review">
@@ -440,8 +313,10 @@ const Detail = () => {
           </ReviewWrapper>
         </DetailWrapper>
       ) : (
-        // CSS 수정 필요함
-        <DetailWrapper>존재하지 않는 게임입니다.</DetailWrapper>
+        // todo : CSS 수정 필요함
+        <DetailWrapper>
+          <div className="no-game">존재하지 않는 게임입니다.</div>
+        </DetailWrapper>
       )}
       <ChatBtn onClick={() => handleChatOpen()}>
         <FontAwesomeIcon icon={faCommentDots} />
