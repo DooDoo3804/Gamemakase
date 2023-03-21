@@ -61,6 +61,7 @@ public class GameServiceImpl implements GameService{
                 .gameName(game.getGameName())
                 .gamePrice(game.getGamePrice())
                 .releaseDate(game.getReleaseDate())
+                .gameDescription(game.getGameDescription())
                 .score(game.getScore())
                 .averagePlaytime(game.getAveragePlaytime())
                 .publisher(game.getPublisher())
