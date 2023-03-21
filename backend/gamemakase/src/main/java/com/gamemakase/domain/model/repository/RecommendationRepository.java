@@ -7,5 +7,5 @@ import java.util.List;
 
 
 public interface RecommendationRepository extends JpaRepository<Recommendation, Long> {
-    List<Recommendation> findAllByGameIdGameIdOrderByRatingDesc(Long gameId);
+    List<Recommendation> findAllByGameGameIdOrderByRatingDesc(Long gameId);
 }

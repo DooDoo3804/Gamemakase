@@ -2,6 +2,8 @@ package com.gamemakase.domain.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.*;
 
@@ -20,7 +22,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @AllArgsConstructor
 @Builder
 @Table(name = "user")
-public class User {
+public class User implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "user_id")
