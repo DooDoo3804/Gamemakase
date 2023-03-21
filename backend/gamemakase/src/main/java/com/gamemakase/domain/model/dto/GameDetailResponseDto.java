@@ -18,6 +18,7 @@ public class GameDetailResponseDto {
     private String gameName;
     private Integer gamePrice;
     private LocalDateTime releaseDate;
+    private String gameDescription;
     private Integer score;
     private Integer averagePlaytime;
     private String publisher;
