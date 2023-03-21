@@ -1,6 +1,6 @@
 package com.gamemakase.domain.model.vo;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import com.gamemakase.domain.model.entity.Review;
 
@@ -17,8 +17,8 @@ public class ReviewInfoVo {
 	private String reviewTitle;
 	private String reviewContent;
 	private long reviewGrade;
-	private LocalTime createdAt;
-	private LocalTime updatedAt;
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
 	
 	public static ReviewInfoVo of(Review review, String gameImgPath) {
 		return ReviewInfoVo.builder()

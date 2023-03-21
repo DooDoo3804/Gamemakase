@@ -26,10 +26,11 @@ public class ProfileContoller {
 	
 	@GetMapping
 	public ResponseEntity<ProfileInfoResponseDto> getProfile(
-			@RequestParam @ApiParam(required = true) long userId
+			@RequestParam @ApiParam(required = true) long userId,
+			@RequestParam(required = true) @ApiParam(required = true) int pageNo
 			) {
 		logger.info("get mapping, userId : {}", userId);
-		ProfileInfoResponseDto result = profileService.getProfile(userId);
+		ProfileInfoResponseDto result = profileService.getProfile(userId, pageNo);
 		return new ResponseEntity<ProfileInfoResponseDto>(result, HttpStatus.OK);
 	}
 	
