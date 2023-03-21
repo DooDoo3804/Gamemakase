@@ -1,6 +1,7 @@
 package com.gamemakase.domain.model.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class GameDetailResponseDto {
@@ -32,27 +34,30 @@ public class GameDetailResponseDto {
     private List<RecommendedUserDTO> recommendedUsers;
 
     @Data
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public class GenreDTO {
+    public static class GenreDTO {
         private Long genreId;
         private String genreName;
         // Getters and setters
     }
 
     @Data
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public class ImageDTO {
+    public static class ImageDTO {
         private Long imageId;
         private String imagePath;
         // Getters and setters
     }
 
     @Data
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public class ReviewDTO {
+    public static class ReviewDTO {
         private Long reviewId;
         private Long gameId;
         private String reviewTitle;
@@ -63,12 +68,15 @@ public class GameDetailResponseDto {
         private String userImagePath;
         private String userName;
         private Long userId;
+
+
     }
 
     @Data
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public class RecommendedUserDTO {
+    public static class RecommendedUserDTO {
         private Long userId;
         private String userName;
         private String userImagePath;
