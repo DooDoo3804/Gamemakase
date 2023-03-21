@@ -162,9 +162,35 @@ export const ReviewModalBody = styled(motion.div)`
       margin-bottom: 1.5rem;
     }
 
+    .review-title {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0);
+      border: none;
+      color: ${Common.colors.white01};
+      text-align: left;
+      font-family: "Noto Sans KR", serif;
+      font-weight: 700;
+
+      resize: none;
+
+      @media (min-width: 768px) {
+        font-size: 1.4rem;
+      }
+      @media (max-width: 768px) {
+        font-size: 1.2rem;
+      }
+      @media (max-width: 500px) {
+        font-size: 1rem;
+      }
+    }
+
+    textarea::placeholder {
+      color: ${Common.colors.white01};
+    }
+
     .review-content {
       width: 100%;
-      height: calc(100% - 2rem);
+      height: calc(100% - 1rem);
       background-color: rgba(255, 255, 255, 0);
       border: none;
       color: ${Common.colors.white01};
@@ -173,6 +199,7 @@ export const ReviewModalBody = styled(motion.div)`
       resize: none;
     }
 
+    .review-title:focus,
     .review-content:focus {
       outline: none;
     }
