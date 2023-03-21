@@ -1,14 +1,8 @@
 package com.gamemakase.domain.model.entity;
 
-import java.time.LocalTime;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import java.time.LocalDateTime;
+import javax.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,11 +20,11 @@ public class Review {
   @Column(name = "review_id")
   private long reviewId;
 
-  @OneToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "game_id")
   private Game game;
 
-  @OneToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   private User user;
 
@@ -44,8 +38,8 @@ public class Review {
   private int reviewGrade;
 
   @Column(name = "created_at")
-  private LocalTime createdAt;
+  private LocalDateTime createdAt;
 
   @Column(name = "updated_at")
-  private LocalTime updatedAt;
+  private LocalDateTime updatedAt;
 }

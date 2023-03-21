@@ -2,6 +2,7 @@ package com.gamemakase.domain.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
