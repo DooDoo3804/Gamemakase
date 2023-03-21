@@ -5,5 +5,5 @@ import com.gamemakase.global.Exception.NotFoundException;
 
 public interface GameService {
 
-    GameDetailResponseDto getByGameId(Long gameId) throws NotFoundException;
+    GameDetailResponseDto getByGameId(Long gameId, Long userId) throws NotFoundException;
 }
