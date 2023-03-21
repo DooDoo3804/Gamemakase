@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Lottie from "react-lottie";
@@ -30,12 +30,14 @@ import {
   faStar as faRegularStar,
 } from "@fortawesome/free-regular-svg-icons";
 import no_game from "../assets/lottie/no-game.json";
+import Loading from "../assets/loading.gif";
 
 import TranslucentBtn from "../components/TranslucentBtn";
 import useBodyScrollLock from "../components/ScrollLock";
 import ChatModal from "../components/ChatModal";
 
 import { BACKEND_URL } from "../config";
+import { useInView } from "react-intersection-observer";
 
 const Detail = () => {
   const navigate = useNavigate();
@@ -46,6 +48,11 @@ const Detail = () => {
   const [recommendedUsers, setRecommendedUsers] = useState(null);
   const [reviewData, setReviewData] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
+
+  const [hasNextPage, setHasNextPage] = useState(true);
+  const [isLoading, setLoading] = useState(false);
+  const [ref, inView] = useInView();
+  const pageNo = useRef(0);
 
   const { lockScroll } = useBodyScrollLock();
   const location = useLocation();
@@ -71,6 +78,40 @@ const Detail = () => {
         // }
       });
   }, []);
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      setLoading(true);
+      getReviews();
+    }
+  }, [inView]);
+
+  const getReviews = useCallback(async () => {
+    setLoading(true);
+
+    await axios
+      .get(`${BACKEND_URL}/api/reviews/${gameId}`, {
+        params: {
+          pageNo: pageNo.current,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.length) {
+          pageNo.current += 1;
+        }
+        setReviewData((reviewData) => [...reviewData, ...response.data]);
+        setHasNextPage(response.data.length === 12);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  });
 
   const options = (lottiefile) => {
     return {
@@ -317,7 +358,16 @@ const Detail = () => {
               ) : null}
             </div>
             {reviewData ? (
-              <div className="review-wrapper">{renderReviews()}</div>
+              <>
+                <div className="review-wrapper">{renderReviews()}</div>
+                {isLoading ? (
+                  <div className="review-loading">
+                    <img src={Loading} alt="loading..."></img>
+                  </div>
+                ) : (
+                  <div ref={ref} className="scroll-handler" />
+                )}
+              </>
             ) : (
               <div className="no-review">
                 <p>작성된 리뷰가 없습니다.</p>
@@ -326,7 +376,6 @@ const Detail = () => {
           </ReviewWrapper>
         </DetailWrapper>
       ) : (
-        // todo : CSS 수정 필요함
         <DetailWrapper>
           <div className="no-game">
             <Lottie

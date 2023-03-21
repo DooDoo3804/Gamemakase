@@ -489,7 +489,7 @@ export const ReviewWrapper = styled.div`
     display: flex;
 
     flex-wrap: wrap;
-    padding-bottom: 10rem;
+    padding-bottom: 5rem;
 
     @media (min-width: 1000px) {
       margin-top: 2rem;
@@ -521,6 +521,16 @@ export const ReviewWrapper = styled.div`
     @media (max-width: 500px) {
       height: 15rem;
       font-size: 0.6rem;
+    }
+  }
+
+  .review-loading {
+    display: flex;
+    justify-content: center;
+
+    img {
+      max-width: 3rem;
+      margin-bottom: 5rem;
     }
   }
 `;
