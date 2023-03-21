@@ -55,7 +55,7 @@ public class ProfileServiceImpl implements ProfileService {
 	 */
 
 	@Override
-	public ProfileInfoResponseDto getProfile(long userId) {
+	public ProfileInfoResponseDto getProfile(long userId, int pageNo) {
 		genreScoreResult = new HashMap<String, Integer>();
 
 		User user = userRepository.findById(userId).orElseThrow(/* here! */);
@@ -90,7 +90,8 @@ public class ProfileServiceImpl implements ProfileService {
 		}
 
 		// userId기반 스크랩한 게임을 조회하여 반환합니다.
-		List<LikeGame> likeList = likeGameRepository.findAllByUser(user);
+		Pageable pageable = PageRequest.of(pageNo, 6);
+		Page<LikeGame> likeList = likeGameRepository.findAllByUser(user, pageable);
 		List<ScrapInfoVo> scrapList = likeList.stream()
 				.map(l -> ScrapInfoVo.of(l.getGame(),
 						imageRepository.findByTypeAndTypeId("GAME_HEADER", l.getGame().getGameId()).orElseThrow(/* here! */).getImagePath()))

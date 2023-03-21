@@ -3,6 +3,7 @@ package com.gamemakase.domain.model.dto;
 import java.util.List;
 
 import com.gamemakase.domain.model.vo.GenreScoreVo;
+import com.gamemakase.domain.model.vo.PaginationVo;
 import com.gamemakase.domain.model.vo.ScrapInfoVo;
 import com.gamemakase.domain.model.vo.UserInfoResponseVo;
 
@@ -19,4 +20,5 @@ public class ProfileInfoResponseDto {
 	private UserInfoResponseVo user;
 	private List<GenreScoreVo> statistics;
 	private List<ScrapInfoVo> scrap;
+	private PaginationVo page;
 }
