@@ -3,29 +3,26 @@ import { Common } from "../styles/Common";
 import { motion } from "framer-motion";
 
 export const ProfileBackgroundWrapper = styled.div`
-  position: absolute;
   background: ${Common.colors.mainColor01};
-
   width: 100%;
-  height: auto;
+  min-height: 100vh;
 
   .profile-box {
     position: relative;
-    margin-top: 110px;
-
     width: 100%;
-    height: auto;
-
+    height: 100%;
+    min-height: 100vh;
+    margin-top: 100px;
+    border-radius: 50px 50px 0px 0px;
+    @media (max-width: 450px) {
+      margin-top: 120px;
+      border-radius: 30px 30px 0px 0px;
+    }
     background: linear-gradient(
       180deg,
       ${Common.colors.mainColor02} 30%,
       ${Common.colors.mainColor05} 100%
     );
-    border-radius: 50px 50px 0px 0px;
-    @media (max-width: 450px) {
-      margin-top: 70px;
-      border-radius: 30px 30px 0px 0px;
-    }
   }
 `;
 
@@ -34,16 +31,17 @@ export const ProfileImgWrapper = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  position: absolute;
   margin-left: 10%;
-  margin-top: -3rem;
+  position: relative;
+  top: -60px;
   display: flex;
-
-  width: 120px;
-  height: 120px;
-
+  height: 100px;
+  img {
+    width: 120px;
+    height: 120px;
+  }
   @media (max-width: 450px) {
-    margin-top: -3rem;
+    top: -50px;
     width: 90px;
     height: 90px;
   }
@@ -53,7 +51,7 @@ export const ProfileImgWrapper = styled.div`
     width: 180x;
     height: 50px;
 
-    margin-top: 60px;
+    margin-top: 75px;
     padding-left: 2rem;
 
     font-family: "Noto Sans KR";
@@ -63,7 +61,7 @@ export const ProfileImgWrapper = styled.div`
     @media (max-width: 450px) {
       margin-top: 50px;
       font-size: 24px;
-      padding-left: 2.5rem;
+      padding-left: 20px;
     }
     line-height: 52px;
     text-align: center;
@@ -85,7 +83,6 @@ export const ProfileNavWrapper = styled.div`
   width: 250px;
   height: 45px;
   margin-left: 10%;
-  padding-top: 6rem;
 
   @media (max-width: 450px) {
     padding-top: 5rem;
@@ -156,7 +153,7 @@ export const ProfileMainStatistics = styled(motion.div)`
 
   position: relative;
   margin-left: 10%;
-  width: 80%;
+  margin-right: 10%;
   height: 33rem;
 
   @media (max-width: 450px) {
@@ -227,7 +224,7 @@ export const ProfileScrapBook = styled(motion.div)`
 
   position: relative;
   margin-left: 10%;
-  width: 80%;
+  margin-right: 10%;
   padding-bottom: 40px;
 
   .scrap-header {
@@ -374,6 +371,7 @@ export const SingleReview = styled(motion.div)`
   }
 
   .game-img {
+    border-radius: 10px;
     width: 100%;
     height: 100%;
     object-fit: fill;
