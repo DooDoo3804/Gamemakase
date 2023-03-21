@@ -91,7 +91,12 @@ public class ProfileServiceImpl implements ProfileService {
 				.map(l -> ScrapInfoVo.of(l.getGame(),
 						imageRepository.findByTypeAndTypeId("GAME_HEADER", l.getGame().getGameId()).orElseThrow(/* here! */).getImagePath()))
 				.collect(Collectors.toList());
-		return ProfileInfoResponseDto.builder().statistics(scoreList).scrap(scrapList).build();
+		return ProfileInfoResponseDto.builder()
+				.user(UserInfoResponseVo.of(user,
+						imageRepository.findByTypeAndTypeId("USER_PROFILE", user.getUserId()).orElseThrow(/*here!*/).getImagePath()))
+				.statistics(scoreList)
+				.scrap(scrapList)
+				.build();
 	}
 
 	@Override
@@ -106,8 +111,6 @@ public class ProfileServiceImpl implements ProfileService {
 				.collect(Collectors.toList());
 		
 		return ProfileReviewsResponseDto.builder()
-				.user(UserInfoResponseVo.of(user,
-						imageRepository.findByTypeAndTypeId("USER_PROFILE", user.getUserId()).orElseThrow(/*here!*/).getImagePath()))
 				.reviews(reviewsInfoList)
 				.page(PaginationVo.builder().pageNum(pageNo).size(totalReviewSize).count(reviewsInfoList.size()).build())
 				.build();
