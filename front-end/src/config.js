@@ -1,2 +1,1 @@
-export const BACKEND_URL = "http://gamemakase.com:8080";
-export const DUMMY_URL = "";
+export const BACKEND_URL = "https://gamemakase.com:8080/";
