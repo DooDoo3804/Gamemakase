@@ -291,9 +291,5 @@ export const MoreGamesWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-
-  .single-game {
-    width: 20rem;
-    color: ${Common.colors.white01};
-  }
+  margin: 1rem 2rem;
 `;

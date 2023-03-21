@@ -34,6 +34,8 @@ const Wrapper = styled.div`
 
     transform-style: preserve-3d;
     transition: transform 1s;
+
+    transform-origin: 50% 50%;
   }
 
   .item {
@@ -237,7 +239,7 @@ const GameCarousel = () => {
               <img
                 className="game-plate-img"
                 alt="game-img"
-                src="https://cdn.cloudflare.steamstatic.com/steam/apps/1868140/header.jpg?t=1678794959"
+                src="https://cdn.cloudflare.steamstatic.com/steam/apps/1135690/header.jpg?t=1667779371"
               />
             </div>
             <div className="plate-container">
