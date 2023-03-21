@@ -19,6 +19,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import GameCarousel from "../components/GameCarousel";
+import GameClip from "../components/GameClip";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -170,25 +171,6 @@ const Home = () => {
     };
   };
 
-  const renderTodayGames = () => {
-    const result = [];
-
-    for (let i = 0; i < todayGames.length; i++) {
-      result.push(
-        <div key={i} className="single-game">
-          <img
-            src={todayGames[i].gameImage}
-            alt="game_img"
-            className="game-img"
-          />
-          <img src={banner_plate} alt="plate" className="plate" />
-        </div>
-      );
-    }
-
-    return result;
-  };
-
   const renderGames = (games) => {
     const result = [];
 
@@ -214,9 +196,16 @@ const Home = () => {
 
     for (let i = 0; i < moreGames.length; i++) {
       result.push(
-        <div key={i} className="single-game">
-          {moreGames[i].gameName}
-        </div>
+        <GameClip
+          key={i}
+          title={moreGames[i].gameName}
+          gameId={moreGames[i].gameId}
+          imgUrl={moreGames[i].gameImage}
+          price={moreGames[i].price}
+          window={moreGames[i].window}
+          apple={moreGames[i].apple}
+          linux={moreGames[i].linux}
+        ></GameClip>
       );
     }
     return result;
