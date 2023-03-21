@@ -140,7 +140,7 @@ const Profile = () => {
         // }
         // error logic
       });
-  }, [userId, navigate]);
+  }, [userId]);
 
   const mainDataSetting = () => {
     setMainTapData();
