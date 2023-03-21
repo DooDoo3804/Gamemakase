@@ -13,7 +13,7 @@ import java.io.IOException;
 public class JwtFilter extends GenericFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
-    private static final String ACCESS_TOKEN = "accessToken";
+    private static final String ACCESS_TOKEN = "Authorization";
 
     private JwtTokenProvider jwtTokenProvider;
     public JwtFilter (JwtTokenProvider jwtTokenProvider) {

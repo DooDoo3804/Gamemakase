@@ -1,6 +1,7 @@
 package com.gamemakase.domain.model.repository;
 
 import com.gamemakase.domain.model.entity.User;
+import com.gamemakase.domain.model.entity.UserDetails;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

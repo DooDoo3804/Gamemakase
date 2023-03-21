@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @Getter
@@ -22,7 +24,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @AllArgsConstructor
 @Builder
 @Table(name = "user")
-public class User implements Serializable {
+public class User implements UserDetails{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "user_id")
@@ -55,4 +57,33 @@ public class User implements Serializable {
           inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
   private Authority authority;
 
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return null;
+  }
+
+  @Override
+  public String getPassword() {
+    return null;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return false;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return false;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return false;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return false;
+  }
 }

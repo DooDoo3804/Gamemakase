@@ -1,17 +1,25 @@
 package com.gamemakase.domain.model.service;
 
+import com.gamemakase.domain.model.dto.LoginRequestDto;
 import com.gamemakase.domain.model.dto.SignUpRequestDto;
 import com.gamemakase.domain.model.entity.Authority;
 import com.gamemakase.domain.model.entity.Authority.AuthorityName;
 import com.gamemakase.domain.model.entity.User;
+import com.gamemakase.domain.model.entity.UserDetails;
 import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.global.Exception.DuplicatedException;
 import com.gamemakase.global.config.jwt.JwtTokenProvider;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,22 +58,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public HttpHeaders getHttpHeaders(User user, String token) {
+    public Map<String, Object> login(LoginRequestDto requestDto) {
+        User user = userRepository.findByUserEmail("this.userEmail");
+        System.out.println("user : " + user);
+//        if(user == null || !passwordEncoder.matches(requestDto.getUserPassword(), user.getUserPassword())) {
+//            throw new BadCredentialsException("비밀번호 불일치");
+//        }
         String accessToken = jwtTokenProvider.createAccessToken(user);
-        String refreshToken = token;
-        if(token == null) {
-            refreshToken = jwtTokenProvider.createRefreshToken(user);
-        }
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(ACCESS_HEADER, "Bearer " + accessToken);
-        httpHeaders.add(REFRESH_HEADER, "Bearer " + refreshToken);
+        String refreshToken = jwtTokenProvider.createRefreshToken(user);
+//        if(refreshToken == null) {
+//            refreshToken = jwtTokenProvider.createRefreshToken(user);
+//        }
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.add(ACCESS_HEADER, "Bearer " + accessToken);
+//        httpHeaders.add(REFRESH_HEADER, "Bearer " + refreshToken);
+
+        System.out.println("엑세스 토큰 : " + accessToken);
+        System.out.println("리프레시 토큰 : " + accessToken);
 
         logger.info("토큰 재발급 ");
         logger.info("ACCESS : {}",accessToken);
         logger.info("REFRESH : {}", refreshToken);
         logger.info("user UID : {}", user.getUserId());
         logger.info("save refresh token");
-        return httpHeaders;
+
+        return new HashMap<String, Object>(){{
+            put("email", user.getUserEmail());
+            put("userId", user.getUserId());
+            put("access-token", accessToken);
+            put("refresh-token", refreshToken);
+            put("name", user.getUserName());
+            put("role", user.getAuthority());
+        }};
     }
 
     @Override
