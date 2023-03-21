@@ -60,6 +60,7 @@ export const GameSummaryClip = styled(motion.div)`
   .game-explain {
     position: relative;
     margin-left: 3%;
+    margin-right: 3%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -75,7 +76,6 @@ export const GameSummaryClip = styled(motion.div)`
       font-style: normal;
       font-size: 18px;
       line-height: 30px;
-
       position: relative;
       color: ${Common.colors.white01};
 
@@ -173,9 +173,17 @@ export const GameSummaryClip = styled(motion.div)`
       }
     }
     @media (max-width: 600px) {
-      display: none;
+      position: relative;
+      top: -134px;
+      right: -50px;
+      width: 35px;
+      min-height: 35px;
+      max-height: 35px;
       .scrap {
-        display: none;
+        max-height: 1rem;
+        min-height: 1rem;
+        max-width: 1rem;
+        min-width: 1rem;
       }
     }
   }
