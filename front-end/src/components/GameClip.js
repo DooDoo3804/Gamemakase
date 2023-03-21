@@ -31,6 +31,7 @@ cursor: pointer;
   }
   .gameImg {
     height: 120px;
+    border-radius: 15px;
     @media (min-width: 1560px) {
       height: 155px;
     }
