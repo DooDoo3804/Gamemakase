@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +26,6 @@ public class ProfileContoller {
 	
 	@GetMapping
 	public ResponseEntity<ProfileInfoResponseDto> getProfile(
-			@RequestHeader(value="Authorization", required = false) @ApiParam(required = false) String token,
 			@RequestParam @ApiParam(required = true) long userId
 			) {
 		logger.info("get mapping, userId : {}", userId);
@@ -37,7 +35,6 @@ public class ProfileContoller {
 	
 	@GetMapping("/reviews")
 	public ResponseEntity<ProfileReviewsResponseDto> getReviews(
-			@RequestHeader(value="Authorization", required = false) @ApiParam(required = false) String token,
 			@RequestParam(required = true) @ApiParam(required = true) long userId,
 			@RequestParam(required = true) @ApiParam(required = true) int pageNo
 			) {
