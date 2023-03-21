@@ -209,6 +209,7 @@ const Detail = () => {
   };
 
   const handleScrap = () => {
+    // todo : 로그인 안했을 때 로그인 유도, api 연결하기
     console.log(!isLiked);
     setIsLiked(!isLiked);
   };
@@ -248,7 +249,6 @@ const Detail = () => {
                 <p className="title">{gameData.gameName}</p>
                 <p className="discription">{gameData.gameDescription}</p>
               </motion.div>
-              {/* todo : 스크랩 기능 연결하기 */}
               <div className="scrap-wrapper" onClick={() => handleScrap()}>
                 <FontAwesomeIcon icon={isLiked ? faStar : faRegularStar} />
               </div>
