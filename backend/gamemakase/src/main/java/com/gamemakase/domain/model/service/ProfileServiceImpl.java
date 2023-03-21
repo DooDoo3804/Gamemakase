@@ -31,7 +31,7 @@ import com.gamemakase.domain.model.repository.ReviewRepository;
 import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.domain.model.vo.GenreScoreVo;
 import com.gamemakase.domain.model.vo.PaginationVo;
-import com.gamemakase.domain.model.vo.ReviewInfoVo;
+import com.gamemakase.domain.model.vo.ProfileReviewInfoVo;
 import com.gamemakase.domain.model.vo.ScrapInfoVo;
 import com.gamemakase.domain.model.vo.UserInfoResponseVo;
 
@@ -116,8 +116,8 @@ public class ProfileServiceImpl implements ProfileService {
 		Long totalReviewSize = reviewRepository.countByUser(user);
 		Pageable pageable = PageRequest.of(pageNo, 8);
 		Page<Review> reviews = reviewRepository.findAllByUser(user, pageable);
-		List<ReviewInfoVo> reviewsInfoList = reviews.stream()
-				.map(r -> ReviewInfoVo.of(r,
+		List<ProfileReviewInfoVo> reviewsInfoList = reviews.stream()
+				.map(r -> ProfileReviewInfoVo.of(r,
 						imageRepository.findByTypeAndTypeId("GAME_HEADER", r.getGame().getGameId()).orElseThrow(/*here!*/).getImagePath()))
 				.collect(Collectors.toList());
 		
