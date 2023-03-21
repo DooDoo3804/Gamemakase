@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import com.gamemakase.domain.model.dto.ProfileInfoResponseDto;
 import com.gamemakase.domain.model.dto.ProfileReviewsResponseDto;
 import com.gamemakase.domain.model.entity.GameHistory;
 import com.gamemakase.domain.model.entity.Genre;
+import com.gamemakase.domain.model.entity.Image;
 import com.gamemakase.domain.model.entity.LikeGame;
 import com.gamemakase.domain.model.entity.Review;
 import com.gamemakase.domain.model.entity.User;
@@ -91,9 +93,15 @@ public class ProfileServiceImpl implements ProfileService {
 				.map(l -> ScrapInfoVo.of(l.getGame(),
 						imageRepository.findByTypeAndTypeId("GAME_HEADER", l.getGame().getGameId()).orElseThrow(/* here! */).getImagePath()))
 				.collect(Collectors.toList());
+		Optional<Image> image = imageRepository.findByTypeAndTypeId("USER_PROFILE", user.getUserId());
+		UserInfoResponseVo userInfo = null;
+		if(!image.isPresent()) {
+			userInfo = UserInfoResponseVo.of(user, "");
+		} else {
+			userInfo = UserInfoResponseVo.of(user, image.get().getImagePath());
+		}
 		return ProfileInfoResponseDto.builder()
-				.user(UserInfoResponseVo.of(user,
-						imageRepository.findByTypeAndTypeId("USER_PROFILE", user.getUserId()).orElseThrow(/*here!*/).getImagePath()))
+				.user(userInfo)
 				.statistics(scoreList)
 				.scrap(scrapList)
 				.build();
