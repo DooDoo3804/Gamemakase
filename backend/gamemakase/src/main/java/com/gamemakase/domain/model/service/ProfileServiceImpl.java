@@ -69,6 +69,8 @@ public class ProfileServiceImpl implements ProfileService {
 				String genreName = genre.getGenreName();
 				if (genreScoreResult.containsKey(genreName)) {
 					genreScoreResult.put(genreName, genreScoreResult.get(genreName) + gameHistory.getTotalPlayGame());
+				} else {
+					genreScoreResult.put(genreName, gameHistory.getTotalPlayGame());
 				}
 			}
 		}
