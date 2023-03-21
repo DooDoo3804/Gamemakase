@@ -130,7 +130,7 @@ const GameClip = (props) => {
           )}
         </div>
       </div>
-      <div className="price">{props.price}$</div>
+      <div className="price">{props.price} $</div>
     </StyleGameClip>
   );
 };
