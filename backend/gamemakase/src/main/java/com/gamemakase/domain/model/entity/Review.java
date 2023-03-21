@@ -1,6 +1,6 @@
 package com.gamemakase.domain.model.entity;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -38,8 +38,8 @@ public class Review {
   private int reviewGrade;
 
   @Column(name = "created_at")
-  private LocalTime createdAt;
+  private LocalDateTime createdAt;
 
   @Column(name = "updated_at")
-  private LocalTime updatedAt;
+  private LocalDateTime updatedAt;
 }
