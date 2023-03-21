@@ -14,7 +14,8 @@ from django.core.paginator import Paginator
 import logging
 from background_task.models import Task
 from background_task import background
-from .task import update_recommed
+from .tasks import update_recommed
+from apscheduler.schedulers.background import BackgroundScheduler
 # user_id : 유저 모델 의 아이디 값
 # user_steam_id : 유저 스팀 아이디
 # steam_id : 스팀 아이디
@@ -267,26 +268,19 @@ def get_recommended_games_small(request, user_id):
     return HttpResponse(status=HTTP_201_CREATED)
 
 
+def job():
+    print("***************************************************")
+    update_recommed()
+    print("***************************************************")
+
+
 def schedule_api():
-    
     print("start big data recommend start")
-    users = User.objects.order_by('user_id').distinct()
+    sched = BackgroundScheduler()
+    sched.add_job(job, 'cron', minute='3', second='0')
     try:
-        get_recommended_games(users)
+        sched.start()
     except Exception as e:
         logging.exception(f"Error in background job: {str(e)}")
 
-# @background(schedule=1)
-# def update_recommed():
-#     print("start big data recommend start")
-#     users = User.objects.order_by('user_id').distinct()
-#     try:
-#         get_recommended_games(users)
-#     except Exception as e:
-#         logging.exception(f"Error in background job: {str(e)}")
-
-
-class UpdateRecommend(APIView):
-    def get(self, request):
-        update_recommed()
-        return Response(status = status.HTTP_302_FOUND)
+schedule_api()

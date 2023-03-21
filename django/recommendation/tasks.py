@@ -110,8 +110,10 @@ def get_recommended_games(users):
     cos_sim_df = pd.DataFrame(
         cos_sim_matrix, columns=pivot_table.index, index=pivot_table.index)
     print(f"cos_sim_df:{cos_sim_df[:30]}")
+    print(users)
     for user in users:
         steam_id = user.user_steam_id
+        print(steam_id)
         knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
         knn = list(knn.index)
 
@@ -129,7 +131,6 @@ def get_recommended_games(users):
             recommendation = Recommendation(steam_id = steam_id, game_id = game.game_id, rating = rating)
             recommendation.save()
 
-@background(schedule = 60)
 def update_recommed():
     print("start big data recommend start")
     users = User.objects.order_by('user_id').distinct()
@@ -137,5 +138,3 @@ def update_recommed():
         get_recommended_games(users)
     except Exception as e:
         logging.exception(f"Error in background job: {str(e)}")
-
-update_recommed()
