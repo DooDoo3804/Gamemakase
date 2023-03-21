@@ -196,6 +196,12 @@ export const ReviewModalBody = styled(motion.div)`
     place-items: center center;
     padding: 0.3rem 0rem;
 
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
     .stars-container {
       display: flex;
       color: ${Common.colors.starColor01};
