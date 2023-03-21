@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class ReviewInfoVo {
+public class ProfileReviewInfoVo {
 	private long reviewId;
 	private long gameId;
 	private String gameImagePath;
@@ -20,8 +20,8 @@ public class ReviewInfoVo {
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	
-	public static ReviewInfoVo of(Review review, String gameImgPath) {
-		return ReviewInfoVo.builder()
+	public static ProfileReviewInfoVo of(Review review, String gameImgPath) {
+		return ProfileReviewInfoVo.builder()
 				.reviewId(review.getReviewId())
 				.gameId(review.getGame().getGameId())
 				.gameImagePath(gameImgPath)
