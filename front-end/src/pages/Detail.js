@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Lottie from "react-lottie";
+import { motion } from "framer-motion";
 import ReviewModal from "../components/ReviewModal";
 import {
   ChatBtn,
@@ -27,8 +29,8 @@ import {
   faCommentDots,
   faStar as faRegularStar,
 } from "@fortawesome/free-regular-svg-icons";
+import no_game from "../assets/lottie/no-game.json";
 
-import { motion } from "framer-motion";
 import TranslucentBtn from "../components/TranslucentBtn";
 import useBodyScrollLock from "../components/ScrollLock";
 import ChatModal from "../components/ChatModal";
@@ -68,6 +70,17 @@ const Detail = () => {
         // }
       });
   }, []);
+
+  const options = (lottiefile) => {
+    return {
+      loop: true,
+      autoplay: true,
+      animationData: lottiefile,
+      rendererSettings: {
+        preserveAspectRatio: "xMidYMid slice",
+      },
+    };
+  };
 
   const renderGenres = () => {
     const result = [];
@@ -315,7 +328,18 @@ const Detail = () => {
       ) : (
         // todo : CSS 수정 필요함
         <DetailWrapper>
-          <div className="no-game">존재하지 않는 게임입니다.</div>
+          <div className="no-game">
+            <Lottie
+              options={options(no_game)}
+              height={300}
+              width={300}
+            ></Lottie>
+            <p>존재하지 않는 게임입니다.</p>
+            <TranslucentBtn
+              text={"홈으로 가기"}
+              onClick={() => navigate("/")}
+            ></TranslucentBtn>
+          </div>
         </DetailWrapper>
       )}
       <ChatBtn onClick={() => handleChatOpen()}>

@@ -289,9 +289,15 @@ export const DetailWrapper = styled.div`
   }
 
   .no-game {
+    margin-top: 3rem;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     font-family: "Noto Sans KR", serif;
+
+    p {
+      margin-bottom: 2rem;
+    }
   }
 `;
 
