@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y, Autoplay } from "swiper";
@@ -12,7 +12,6 @@ import {
 } from "../styles/HomeEmotion";
 import banner_img from "../assets/banner_img.json";
 import banner_img2 from "../assets/banner_img2.json";
-import banner_plate from "../assets/banner_plate.svg";
 
 // Import Swiper styles
 import "swiper/css";
@@ -25,6 +24,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [hasNextPage, setHasNextPage] = useState(true);
   const [isLoading, setLoading] = useState(true);
+  const swiperRef = useRef(null);
   const [ref, inView] = useInView();
 
   // 임시 데이터
@@ -211,6 +211,17 @@ const Home = () => {
     return result;
   };
 
+  const handleMouseEnter = () => {
+    if (swiperRef.current) {
+      swiperRef.current.swiper.autoplay.stop();
+    }
+  };
+  const handleMouseLeave = () => {
+    if (swiperRef.current) {
+      swiperRef.current.swiper.autoplay.start();
+    }
+  };
+
   return (
     <HomeWrapper>
       <Swiper
@@ -219,10 +230,17 @@ const Home = () => {
         slidesPerView={1}
         navigation
         pagination={{ clickable: true }}
-        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        autoplay={{
+          delay: 4000,
+          disableOnInteraction: false,
+        }}
+        ref={swiperRef}
       >
         <SwiperSlide>
-          <Banner>
+          <Banner
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
             <div className="banner1">
               <div className="text-wrapper">
                 <p className="subtitle">겜마카세가 추천하는,</p>
@@ -235,7 +253,10 @@ const Home = () => {
           </Banner>
         </SwiperSlide>
         <SwiperSlide>
-          <Banner>
+          <Banner
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
             <div className="banner2">
               <div className="lottie-wrapper">
                 <div className="single-lottie">
