@@ -1,15 +1,12 @@
-import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { ResponsivePie } from "@nivo/pie";
 import { Common } from "../styles/Common";
 import { motion } from "framer-motion";
-import { BACKEND_URL } from "../config";
 //Components
 import GameSummary from "../components/GameSummary";
 import { Paging } from "../components/Pagination";
 import EditModal from "../components/EditModal";
-import AlertModal from "../components/AlertModal";
 //Emotions
 import {
   ProfileBackgroundWrapper,
@@ -28,8 +25,10 @@ import noReivew from "../assets/lottie/review.json";
 //Svg
 import starSvgYellow from "../assets/fontAwesomeSvg/star-yellow.svg";
 import starSvgEmpty from "../assets/fontAwesomeSvg/star-empty.svg";
-//empty profile img
-import defaultUserImg from "../assets/profileImg.svg";
+//임시
+import exampleGameImg from "../assets/임시게임이미지.svg";
+import profileImg from "../assets/profileImg.svg";
+import AlertModal from "../components/AlertModal";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -37,21 +36,16 @@ const Profile = () => {
   const userId = location.pathname.split("/").reverse()[0];
   //state
   const [userName, setUserName] = useState("");
-  const [userImage, setUserImage] = useState(defaultUserImg);
-
+  const [isMainTap, setIsMainTap] = useState(true);
   const [statisticsData, setStatisticsData] = useState([]);
   const [statisticsSum, setStatisticsSum] = useState(0);
-  const [reviewsData, setReviewsData] = useState([]);
-
-  const [isMainTap, setIsMainTap] = useState(true);
   const [scrapDeleteAlertView, setScrapDeleteAlertView] = useState(false);
   const [reviewDeleteAlertView, setReviewDeleteAlertView] = useState(false);
-  const [scrapGames, setScrapGames] = useState([]);
-  
   // paging state
+  const [scrapGames, setScrapGames] = useState([{}]);
   const [gamesCount, setGamesCount] = useState(0);
-  const [gameCurrentpage, setGameCurrentpage] = useState(0);
-  const [reviewCurrentpage, setReviewCurrentpage] = useState(0);
+  const [gameCurrentpage, setGameCurrentpage] = useState(1);
+  const [reviewCurrentpage, setReviewCurrentpage] = useState(1);
   //const [countPerPage] = useState(6);
 
   // tap switching func
@@ -60,19 +54,6 @@ const Profile = () => {
   };
   const clickReviewsTap = () => {
     setIsMainTap(false);
-    axios
-      .get(`${BACKEND_URL}api/profile/reviews`, {
-        params: {
-          userId: userId,
-          pageNo: 0,
-        },
-      })
-      .then((response) => {
-        setReviewsData(response.data.reviews);
-      })
-      .catch((error) => {
-
-      });
   };
 
   // lottie option
@@ -86,53 +67,66 @@ const Profile = () => {
 
   // Data setting at mount
   const setMainTapData = useCallback(() => {
-    axios
-      .get(`${BACKEND_URL}api/profile`, {
-        params: {
-          userId: userId,
-          pageNo: 0,
-        },
+    const genre = [
+      { id: "Casual", value: 116 },
+      { id: "Indie", value: 56 },
+      { id: "RPG", value: 198 },
+      { id: "Action", value: 519 },
+      { id: "Adventure", value: 317 },
+    ];
+    const scrap = [
+      {
+        gameId: 1,
+        image_path: exampleGameImg,
+        game_name: "Star Survivor adsfasdfiq,mag asdf ff",
+        window: true,
+        apple: false,
+        linux: true,
+        price: 5.6,
+      },
+      {
+        gameId: 2,
+        image_path: exampleGameImg,
+        game_name: "Star Survivor",
+        window: true,
+        apple: false,
+        linux: false,
+        price: 5.6,
+      },
+      {
+        gameId: 3,
+        image_path: exampleGameImg,
+        game_name: "Star Survivor",
+        window: false,
+        apple: true,
+        linux: false,
+        price: 5.6,
+      },
+      {
+        gameId: 4,
+        image_path: exampleGameImg,
+        game_name: "Star Survivor",
+        window: true,
+        apple: true,
+        linux: true,
+        price: 5.6,
+      },
+      {
+        gameId: 5,
+        image_path: exampleGameImg,
+        game_name: "Star Survivor",
+        window: true,
+        apple: false,
+        linux: true,
+        price: 5.6,
+      },
+    ];
+    setScrapGames(scrap);
+    setStatisticsData(
+      genre.sort((data1, data2) => {
+        return data2.value - data1.value;
       })
-      .then((response) => {
-        const mapping = { genre: 'id', value: 'value' };
-        const statistics = renameKeys(mapping,  response.data.statistics);
-        setStatisticsData(
-          statistics.sort((data1, data2) => {
-            return data2.value - data1.value;
-          })
-        );
-        setStatisticsSum(calStatisticsSum(statistics));
-        setScrapGames(response.data.scrap);
-        setGamesCount(response.data.scrap.length);
-        setUserName(response.data.user.userName);
-        const userImg = response.data.user.userImagePath;
-        if (userImg == null || userImg.length <= 0) {
-          setUserImage(defaultUserImg);
-        } else {
-          setUserImage(userImg);
-        }
-      })
-      .catch((error) => {
-        if (error.response.status === 500) {
-          navigate("/500");
-        } else if (error.response.status === 404) {
-          navigate("/*")
-        }
-        // error logic
-      });
-    const renameKeys = (mapping, objArr) => {
-      const renameObjArr = [];
-      for (let obj of objArr) {
-        const renameObj = {};
-        for (let [before, after] of Object.entries(mapping)) {
-          if (obj[before]) {
-            renameObj[after] = obj[before];
-          }
-        }
-        renameObjArr.push(renameObj);
-      }
-      return renameObjArr;
-    };
+    );
     const calStatisticsSum = (Array) => {
       let statisticsSumTmp = 0;
       Array.forEach((e) => {
@@ -140,10 +134,110 @@ const Profile = () => {
       });
       return statisticsSumTmp;
     };
-  }, [userId, navigate]);
+    setStatisticsSum(calStatisticsSum(genre));
+    setGamesCount(8);
+  }, []);
+  const reviewData = {
+    user: {
+      userImagePath:
+        "https://item.kakaocdn.net/do/493188dee481260d5c89790036be0e66f604e7b0e6900f9ac53a43965300eb9a",
+      userName: "홍길동",
+      userId: 3,
+    },
+    result: [
+      {
+        reviewId: 1,
+        gameId: 2,
+        gameImagePath: exampleGameImg,
+        gameTitle: "Star Survivor",
+        reviewTitle: "재밌는 게임이에요",
+        reviewContent:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typeset",
+        reviewGrade: 5,
+        createdAt: "2023-03-01",
+        updatedAt: "2023-03-03",
+      },
+      {
+        reviewId: 2,
+        gameId: 3,
+        gameImagePath: exampleGameImg,
+        gameTitle: "Star Survivor asdf werqdfasd fdsfsdf",
+        reviewTitle: "홀리 게임이에요",
+        reviewContent: "이걸 이제야 알다니",
+        reviewGrade: 4,
+        createdAt: "2018-02-01",
+        updatedAt: "0000-00-00",
+      },
+      {
+        reviewId: 3,
+        gameId: 4,
+        gameImagePath: exampleGameImg,
+        gameTitle: "Star Survivor af asdfads sdfew",
+        reviewTitle: "재밌는 게임이에요",
+        reviewContent: "이걸 이제야 알다니",
+        reviewGrade: 5,
+        createdAt: "2023-03-01",
+        updatedAt: "2023-03-03",
+      },
+      {
+        reviewId: 4,
+        gameId: 5,
+        gameImagePath: exampleGameImg,
+        gameTitle: "Star Survivor",
+        reviewTitle: "홀리 게임이에요",
+        reviewContent:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text",
+        reviewGrade: 4,
+        createdAt: "2023-04-01",
+        updatedAt: "0000-00-00",
+      },
+      {
+        reviewId: 5,
+        gameId: 6,
+        gameImagePath: exampleGameImg,
+        gameTitle: "Star Survivor",
+        reviewTitle: "홀리 게임이에요",
+        reviewContent:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text",
+        reviewGrade: 4,
+        createdAt: "2021-01-01",
+        updatedAt: "0000-00-00",
+      },
+      {
+        reviewId: 6,
+        gameId: 7,
+        gameImagePath: exampleGameImg,
+        gameTitle: "Star Survivor",
+        reviewTitle: "홀리 게임이에요",
+        reviewContent:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text",
+        reviewGrade: 3,
+        createdAt: "2023-12-01",
+        updatedAt: "0000-00-00",
+      },
+      {
+        reviewId: 7,
+        gameId: 8,
+        gameImagePath: exampleGameImg,
+        gameTitle: "Star Survivor",
+        reviewTitle: "홀리 게임이에요",
+        reviewContent:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text",
+        reviewGrade: 2,
+        createdAt: "2023-03-01",
+        updatedAt: "0000-00-00",
+      },
+    ],
+    page: {
+      pageNum: 1,
+      size: 7,
+      count: 5,
+    },
+  };
 
   const mainDataSetting = () => {
     setMainTapData();
+    setUserName("Username");
   };
 
   const reviewEdit = () => {
@@ -276,7 +370,7 @@ const Profile = () => {
             transition: { delay: 0.1 },
           }}
         >
-          <div className="scrap-header">스크랩 북</div>
+          <div className="scrap-header">ScrapBook</div>
           {scrapGamesRend()}
         </ProfileScrapBook>
       </div>
@@ -292,8 +386,8 @@ const Profile = () => {
         result.push(
           <GameSummary
             key={idx}
-            imgUrl={e.imagePath}
-            title={e.gameName}
+            imgUrl={e.image_path}
+            title={e.game_name}
             window={e.window}
             apple={e.apple}
             linux={e.linux}
@@ -350,7 +444,7 @@ const Profile = () => {
     };
 
     const reivewRend = () => {
-      const monthEng = [
+      const month = [
         "",
         "January",
         "February",
@@ -366,12 +460,12 @@ const Profile = () => {
         "December",
       ];
       const result = [];
-      reviewsData.forEach((e) => {
-        const year = Number(e.createdAt[0]);
-        const monthIdx = Number(e.createdAt[1]);
-        const dateNum = Number(e.createdAt[2]);
-        const dateStringEng = dateNum + " " + monthEng[monthIdx] + ", " + year;
-        const dateStringKo = year + "년 " + monthIdx + "월 " + dateNum + "일";
+      reviewData.result.forEach((e) => {
+        const dateArr = e.createdAt.split("-");
+        const year = Number(dateArr[0]);
+        const monthIdx = Number(dateArr[1]);
+        const dateNum = Number(dateArr[2]);
+        const dateString = dateNum + " " + month[monthIdx] + ", " + year;
 
         result.push(
           <SingleReview
@@ -385,25 +479,16 @@ const Profile = () => {
           >
             <div className="game-wrapper">
               <div className="game-img-wrapper">
-                <img
-                  onClick={() => {
-                    navigate(`/detail/${e.gameId}`);
-                  }}
-                  src={e.gameImagePath}
-                  alt="profile"
-                  className="game-img"
-                />
+                <img onClick={() => {navigate(`/detail/${e.gameId}`)}} src={e.gameImagePath} alt="profile" className="game-img" />
               </div>
               <div className="game-content-wrapper">
                 <p className="game-title">{e.gameTitle}</p>
                 <div className="star-wrapper">{starsRend(e.reviewGrade)}</div>
-                <div className="create-date">{dateStringKo}</div>
+                <div className="create-date">{dateString}</div>
               </div>
               <EditModal
                 editFunction={reviewEdit}
-                deleteFunction={() => {
-                  setReviewDeleteAlertView(true);
-                }}
+                deleteFunction={() => {setReviewDeleteAlertView(true)}}
               ></EditModal>
             </div>
             <p className="review-title">{e.reviewTitle}</p>
@@ -416,7 +501,7 @@ const Profile = () => {
 
     const reviewPaging = () => {
       const result = [];
-      if (reviewsData.length > 3) {
+      if (reviewData.result.length > 3) {
         const setPage = (e) => {
           setReviewCurrentpage(e);
         };
@@ -424,7 +509,7 @@ const Profile = () => {
           <Paging
             key="reviewPaging"
             page={reviewCurrentpage}
-            count={reviewsData.page.size}
+            count={reviewData.page.size}
             setPage={setPage}
             countPerPage={6}
           />
@@ -436,11 +521,9 @@ const Profile = () => {
     const result = [];
     result.push(
       <ProfileReviewsWrapper key="reviewTapData">
-        {reviewsData != null &&
-          reviewsData != null &&
-          reviewsData.length > 0 ? (
+        {reviewData != null && reviewData.result != null ? (
           <>
-            <div className="review-header">내가 작성한 리뷰</div>
+            <div className="review-header">My Reviews</div>
             <div className="review-wrapper">{reivewRend()}</div>
             {reviewPaging()}
           </>
@@ -482,7 +565,7 @@ const Profile = () => {
 
   return (
     <ProfileBackgroundWrapper>
-      <AlertModal
+       <AlertModal
         alertView={scrapDeleteAlertView}
         setAlertView={setScrapDeleteAlertView}
         msg="해당 스크랩을 삭제하시겠습니까?"
@@ -490,7 +573,7 @@ const Profile = () => {
         cancelMsg="취소"
         goFunction={scrapDelete}
       ></AlertModal>
-      <AlertModal
+       <AlertModal
         alertView={reviewDeleteAlertView}
         setAlertView={setReviewDeleteAlertView}
         msg="해당 리뷰를 삭제하시겠습니까?"
@@ -501,7 +584,7 @@ const Profile = () => {
       <div className="profile-box">
         <div>
           <ProfileImgWrapper>
-            <img src={userImage} alt="profileImage" />
+            <img src={profileImg} alt="profileImage" />
             {userName != null ? <p className="profile-name">{userName}</p> : ""}
           </ProfileImgWrapper>
         </div>
@@ -525,7 +608,8 @@ const Profile = () => {
           </ProfileNavWrapper>
         </nav>
         <section>
-          <div>{isMainTap ? mainTapRend() : reviewTapRend()}</div>
+          {isMainTap ? mainTapRend() : reviewTapRend()}
+          <div></div>
         </section>
       </div>
     </ProfileBackgroundWrapper>
