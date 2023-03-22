@@ -257,7 +257,16 @@ export const ChatRoomBody = styled.div`
   }
 
   .chat-logs::-webkit-scrollbar {
-    display: none;
+    width: 0.2rem;
+  }
+
+  .chat-logs::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 1rem;
+  }
+
+  .chat-logs::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
   }
 
   .messagebar-wrapper {

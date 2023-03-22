@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as StompJs from "@stomp/stompjs";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   faBars,
   faHashtag,
@@ -130,7 +130,6 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
 
   // 임시로 설정해둔 인자 변수 (나중에 프론트에서 넣어주세요)
   const chatRoomId = 1;
-  const writerId = 1;
   const userId = 1;
 
   const { openScroll } = useBodyScrollLock();
@@ -221,7 +220,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
         content: message,
         chatRoomId: chatRoomId,
         gameId: gameData.gameId,
-        writerId: writerId,
+        writerId: userId,
         // receiverSeq: receiverSeq,
       }),
     });
@@ -230,7 +229,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
       content: message,
       chatRoomId: chatRoomId,
       gameId: gameData.gameId,
-      writerId: writerId,
+      writerId: userId,
     });
 
     // 보내고 메세지 초기화
@@ -263,19 +262,31 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
   const renderChatLogs = (chatLogs) => {
     const result = [];
 
+    // todo : motion.div 쓸지말지 결정하기
     if (chatLogs) {
       <div className="my-msg-wrapper"></div>;
       for (let i = 0; i < chatLogs.length; i++) {
         if (parseInt(chatLogs[i].writerId) === userId) {
           result.push(
-            <div className="my-msg-wrapper">
-              <div className="my message">{chatLogs[i].content}</div>
+            <div className="my-msg-wrapper" key={i}>
+              <motion.div
+                className="my message"
+                initial={{ opacity: 0, y: 500 }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+              >
+                {chatLogs[i].content}
+              </motion.div>
             </div>
           );
         } else {
           result.push(
-            <div className="others-msg-wrapper">
-              <div className="others message">{chatLogs[i].content}</div>
+            <div className="others-msg-wrapper" key={i}>
+              <motion.div className="others message">
+                {chatLogs[i].content}
+              </motion.div>
             </div>
           );
         }
@@ -329,10 +340,8 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
                   />
                 </SmallSidebar>
                 <div className="chat-logs">
-                  {chatList.map((item, index) => {
-                    return <div key={index}>{item}</div>;
-                  })}
                   {renderChatLogs(tempData)}
+                  {renderChatLogs(chatList)}
                 </div>
                 {/* todo : 메시지바는 로그인했을 때만 노출 */}
                 <div className="messagebar-wrapper">
