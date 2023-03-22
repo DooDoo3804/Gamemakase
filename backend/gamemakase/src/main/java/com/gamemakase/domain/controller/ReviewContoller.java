@@ -50,6 +50,7 @@ public class ReviewContoller {
 			@RequestBody(required = true) @ApiParam(required = true) ReviewInsertRequestDto reviewRequest
 			) throws NotFoundException {
 		logger.info("insertReview : requestdto : {}", reviewRequest);
+		
 		reviewService.insertReview(reviewRequest);
 		List<GameReviewResponseDto> result = reviewService.getReviewsByGameId(reviewRequest.getGameId(), 0);
 		return new ResponseEntity<List<GameReviewResponseDto>>(result, HttpStatus.OK);
