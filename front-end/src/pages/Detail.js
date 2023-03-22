@@ -30,7 +30,7 @@ import {
   faStar as faRegularStar,
 } from "@fortawesome/free-regular-svg-icons";
 import no_game from "../assets/lottie/no-game.json";
-import Loading from "../assets/loading.gif";
+import Loading from "../assets/tinyLoading.gif";
 import defaultUserImg from "../assets/profileImg.svg";
 
 import TranslucentBtn from "../components/TranslucentBtn";
@@ -49,9 +49,10 @@ const Detail = () => {
   const [recommendedUsers, setRecommendedUsers] = useState(null);
   const [reviewData, setReviewData] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [isLoading, setLoading] = useState(false);
+  const [reviewLoading, setReviewLoading] = useState(false);
   const [ref, inView] = useInView();
   const pageNo = useRef(1);
 
@@ -82,13 +83,13 @@ const Detail = () => {
 
   useEffect(() => {
     if (inView && hasNextPage) {
-      setLoading(true);
+      setReviewLoading(true);
       getReviews();
     }
   }, [inView]);
 
   const getReviews = useCallback(async () => {
-    setLoading(true);
+    setReviewLoading(true);
 
     await axios
       .get(`${BACKEND_URL}/api/reviews/${gameId}`, {
@@ -106,11 +107,11 @@ const Detail = () => {
         }
         setReviewData((reviewData) => [...reviewData, ...response.data]);
         setHasNextPage(response.data.length === 12);
-        setLoading(false);
+        setReviewLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        setLoading(false);
+        setReviewLoading(false);
       });
   });
 
@@ -260,6 +261,10 @@ const Detail = () => {
     setIsLiked(!isLiked);
   };
 
+  if (isLoading) {
+    return <div>로딩중</div>;
+  }
+
   return (
     <div>
       {gameData ? (
@@ -365,7 +370,7 @@ const Detail = () => {
             {reviewData ? (
               <>
                 <div className="review-wrapper">{renderReviews()}</div>
-                {isLoading ? (
+                {reviewLoading ? (
                   <div className="review-loading">
                     <img src={Loading} alt="loading..."></img>
                   </div>
