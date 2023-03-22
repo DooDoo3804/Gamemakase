@@ -307,18 +307,20 @@ const Detail = () => {
           ></ChatModal>
           <div className="detail-main">
             <div className="main-wrapper">
-              <motion.div
-                className="title-wrapper"
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{
-                  opacity: 1,
-                  x: 0,
-                  transition: { delay: 0.1 },
-                }}
-              >
-                <p className="title">{gameData.gameName}</p>
-                <p className="discription">{gameData.gameDescription}</p>
-              </motion.div>
+              <div className="title-info-wrapper">
+                <motion.div
+                  className="title-wrapper"
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{
+                    opacity: 1,
+                    x: 0,
+                    transition: { delay: 0.1 },
+                  }}
+                >
+                  <p className="title">{gameData.gameName}</p>
+                  <p className="discription">{gameData.gameDescription}</p>
+                </motion.div>
+              </div>
               <div className="scrap-wrapper" onClick={() => handleScrap()}>
                 <FontAwesomeIcon icon={isLiked ? faStar : faRegularStar} />
               </div>
