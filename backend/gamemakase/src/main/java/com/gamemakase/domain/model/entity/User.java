@@ -30,12 +30,9 @@ public class User implements UserDetails{
   @Column(name = "user_id")
   private long userId;
 
-  @Column(name = "user_email", nullable = false, length = 40)
-  private String userEmail;
-
-  @JsonProperty(access = Access.WRITE_ONLY)
-  @Column(name = "user_password", nullable = false, length = 40)
-  private String userPassword;
+//  @JsonProperty(access = Access.WRITE_ONLY)
+//  @Column(name = "user_password", nullable = false, length = 40)
+//  private String userPassword;
 
   @Column(name = "user_steam_id", nullable = false)
   private long userSteamId;
