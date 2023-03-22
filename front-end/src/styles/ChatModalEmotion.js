@@ -251,7 +251,7 @@ export const ChatRoomBody = styled.div`
     }
 
     .others {
-      background-color: ${Common.colors.mainColor03};
+      background-color: ${Common.colors.mainColor04};
     }
   }
 
