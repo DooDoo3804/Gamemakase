@@ -172,7 +172,7 @@ def get_recommended_games(users):
 
         games = []
         Recommendation.objects.filter(steam_id=steam_id).delete()
-        for game_id, rating in recommend[:10]:
+        for game_id, rating in recommend[:100]:
             game = Game.objects.get(game_id=game_id)
             recommendation = Recommendation(steam_id = steam_id, game_id = game.game_id, rating = rating)
             recommendation.save()
@@ -218,7 +218,7 @@ def get_recommended_games_small(request, user_id):
     recommend = get_recommend(user_steamid, knn, json_data_2)
 
     Recommendation.objects.filter(steam_id=user_steamid).delete()
-    for game_id, rating in recommend[:10]:
+    for game_id, rating in recommend[:100]:
         game = Game.objects.get(game_id=game_id)
         images = Image.objects.filter(type_id = game_id)
         # new_game = {
