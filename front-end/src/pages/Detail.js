@@ -374,7 +374,7 @@ const Detail = () => {
             >
               {renderUsers()}
             </motion.div>
-            <div className="gradient"></div>
+            <div className="gradient-second"></div>
           </RecommendUsers>
           <ReviewWrapper>
             <div className="title-wrapper">
