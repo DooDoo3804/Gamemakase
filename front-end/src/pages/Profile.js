@@ -35,45 +35,37 @@ const Profile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const userId = location.pathname.split("/").reverse()[0];
+
   //state
+  const [isKo, setIsKo] = useState(true);
   const [userName, setUserName] = useState("");
   const [userImage, setUserImage] = useState(defaultUserImg);
 
   const [statisticsData, setStatisticsData] = useState([]);
   const [statisticsSum, setStatisticsSum] = useState(0);
   const [reviewsData, setReviewsData] = useState([]);
+  const [reviewDataSize, setReviewDataSize] = useState(0);
 
   const [isMainTap, setIsMainTap] = useState(true);
   const [scrapDeleteAlertView, setScrapDeleteAlertView] = useState(false);
   const [reviewDeleteAlertView, setReviewDeleteAlertView] = useState(false);
   const [scrapGames, setScrapGames] = useState([]);
-  
+
   // paging state
   const [gamesCount, setGamesCount] = useState(0);
   const [gameCurrentpage, setGameCurrentpage] = useState(0);
   const [reviewCurrentpage, setReviewCurrentpage] = useState(0);
   //const [countPerPage] = useState(6);
 
-  // etc func
   const clickMainTap = () => {
     setIsMainTap(true);
   };
   const clickReviewsTap = () => {
     setIsMainTap(false);
-    axios
-      .get(`${BACKEND_URL}api/profile/reviews`, {
-        params: {
-          userId: userId,
-          pageNo: 0,
-        },
-      })
-      .then((response) => {
-        setReviewsData(response.data.reviews);
-      })
-      .catch((error) => {
-
-      });
+    reviewDataRend(1);
   };
+
+  // 객체 배열의 key값 일괄 변경 func
   const renameKeys = (mapping, objArr) => {
     const renameObjArr = [];
     for (let obj of objArr) {
@@ -87,6 +79,8 @@ const Profile = () => {
     }
     return renameObjArr;
   };
+
+  // 배열의 value값의 sum값을 구하는 func
   const calStatisticsSum = (Array) => {
     let statisticsSumTmp = 0;
     Array.forEach((e) => {
@@ -104,8 +98,10 @@ const Profile = () => {
     };
   };
 
-  // Data setting at mount
+  // Data setting
+  // Main Data
   const setMainTapData = useCallback(() => {
+    setIsKo(true);
     axios
       .get(`${BACKEND_URL}api/profile`, {
         params: {
@@ -114,8 +110,8 @@ const Profile = () => {
         },
       })
       .then((response) => {
-        const mapping = { genre: 'id', value: 'value' };
-        const statistics = renameKeys(mapping,  response.data.statistics);
+        const mapping = { genre: "id", value: "value" };
+        const statistics = renameKeys(mapping, response.data.statistics);
         setStatisticsData(
           statistics.sort((data1, data2) => {
             return data2.value - data1.value;
@@ -142,21 +138,35 @@ const Profile = () => {
       });
   }, [userId]);
 
-  const mainDataSetting = () => {
-    setMainTapData();
+  // Review Data
+  const reviewDataRend = (e) => {
+    axios
+      .get(`${BACKEND_URL}api/profile/reviews`, {
+        params: {
+          userId: userId,
+          pageNo: (e - 1),
+        },
+      })
+      .then((response) => {
+        setReviewsData(response.data.reviews);
+        setReviewDataSize(response.data.page.size);
+      })
+      .catch((error) => {});
   };
 
   const reviewEdit = () => {
     console.log("edit!");
   };
-
+  
   const reviewDelete = () => {
     console.log("리뷰 삭제!");
   };
-
+  
   const scrapDelete = () => {
     console.log("스크랩 삭제");
   };
+
+  useEffect(() => {setMainTapData()}, [setMainTapData]);
 
   /////////////////////////////////////////////
   /////         rending function         //////
@@ -307,6 +317,7 @@ const Profile = () => {
       return result;
     };
     const setPage = (e) => {
+      console.log("스크랩 페이징");
       setGameCurrentpage(e);
     };
     const result = [];
@@ -397,7 +408,9 @@ const Profile = () => {
               <div className="game-content-wrapper">
                 <p className="game-title">{e.gameTitle}</p>
                 <div className="star-wrapper">{starsRend(e.reviewGrade)}</div>
-                <div className="create-date">{dateStringKo}</div>
+                <div className="create-date">
+                  {isKo ? dateStringKo : dateStringEng}
+                </div>
               </div>
               <EditModal
                 editFunction={reviewEdit}
@@ -416,15 +429,16 @@ const Profile = () => {
 
     const reviewPaging = () => {
       const result = [];
-      if (reviewsData.length > 3) {
+      if (reviewDataSize > 3) {
         const setPage = (e) => {
           setReviewCurrentpage(e);
+          reviewDataRend(e);
         };
         result.push(
           <Paging
             key="reviewPaging"
             page={reviewCurrentpage}
-            count={reviewsData.page.size}
+            count={reviewDataSize}
             setPage={setPage}
             countPerPage={6}
           />
@@ -437,8 +451,8 @@ const Profile = () => {
     result.push(
       <ProfileReviewsWrapper key="reviewTapData">
         {reviewsData != null &&
-          reviewsData != null &&
-          reviewsData.length > 0 ? (
+        reviewsData != null &&
+        reviewsData.length > 0 ? (
           <>
             <div className="review-header">내가 작성한 리뷰</div>
             <div className="review-wrapper">{reivewRend()}</div>
@@ -473,8 +487,6 @@ const Profile = () => {
     );
     return result;
   };
-
-  useEffect(mainDataSetting, [userId, setMainTapData]);
 
   /////////////////////////////////////////////
   /////              return              //////
