@@ -106,7 +106,7 @@ public class ProfileServiceImpl implements ProfileService {
 		userList.add(user);
 		List<UserInfoVo> realUserInfoList = realTimeUserInfoService.getUserInfoResponseVo(userList);
 		UserInfoVo userInfo = null;
-		if (realUserInfoList != null) {
+		if (realUserInfoList != null && realUserInfoList.size() > 0) {
 			userInfo = realUserInfoList.get(0);
 		} else {
 			Optional<Image> image = imageRepository.findByTypeAndTypeId("USER_PROFILE", user.getUserId());
