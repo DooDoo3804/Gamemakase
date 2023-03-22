@@ -1,12 +1,10 @@
 package com.gamemakase.domain.controller;
 
-import com.gamemakase.domain.model.dto.UserResponseDto;
 import com.gamemakase.domain.model.entity.User;
 import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.domain.model.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;

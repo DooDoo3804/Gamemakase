@@ -1,38 +1,25 @@
 package com.gamemakase.domain.controller;
 
-import com.gamemakase.domain.model.dto.LoginRequestDto;
 import com.gamemakase.domain.model.dto.SignUpRequestDto;
-import com.gamemakase.domain.model.dto.SteamLoginRequestDto;
-import com.gamemakase.domain.model.entity.User;
+import com.gamemakase.domain.model.dto.UserRequestDto;
 import com.gamemakase.domain.model.service.UserService;
-import com.gamemakase.global.config.OpenIdAuthentication;
 import com.gamemakase.global.config.jwt.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.openid4java.consumer.ConsumerException;
 import org.openid4java.consumer.ConsumerManager;
-import org.openid4java.consumer.VerificationResult;
-import org.openid4java.discovery.DiscoveryException;
-import org.openid4java.message.AuthRequest;
-import org.openid4java.message.MessageException;
-import org.openid4java.message.Parameter;
 import org.openid4java.message.ParameterList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.IOException;
 import java.security.Principal;
 
@@ -55,7 +42,7 @@ public class SteamController {
     }
 
     @GetMapping("/login/steam/callback")
-    public ResponseEntity<?> steamLoginCallBack(HttpServletRequest request, SignUpRequestDto signUpRequestDto, LoginRequestDto loginRequestDto) throws Exception {
+    public ResponseEntity<?> steamLoginCallBack(HttpServletRequest request, SignUpRequestDto signUpRequestDto, UserRequestDto userRequestDto) throws Exception {
         ParameterList res = new ParameterList(request.getParameterMap());
 
         HttpHeaders headers = new HttpHeaders();
@@ -66,7 +53,7 @@ public class SteamController {
 
         if (userService.isUser(steamIdNum)) {
             //로그인
-            Map<String, Object> token = userService.login(loginRequestDto);
+            Map<String, Object> token = userService.login(steamIdNum);
             String access_token = (String) token.get("access-token");
             jwtTokenProvider.validateToken(access_token);
             headers.setLocation(URI.create("http://www.gamemakase.com:3000"));
