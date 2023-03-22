@@ -147,8 +147,10 @@ const Detail = () => {
 
   const renderScreenshots = () => {
     const result = [];
+    let maxLength = gameData.images.length;
+    if (maxLength > 11) maxLength = 11;
 
-    for (let i = 0; i < gameData.images.length; i++) {
+    for (let i = 0; i < maxLength; i++) {
       result.push(
         <SwiperSlide key={gameData.images[i].imageId}>
           <img
@@ -174,7 +176,14 @@ const Detail = () => {
               className="profile-wrapper"
               onClick={() => navigate(`/profile/${recommendedUsers[i].userId}`)}
             >
-              <img src={recommendedUsers[i].profilePath} alt="profile_img" />
+              <img
+                src={
+                  recommendedUsers[i].profilePath
+                    ? recommendedUsers[i].profilePath
+                    : defaultUserImg
+                }
+                alt="profile_img"
+              />
             </div>
             <p className="username">{recommendedUsers[i].userName}</p>
           </div>
@@ -298,18 +307,20 @@ const Detail = () => {
           ></ChatModal>
           <div className="detail-main">
             <div className="main-wrapper">
-              <motion.div
-                className="title-wrapper"
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{
-                  opacity: 1,
-                  x: 0,
-                  transition: { delay: 0.1 },
-                }}
-              >
-                <p className="title">{gameData.gameName}</p>
-                <p className="discription">{gameData.gameDescription}</p>
-              </motion.div>
+              <div className="title-info-wrapper">
+                <motion.div
+                  className="title-wrapper"
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{
+                    opacity: 1,
+                    x: 0,
+                    transition: { delay: 0.1 },
+                  }}
+                >
+                  <p className="title">{gameData.gameName}</p>
+                  <p className="discription">{gameData.gameDescription}</p>
+                </motion.div>
+              </div>
               <div className="scrap-wrapper" onClick={() => handleScrap()}>
                 <FontAwesomeIcon icon={isLiked ? faStar : faRegularStar} />
               </div>
@@ -365,7 +376,7 @@ const Detail = () => {
             >
               {renderUsers()}
             </motion.div>
-            <div className="gradient"></div>
+            <div className="gradient-second"></div>
           </RecommendUsers>
           <ReviewWrapper>
             <div className="title-wrapper">

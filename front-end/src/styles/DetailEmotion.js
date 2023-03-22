@@ -48,9 +48,14 @@ export const DetailWrapper = styled.div`
     }
   }
 
+  .title-info-wrapper {
+    width: 90%;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 5rem;
+  }
+
   .title-wrapper {
-    position: relative;
-    top: 40%;
     transition: all 0.5s ease-in-out;
 
     @media (min-width: 768px) {
@@ -233,6 +238,9 @@ export const DetailWrapper = styled.div`
     user-select: none;
   }
 
+  .swiper-pagination {
+    position: relative;
+  }
   .swiper-pagination-bullet {
     border-radius: 0.2rem;
 
@@ -257,7 +265,7 @@ export const DetailWrapper = styled.div`
   }
 
   .swiper-slide {
-    margin: 2rem 0rem;
+    margin-top: 2rem;
     display: flex;
     align-items: center;
   }
@@ -409,7 +417,7 @@ export const RecommendUsers = styled.div`
     }
   }
 
-  .gradient {
+  .gradient-second {
     background-image: linear-gradient(
       to top,
       rgba(50, 50, 50, 1),
