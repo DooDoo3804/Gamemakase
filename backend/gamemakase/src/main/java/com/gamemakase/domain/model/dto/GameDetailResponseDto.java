@@ -31,7 +31,7 @@ public class GameDetailResponseDto {
 
     private List<GenreDTO> genres;
     private List<ImageDTO> images;
-    private List<ReviewDTO> reviews;
+    private List<GameReviewResponseDto> reviews;
     private List<RecommendedUserDTO> recommendedUsers;
 
     @Data

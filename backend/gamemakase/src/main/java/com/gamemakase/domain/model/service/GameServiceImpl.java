@@ -23,6 +23,7 @@ public class GameServiceImpl implements GameService{
     private final UserRepository userRepository;
     private final LikeGameRepository likeGameRepository;
     private final RecommendationRepository recommendationRepository;
+    private final ReviewService reviewService;
 
     @Override
     public GameDetailResponseDto getByGameId(Long gameId, Long userId) throws NotFoundException {
@@ -46,13 +47,12 @@ public class GameServiceImpl implements GameService{
         boolean canReview = gameHistoryRepository.existsByGameGameIdAndUserUserId(gameId, userId) && !reviewRepository.existsByGameGameIdAndUserUserId(gameId, userId);
 //        System.out.println("canReview = " + canReview);
 
-//        장르, 이미지, 리뷰
+
+//        장르, 이미지, 추천
         List<Genre> genreList = genreRepository.findAllByGameGameId(gameId);
 //        System.out.println("genreList = " + genreList.toString());
         List<Image> imageList = imageRepository.findAllByTypeAndTypeId("GAME_SCREENSHOTS", gameId);
 //        System.out.println("imageList = " + imageList.toString());
-        List<Review> reviewList = reviewRepository.findAllByGameGameId(gameId);
-//        System.out.println("reviewList.toString() = " + reviewList.toString());
         List<Recommendation> recommendationList = recommendationRepository.findAllByGameGameIdOrderByRatingDesc(gameId);
 //        System.out.println("recommendationList = " + recommendationList.toString());
 
@@ -86,26 +86,15 @@ public class GameServiceImpl implements GameService{
                                 .build())
                         .collect(Collectors.toList()))
 //                리뷰
-                .reviews(reviewList.stream()
-                        .map(review -> GameDetailResponseDto.ReviewDTO.builder()
-                                .reviewId(review.getReviewId())
-                                .gameId(review.getGame().getGameId())
-                                .reviewTitle(review.getReviewTitle())
-                                .reviewContent(review.getReviewContent())
-                                .reviewGrade(review.getReviewGrade())
-                                .createdAt(review.getCreatedAt())
-                                .updatedAt(review.getUpdatedAt())
-                                .userImagePath(imageRepository.findByTypeAndTypeId("User", review.getUser().getUserId()).orElseGet(Image::new).getImagePath())
-                                .userName(review.getUser().getUserName())
-                                .userId(review.getUser().getUserId())
-                                .build())
-                        .collect(Collectors.toList()))
+                .reviews(reviewService.getReviewsByGameId(gameId, 0))
 //                유저 추천
                 .recommendedUsers(recommendationList.stream()
                         .map(recommendation -> GameDetailResponseDto.RecommendedUserDTO.builder()
                                 .userId(recommendation.getUser().getUserId())
                                 .userName(recommendation.getUser().getUserName())
-                                .userImagePath(imageRepository.findByTypeAndTypeId("User", recommendation.getUser().getUserId()).orElseGet(Image::new).getImagePath())
+                                .userImagePath(imageRepository.findByTypeAndTypeId("User", recommendation.getUser().getUserId())
+                                        .map(Image::getImagePath)
+                                        .orElse(""))
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
