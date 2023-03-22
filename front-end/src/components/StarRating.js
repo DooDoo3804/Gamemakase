@@ -64,8 +64,7 @@ const Star = ({ i, isHoveringWrapper, isClicked }) => {
         variants={starVariants}
         initial="initial"
         animate={starControls}
-        whileHover={() => setIsHovering(true)}
-        whileTap={{ scale: 0.9 }}
+        onMouseOver={() => setIsHovering(true)}
         onMouseOut={() => setIsHovering(false)}
         custom={i}
       />
