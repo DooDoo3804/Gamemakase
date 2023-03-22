@@ -199,11 +199,10 @@ export const ChatRoomBody = styled.div`
     font-family: "Noto Sans KR", serif;
     transition: all 0.3s ease-in-out;
     overflow-y: scroll;
-    -ms-overflow-style: none; /* 인터넷 익스플로러 */
-    scrollbar-width: none; /* 파이어폭스 */
+    -ms-overflow-style: none; /* 인터넷 익스플로러는 스타일 적용 안될 수도 있어서 hidden 처리 */
 
     @media (min-width: 768px) {
-      height: calc(100% - 11rem);
+      height: calc(100% - 12rem);
     }
     @media (max-width: 768px) {
       height: calc(100% - 11rem);
