@@ -8,6 +8,7 @@ import {
   ChatBtn,
   DetailWrapper,
   FaStar,
+  LoadingWrapper,
   RecommendUsers,
   ReviewWrapper,
   SingleReview,
@@ -30,8 +31,9 @@ import {
   faStar as faRegularStar,
 } from "@fortawesome/free-regular-svg-icons";
 import no_game from "../assets/lottie/no-game.json";
-import Loading from "../assets/tinyLoading.gif";
+import reviewLoading from "../assets/tinyLoading.gif";
 import defaultUserImg from "../assets/profileImg.svg";
+import loading from "../assets/lottie/loading.json";
 
 import TranslucentBtn from "../components/TranslucentBtn";
 import useBodyScrollLock from "../components/ScrollLock";
@@ -71,13 +73,15 @@ const Detail = () => {
         setGameData(response.data);
         setRecommendedUsers(response.data.recommendedUsers);
         setReviewData(response.data.reviews);
+        setIsLoading(false);
       })
       .catch(function (error) {
         console.log(error);
-        // if (error.response.status === 404) {
-        //   navigate("/*");
-        // } else if (error.response.status === 401) {
-        // }
+        if (error.response.status === 500) {
+          window.location.replace("/500");
+        } else {
+          setIsLoading(false);
+        }
       });
   }, []);
 
@@ -262,7 +266,13 @@ const Detail = () => {
   };
 
   if (isLoading) {
-    return <div>로딩중</div>;
+    return (
+      <LoadingWrapper>
+        <Lottie options={options(loading)} height={300} width={300}></Lottie>
+        <p className="title-text">페이지를 불러오는 중입니다.</p>
+        <p className="info-text">잠시만 기다려주세요.</p>
+      </LoadingWrapper>
+    );
   }
 
   return (
@@ -372,7 +382,7 @@ const Detail = () => {
                 <div className="review-wrapper">{renderReviews()}</div>
                 {reviewLoading ? (
                   <div className="review-loading">
-                    <img src={Loading} alt="loading..."></img>
+                    <img src={reviewLoading} alt="loading..."></img>
                   </div>
                 ) : (
                   <div ref={ref} className="scroll-handler" />
