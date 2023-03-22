@@ -115,7 +115,7 @@ public class ProfileServiceImpl implements ProfileService {
 		User user = userRepository.findById(userId).orElseThrow(/*here!*/);
 		Long totalReviewSize = reviewRepository.countByUser(user);
 		Pageable pageable = PageRequest.of(pageNo, 8);
-		Page<Review> reviews = reviewRepository.findAllByUser(user, pageable);
+		Page<Review> reviews = reviewRepository.findAllByUserOrderByCreatedAtDesc(user, pageable);
 		List<ProfileReviewInfoVo> reviewsInfoList = reviews.stream()
 				.map(r -> ProfileReviewInfoVo.of(r,
 						imageRepository.findByTypeAndTypeId("GAME_HEADER", r.getGame().getGameId()).orElseThrow(/*here!*/).getImagePath()))
