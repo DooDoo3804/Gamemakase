@@ -31,6 +31,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import no_game from "../assets/lottie/no-game.json";
 import Loading from "../assets/loading.gif";
+import defaultUserImg from "../assets/profileImg.svg";
 
 import TranslucentBtn from "../components/TranslucentBtn";
 import useBodyScrollLock from "../components/ScrollLock";
@@ -52,7 +53,7 @@ const Detail = () => {
   const [hasNextPage, setHasNextPage] = useState(true);
   const [isLoading, setLoading] = useState(false);
   const [ref, inView] = useInView();
-  const pageNo = useRef(0);
+  const pageNo = useRef(1);
 
   const { lockScroll } = useBodyScrollLock();
   const location = useLocation();
@@ -218,7 +219,11 @@ const Detail = () => {
               onClick={() => navigate(`/profile/${reviewData[i].userId}`)}
             >
               <img
-                src={reviewData[i].userImagePath}
+                src={
+                  reviewData[i].userImagePath
+                    ? reviewData[i].userImagePath
+                    : defaultUserImg
+                }
                 alt="profile"
                 className="profile-img"
               />
