@@ -1,15 +1,29 @@
 package com.gamemakase.domain.model.service;
 
-import com.gamemakase.domain.model.dto.GameDetailResponseDto;
-import com.gamemakase.domain.model.entity.*;
-import com.gamemakase.domain.model.repository.*;
-import com.gamemakase.global.Exception.NotFoundException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.json.simple.parser.ParseException;
+import org.springframework.stereotype.Service;
+
+import com.gamemakase.domain.model.dto.GameDetailResponseDto;
+import com.gamemakase.domain.model.entity.Game;
+import com.gamemakase.domain.model.entity.Genre;
+import com.gamemakase.domain.model.entity.Image;
+import com.gamemakase.domain.model.entity.Recommendation;
+import com.gamemakase.domain.model.repository.GameHistoryRepository;
+import com.gamemakase.domain.model.repository.GameRepository;
+import com.gamemakase.domain.model.repository.GenreRepository;
+import com.gamemakase.domain.model.repository.ImageRepository;
+import com.gamemakase.domain.model.repository.LikeGameRepository;
+import com.gamemakase.domain.model.repository.RecommendationRepository;
+import com.gamemakase.domain.model.repository.ReviewRepository;
+import com.gamemakase.domain.model.repository.UserRepository;
+import com.gamemakase.global.Exception.NotFoundException;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +40,7 @@ public class GameServiceImpl implements GameService{
     private final ReviewService reviewService;
 
     @Override
-    public GameDetailResponseDto getByGameId(Long gameId, Long userId) throws NotFoundException {
+    public GameDetailResponseDto getByGameId(Long gameId, Long userId) throws NotFoundException, IOException, ParseException {
 
 //        System.out.println("gameId = " + gameId + ", userId = " + userId);
 

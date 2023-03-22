@@ -6,6 +6,10 @@ import com.gamemakase.global.Exception.NotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+
+import java.io.IOException;
+
+import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,7 +28,7 @@ public class GameController {
 
     @ApiOperation("게임 상세 정보 페이지")
     @GetMapping("/api/game/{gameId}")
-    public ResponseEntity<GameDetailResponseDto> getGameDetail(@RequestHeader("userId") Long userId, @PathVariable Long gameId) throws NotFoundException {
+    public ResponseEntity<GameDetailResponseDto> getGameDetail(@RequestHeader("userId") Long userId, @PathVariable Long gameId) throws NotFoundException, IOException, ParseException {
         return ResponseEntity.status(HttpStatus.OK).body(gameService.getByGameId(gameId, userId));
     }
 
