@@ -412,7 +412,7 @@ export const RecommendUsers = styled.div`
     }
   }
 
-  .gradient {
+  .gradient-second {
     background-image: linear-gradient(
       to top,
       rgba(50, 50, 50, 1),
