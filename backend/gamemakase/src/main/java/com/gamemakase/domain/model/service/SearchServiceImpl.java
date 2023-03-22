@@ -34,13 +34,13 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public SearchResponseDto getSearchResult(String niddle, int gamePageNo, int userPageNo) throws IOException, ParseException, NotFoundException {
 		Pageable GamePageable = PageRequest.of(gamePageNo, 6);
-		Page<Game> gameList = gameRepository.findAllByGameNameLikeOrderByGameName(niddle, GamePageable);
+		Page<Game> gameList = gameRepository.findAllByGameNameLikeOrderByGameName("&" + niddle + "%", GamePageable);
 		List<GameInfoVo> gameResults = gameList.stream()
 				.map(g -> GameInfoVo.of(g, imageRepository.findByTypeAndTypeId("GAME_HEADER", g.getGameId()).orElse(null).getImagePath()))
 				.collect(Collectors.toList());
 
 		Pageable UserPageable = PageRequest.of(userPageNo, 5);
-		Page<User> userPagedList = UserRepository.findAllByUserNameLikeOrderByUserName(niddle, UserPageable);
+		Page<User> userPagedList = UserRepository.findAllByUserNameLikeOrderByUserName("%" + niddle + "%", UserPageable);
 		List<User> userList = userPagedList.stream()
 				.map(u -> u).collect(Collectors.toList());
 		List<UserInfoVo> userResults = realTimeUserInfoService.getUserInfoResponseVo(userList);
