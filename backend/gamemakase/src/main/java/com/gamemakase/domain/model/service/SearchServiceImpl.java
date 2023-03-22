@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.json.simple.parser.ParseException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,15 +34,15 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public SearchResponseDto getSearchResult(String niddle, int gamePageNo, int userPageNo) throws IOException, ParseException, NotFoundException {
 		Pageable GamePageable = PageRequest.of(gamePageNo, 6);
-		@SuppressWarnings("unchecked")
-		List<Game> gameList = (List<Game>) gameRepository.findAllByGameNameLikeOrderByGameName(niddle, GamePageable);
+		Page<Game> gameList = gameRepository.findAllByGameNameLikeOrderByGameName(niddle, GamePageable);
 		List<GameInfoVo> gameResults = gameList.stream()
 				.map(g -> GameInfoVo.of(g, imageRepository.findByTypeAndTypeId("GAME_HEADER", g.getGameId()).orElse(null).getImagePath()))
 				.collect(Collectors.toList());
 
 		Pageable UserPageable = PageRequest.of(userPageNo, 5);
-		@SuppressWarnings("unchecked")
-		List<User> userList = (List<User>) UserRepository.findAllByUserNameLikeOrderByUserName(niddle, UserPageable);
+		Page<User> userPagedList = UserRepository.findAllByUserNameLikeOrderByUserName(niddle, UserPageable);
+		List<User> userList = userPagedList.stream()
+				.map(u -> u).collect(Collectors.toList());
 		List<UserInfoVo> userResults = realTimeUserInfoService.getUserInfoResponseVo(userList);
 		
 		return SearchResponseDto.builder()
