@@ -63,13 +63,13 @@ const Home = () => {
 
   const recommendGames = [
     {
-      gameId: 1,
+      gameId: 10,
       gameName: "Stray",
       gameImage:
         "https://cdn.akamai.steamstatic.com/steam/apps/1332010/header_292x136.jpg?t=1670349423",
     },
     {
-      gameId: 2,
+      gameId: 11,
       gameName: "Cult of the Lamb",
       gameImage:
         "https://cdn.akamai.steamstatic.com/steam/apps/1313140/header_292x136.jpg?t=1674826230",
@@ -96,7 +96,7 @@ const Home = () => {
 
   const popularGames = [
     {
-      gameId: 1,
+      gameId: 10,
       gameName: "Stray",
       gameImage:
         "https://cdn.akamai.steamstatic.com/steam/apps/1332010/header_292x136.jpg?t=1670349423",
