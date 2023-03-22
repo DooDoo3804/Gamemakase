@@ -16,6 +16,7 @@ from background_task.models import Task
 from background_task import background
 from .tasks import update_recommed
 from apscheduler.schedulers.background import BackgroundScheduler
+import time
 
 # user_id : 유저 모델 의 아이디 값
 # user_steam_id : 유저 스팀 아이디
@@ -265,6 +266,7 @@ def get_recommended_games_small(request, user_id):
 def job():
     print("***************************************************")
     update_recommed()
+    print(f"End Time : {time.strftime('%c')}")
     print("***************************************************")
 
 
