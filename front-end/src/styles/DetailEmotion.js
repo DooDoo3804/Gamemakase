@@ -233,6 +233,9 @@ export const DetailWrapper = styled.div`
     user-select: none;
   }
 
+  .swiper-pagination {
+    position: relative;
+  }
   .swiper-pagination-bullet {
     border-radius: 0.2rem;
 
@@ -257,7 +260,7 @@ export const DetailWrapper = styled.div`
   }
 
   .swiper-slide {
-    margin: 2rem 0rem;
+    margin-top: 2rem;
     display: flex;
     align-items: center;
   }
