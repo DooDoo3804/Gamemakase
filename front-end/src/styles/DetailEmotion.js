@@ -48,9 +48,14 @@ export const DetailWrapper = styled.div`
     }
   }
 
+  .title-info-wrapper {
+    width: 90%;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 5rem;
+  }
+
   .title-wrapper {
-    position: relative;
-    top: 40%;
     transition: all 0.5s ease-in-out;
 
     @media (min-width: 768px) {
