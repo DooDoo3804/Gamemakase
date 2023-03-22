@@ -85,6 +85,54 @@ class Authority(models.Model):
         db_table = 'authority'
 
 
+class BackgroundTask(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    task_name = models.CharField(max_length=190)
+    task_params = models.TextField()
+    task_hash = models.CharField(max_length=40)
+    verbose_name = models.CharField(max_length=255, blank=True, null=True)
+    priority = models.IntegerField()
+    run_at = models.DateTimeField()
+    repeat = models.BigIntegerField()
+    repeat_until = models.DateTimeField(blank=True, null=True)
+    queue = models.CharField(max_length=190, blank=True, null=True)
+    attempts = models.IntegerField()
+    failed_at = models.DateTimeField(blank=True, null=True)
+    last_error = models.TextField()
+    locked_by = models.CharField(max_length=64, blank=True, null=True)
+    locked_at = models.DateTimeField(blank=True, null=True)
+    creator_object_id = models.PositiveIntegerField(blank=True, null=True)
+    creator_content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'background_task'
+
+
+class BackgroundTaskCompletedtask(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    task_name = models.CharField(max_length=190)
+    task_params = models.TextField()
+    task_hash = models.CharField(max_length=40)
+    verbose_name = models.CharField(max_length=255, blank=True, null=True)
+    priority = models.IntegerField()
+    run_at = models.DateTimeField()
+    repeat = models.BigIntegerField()
+    repeat_until = models.DateTimeField(blank=True, null=True)
+    queue = models.CharField(max_length=190, blank=True, null=True)
+    attempts = models.IntegerField()
+    failed_at = models.DateTimeField(blank=True, null=True)
+    last_error = models.TextField()
+    locked_by = models.CharField(max_length=64, blank=True, null=True)
+    locked_at = models.DateTimeField(blank=True, null=True)
+    creator_object_id = models.PositiveIntegerField(blank=True, null=True)
+    creator_content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'background_task_completedtask'
+
+
 class Chat(models.Model):
     chat_id = models.BigAutoField(primary_key=True)
     chatting_room = models.ForeignKey('ChattingRoom', models.DO_NOTHING)
@@ -121,6 +169,32 @@ class DjangoAdminLog(models.Model):
     class Meta:
         managed = False
         db_table = 'django_admin_log'
+
+
+class DjangoApschedulerDjangojob(models.Model):
+    id = models.CharField(primary_key=True, max_length=255)
+    next_run_time = models.DateTimeField(blank=True, null=True)
+    job_state = models.TextField()
+
+    class Meta:
+        managed = False
+        db_table = 'django_apscheduler_djangojob'
+
+
+class DjangoApschedulerDjangojobexecution(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    status = models.CharField(max_length=50)
+    run_time = models.DateTimeField()
+    duration = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    finished = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    exception = models.CharField(max_length=1000, blank=True, null=True)
+    traceback = models.TextField(blank=True, null=True)
+    job = models.ForeignKey(DjangoApschedulerDjangojob, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'django_apscheduler_djangojobexecution'
+        unique_together = (('job', 'run_time'),)
 
 
 class DjangoContentType(models.Model):
@@ -207,7 +281,7 @@ class GameSmall(models.Model):
 class Genre(models.Model):
     genre_id = models.BigAutoField(primary_key=True)
     game = models.ForeignKey(Game, models.DO_NOTHING)
-    genre_name = models.CharField(max_length=20, blank=True, null=True)
+    genre_name = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -307,8 +381,6 @@ class TendencyTest(models.Model):
 
 class User(models.Model):
     user_id = models.BigAutoField(primary_key=True)
-    user_email = models.CharField(unique=True, max_length=40)
-    user_password = models.CharField(unique=True, max_length=255)
     user_steam_id = models.BigIntegerField(unique=True)
     user_name = models.CharField(max_length=40)
     created_at = models.DateTimeField(blank=True, null=True)
