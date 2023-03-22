@@ -147,8 +147,10 @@ const Detail = () => {
 
   const renderScreenshots = () => {
     const result = [];
+    let maxLength = gameData.images.length;
+    if (maxLength > 11) maxLength = 11;
 
-    for (let i = 0; i < gameData.images.length; i++) {
+    for (let i = 0; i < maxLength; i++) {
       result.push(
         <SwiperSlide key={gameData.images[i].imageId}>
           <img
@@ -174,7 +176,14 @@ const Detail = () => {
               className="profile-wrapper"
               onClick={() => navigate(`/profile/${recommendedUsers[i].userId}`)}
             >
-              <img src={recommendedUsers[i].profilePath} alt="profile_img" />
+              <img
+                src={
+                  recommendedUsers[i].profilePath
+                    ? recommendedUsers[i].profilePath
+                    : defaultUserImg
+                }
+                alt="profile_img"
+              />
             </div>
             <p className="username">{recommendedUsers[i].userName}</p>
           </div>
