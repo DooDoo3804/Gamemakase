@@ -196,6 +196,17 @@ export const ChatRoomBody = styled.div`
 
   .chat-logs {
     height: 100%;
+
+    .message {
+    }
+
+    .my {
+      background-color: ${Common.colors.mainColor05};
+    }
+
+    .others {
+      background-color: ${Common.colors.mainColor04};
+    }
   }
 
   .messagebar-wrapper {
