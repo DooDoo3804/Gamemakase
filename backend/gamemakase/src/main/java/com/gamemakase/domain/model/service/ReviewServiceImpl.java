@@ -1,9 +1,11 @@
 package com.gamemakase.domain.model.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,7 @@ import com.gamemakase.domain.model.repository.GameRepository;
 import com.gamemakase.domain.model.repository.ImageRepository;
 import com.gamemakase.domain.model.repository.ReviewRepository;
 import com.gamemakase.domain.model.repository.UserRepository;
+import com.gamemakase.domain.model.vo.UserInfoVo;
 import com.gamemakase.global.Exception.NotFoundException;
 import com.gamemakase.global.Exception.TokenValidFailedException;
 import com.gamemakase.global.Exception.UnAuthorizedException;
@@ -38,25 +41,52 @@ public class ReviewServiceImpl implements ReviewService {
 	private final UserRepository userRepository;
 	private final ReviewRepository reviewRepository;
 	private final ImageRepository imageRepository;
+	private final RealTimeUserInfoService realTimeUserInfoService;
 	private final Logger logger = LoggerFactory.getLogger(ReviewServiceImpl.class);
 	
 	@Override
-	public List<GameReviewResponseDto> getReviewsByGameId(long gameId, int pageNo) throws NotFoundException {
+	public List<GameReviewResponseDto> getReviewsByGameId(long gameId, int pageNo) throws NotFoundException, IOException, ParseException {
 		Game game = gameRepository.findById(gameId).orElseThrow(() -> new NotFoundException("게임정보를 찾을 수 없습니다."));
 		Pageable pageable = PageRequest.of(pageNo, 12);
 		Page<Review> reviews = reviewRepository.findAllByGameOrderByCreatedAtDesc(game, pageable);
 		
-		List<GameReviewResponseDto> results = reviews.stream()
-				.map(r -> {
-					Image gameImage = imageRepository.findByTypeAndTypeId("GAME_HEADER", r.getGame().getGameId()).orElse(null);
-					Optional<Image> userImage = imageRepository.findByTypeAndTypeId("USER_PROFILE", r.getUser().getUserId());
-					String userImagePath = "";
-					if(userImage.isPresent()) {
-						userImagePath = userImage.get().getImagePath();
-					}
-					return GameReviewResponseDto.of(r, gameImage.getImagePath(), userImagePath);
-				})
-				.collect(Collectors.toList());
+		List<GameReviewResponseDto> results = new ArrayList<GameReviewResponseDto>();
+		for (Review review : reviews) {
+			String gameImagePath = "";
+			Optional<Image> gameImage = imageRepository.findByTypeAndTypeId("GAME_HEADER", review.getGame().getGameId());
+			if (gameImage.isPresent()) {
+				gameImagePath = gameImage.get().getImagePath();
+			}
+			
+			List<User> userList = new ArrayList<User>();
+			userList.add(review.getUser());
+			List<UserInfoVo> realUserInfoList = realTimeUserInfoService.getUserInfoResponseVo(userList);
+			UserInfoVo userInfo = null;
+			if (realUserInfoList != null) {
+				userInfo = realUserInfoList.get(0);
+			} else {
+				Optional<Image> image = imageRepository.findByTypeAndTypeId("USER_PROFILE", review.getUser().getUserId());
+				if(!image.isPresent()) {
+					userInfo = UserInfoVo.of(review.getUser(), "");
+				} else {
+					userInfo = UserInfoVo.of(review.getUser(), image.get().getImagePath());
+				}
+			}
+			
+			results.add(GameReviewResponseDto.builder()
+				.reviewId(review.getReviewId())
+				.gameId(review.getGame().getGameId())
+				.gameImagePath(gameImagePath)
+				.reviewTitle(review.getReviewTitle())
+				.reviewContent(review.getReviewContent())
+				.reviewGrade(review.getReviewGrade())
+				.createdAt(review.getCreatedAt())
+				.updatedAt(review.getUpdatedAt())
+				.userImagePath(userInfo.getUserImagePath())
+				.userName(userInfo.getUserName())
+				.userId(review.getUser().getUserId())
+				.build());
+		}
 		return results;
 	}
 
