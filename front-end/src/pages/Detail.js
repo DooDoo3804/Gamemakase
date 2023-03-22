@@ -64,7 +64,7 @@ const Detail = () => {
 
   useEffect(() => {
     axios
-      .get(`${BACKEND_URL}/api/game/${gameId}`, {
+      .get(`${BACKEND_URL}api/game/${gameId}`, {
         // todo : userId 수정해야함
         headers: { "Content-Type": "application/json", userId: 1 },
       })
@@ -96,7 +96,7 @@ const Detail = () => {
     setReviewLoading(true);
 
     await axios
-      .get(`${BACKEND_URL}/api/reviews/${gameId}`, {
+      .get(`${BACKEND_URL}api/reviews/${gameId}`, {
         params: {
           pageNo: pageNo.current,
         },
