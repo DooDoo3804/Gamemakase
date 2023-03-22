@@ -12,8 +12,8 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 	Long countByUser(User user);
-    Page<Review> findAllByUser(User user, Pageable pageable);
-    Page<Review> findAllByGame(Game game, Pageable pageable);
+    Page<Review> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
+    Page<Review> findAllByGameOrderByCreatedAtDesc(Game game, Pageable pageable);
 
     boolean existsByGameGameIdAndUserUserId(Long gameId, Long userId);
 

@@ -6,9 +6,11 @@ import com.gamemakase.domain.model.entity.Review;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Builder
 @Getter
+@ToString
 public class GameReviewResponseDto {
 	private long reviewId;
 	private long gameId;
