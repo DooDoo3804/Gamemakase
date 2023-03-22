@@ -122,7 +122,8 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
       chatRoomId: "1",
       writerId: "3",
       gameId: "1",
-      content: "세번쨰 채팅입니다",
+      content:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.      ",
       createdAt: "2023-03-03 14:39:18",
     },
   ];
@@ -263,13 +264,19 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
     const result = [];
 
     if (chatLogs) {
+      <div className="my-msg-wrapper"></div>;
       for (let i = 0; i < chatLogs.length; i++) {
-        if (chatLogs[i].writerId === userId) {
-          result.push(<div className="my message">{chatLogs[i].content}</div>);
-        } else {
-          console.log(chatLogs[i].writerId, userId);
+        if (parseInt(chatLogs[i].writerId) === userId) {
           result.push(
-            <div className="others message">{chatLogs[i].content}</div>
+            <div className="my-msg-wrapper">
+              <div className="my message">{chatLogs[i].content}</div>
+            </div>
+          );
+        } else {
+          result.push(
+            <div className="others-msg-wrapper">
+              <div className="others message">{chatLogs[i].content}</div>
+            </div>
           );
         }
       }
