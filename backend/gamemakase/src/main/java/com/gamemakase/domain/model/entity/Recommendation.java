@@ -18,7 +18,7 @@ public class Recommendation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recommendation_id")
-    private long recommendationId;
+    private Long recommendationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "user_steam_id", name = "steam_id", nullable = false)
@@ -29,6 +29,6 @@ public class Recommendation {
     private Game game;
 
     @Column(nullable = false)
-    private double rating;
+    private Double rating;
 
 }
