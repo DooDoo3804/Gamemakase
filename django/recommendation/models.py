@@ -241,6 +241,11 @@ class Game(models.Model):
     windows = models.IntegerField(blank=True, null=True)
     mac = models.IntegerField(blank=True, null=True)
     linux = models.IntegerField(blank=True, null=True)
+    peak_ccu = models.IntegerField(blank=True, null=True)
+    average_playtime_2weeks = models.IntegerField(blank=True, null=True)
+    recommendations = models.IntegerField(blank=True, null=True)
+    estimated_owners = models.CharField(max_length=200, blank=True, null=True)
+    reviews = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -324,7 +329,7 @@ class Rating(models.Model):
 
 class RatingSmall(models.Model):
     game_id = models.BigIntegerField(blank=True, null=True)
-    steam_id = models.BigIntegerField(blank=True, null=True)
+    steam_id = models.CharField(max_length=25, blank=True, null=True)
     playtime = models.IntegerField(blank=True, null=True)
     frequency = models.FloatField(blank=True, null=True)
     rating = models.FloatField(blank=True, null=True)
