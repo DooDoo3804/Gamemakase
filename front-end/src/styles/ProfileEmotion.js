@@ -13,7 +13,7 @@ export const ProfileBackgroundWrapper = styled.div`
     position: relative;
     margin-top: 110px;
     width: 100%;
-    min-height: 90vh;
+    min-height: 85vh;
     height: 100%;
 
     background: linear-gradient(
@@ -34,21 +34,25 @@ export const ProfileImgWrapper = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  position: relative;
-  margin-left: 10%;
-  top: -60px;
+  
   display: flex;
-
   height: 10px;
+  margin-left: 10%;
+  
+  position: relative;
+  top: -60px;
+
+  @media (max-width: 450px) {
+    top: -40px;
+  }
+  
   img {
     width: 120px;
     height: 120px;
-  }
-
-  @media (max-width: 450px) {
-    top: -50px;
-    width: 90px;
-    height: 90px;
+      @media (max-width: 450px) {
+      width: 90px;
+      height: 90px;
+    }
   }
 
   .profile-name {
@@ -66,7 +70,7 @@ export const ProfileImgWrapper = styled.div`
     @media (max-width: 450px) {
       margin-top: 50px;
       font-size: 24px;
-      padding-left: 2.5rem;
+      padding-left: 30px;
     }
     line-height: 52px;
     text-align: center;
@@ -91,7 +95,8 @@ export const ProfileNavWrapper = styled.div`
   padding-top: 6rem;
 
   @media (max-width: 450px) {
-    padding-top: 5rem;
+    width: 80%;
+    padding-top: 80px;
   }
 
   .flex {
