@@ -273,7 +273,7 @@ def job():
 def schedule_api():
     print("start big data recommend start")
     sched = BackgroundScheduler()
-    sched.add_job(job, 'cron', hour='11', minute='0', second='0')
+    sched.add_job(job, 'cron', hour='03', minute='0', second='0')
     try:
         sched.start()
     except Exception as e:
