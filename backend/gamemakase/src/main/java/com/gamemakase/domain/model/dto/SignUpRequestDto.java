@@ -9,10 +9,6 @@ import lombok.Data;
 @Data
 public class SignUpRequestDto {
 
-    String userEmail;
-
-    String userPassword;
-
     Long userSteamId;
 
     String userName;
@@ -20,8 +16,6 @@ public class SignUpRequestDto {
 
     public User toEntity(long steamId) {
         return User.builder()
-                .userEmail("this.userEmail")
-                .userPassword("this.userPassword")
                 .userSteamId(steamId)
                 .userName("ADMIN")
                 .build();
