@@ -10,4 +10,5 @@ public interface RecommendationService {
 
     List<RecommendationResponseDto> getByUserId(Integer pageNo, Integer pageSize, String token) throws NotFoundException, TokenValidFailedException;
 
+    List<RecommendationResponseDto> getByUserIdTest(Integer pageNo, Integer pageSize, String userId) throws NotFoundException, TokenValidFailedException;
 }

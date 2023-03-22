@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,7 +24,7 @@ public class RecommendationController {
     private final RecommendationService recommendationService;
 
     @ApiOperation(value = "개인 맞춤 추천", notes = "페이징해서 보내드립니다.")
-    @GetMapping("/api/recommend/games")
+    @GetMapping("/auth/recommend/games")
     public ResponseEntity<List<RecommendationResponseDto>> getByUserId(
             @RequestHeader("accessToken") @ApiParam(required = true) String token,
             @RequestParam(name = "page", required = false) Integer pageNo,
@@ -37,4 +34,18 @@ public class RecommendationController {
     {
         return ResponseEntity.status(HttpStatus.OK).body(recommendationService.getByUserId(pageNo, pageSize, token));
     }
+
+    @ApiOperation(value = "개인 맞춤 추천 (token 적용 전 테스트용)", notes = "토큰 대신 유저아이디를 pathvariable로 직접 보내주세요")
+    @GetMapping("/api/recommend/games/{userId}")
+    public ResponseEntity<List<RecommendationResponseDto>> getByUserId(
+            @RequestParam(name = "page", required = false) Integer pageNo,
+            @RequestParam(name = "size", required = false) Integer pageSize,
+            @PathVariable String userId
+    )
+            throws NotFoundException, TokenValidFailedException
+    {
+        return ResponseEntity.status(HttpStatus.OK).body(recommendationService.getByUserIdTest(pageNo, pageSize, userId));
+    }
+
+
 }

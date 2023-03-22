@@ -67,5 +67,40 @@ public class RecommendationServiceImpl implements RecommendationService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<RecommendationResponseDto> getByUserIdTest(Integer pageNo, Integer pageSize, String userId) throws NotFoundException, TokenValidFailedException {
+
+////        유저 파싱 및 예외처리
+//        String userIdStr = jwtTokenProvider.getUserId(token);
+//        Long userId = Long.parseLong(userIdStr);
+//
+//        try {
+//            User user = userRepository.findById(userId)
+//                    .orElseThrow(() -> new NotFoundException("wrong userId"));
+//        } catch (NumberFormatException e) {
+//            logger.error(e.getMessage());
+//            throw new TokenValidFailedException("유효하지 않은 토큰값입니다.");
+//        }
+
+//        스팀아이디
+        Long userSteamId = userRepository.findById(Long.parseLong(userId)).get().getUserSteamId();
+
+//        페이징 객체 및 추천 결과
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Recommendation> recommendations = recommendationRepository.findAllByUserUserSteamIdOrderByRatingDesc(userSteamId, pageable);
+
+//        DTO로 반환
+        return recommendations.stream()
+                .map(recommendation -> RecommendationResponseDto.builder()
+                        .gameId(recommendation.getGame().getGameId())
+                        .gameName(recommendation.getGame().getGameName())
+                        .gameImage(imageRepository.findByTypeAndTypeId("GAME_HEADER", recommendation.getGame().getGameId())
+                                .map(Image::getImagePath)
+                                .orElse(""))
+                        .rating(recommendation.getRating())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }
 
