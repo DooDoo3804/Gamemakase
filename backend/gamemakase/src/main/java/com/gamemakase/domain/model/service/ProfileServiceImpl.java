@@ -1,5 +1,6 @@
 package com.gamemakase.domain.model.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,8 +34,9 @@ import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.domain.model.vo.GenreScoreVo;
 import com.gamemakase.domain.model.vo.PaginationVo;
 import com.gamemakase.domain.model.vo.ProfileReviewInfoVo;
-import com.gamemakase.domain.model.vo.ScrapInfoVo;
-import com.gamemakase.domain.model.vo.UserInfoResponseVo;
+import com.gamemakase.domain.model.vo.GameInfoVo;
+import com.gamemakase.domain.model.vo.UserInfoVo;
+import com.gamemakase.global.Exception.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,21 +50,23 @@ public class ProfileServiceImpl implements ProfileService {
 	private final GenreRepository genreRepository;
 	private final GameHistoryRepository gamehistoryRepository;
 	private final ReviewRepository reviewRepository;
-
-	private static Map<String, Integer> genreScoreResult;
+	private final RealTimeUserInfoService realTimeUserInfoService;
 
 	/***
 	 * todo : orElseThrow() 비어있는 부분 Exception 처리 추후 해주어햐 합니다.
+	 * @throws NotFoundException 
+	 * @throws ParseException 
+	 * @throws IOException 
 	 */
 
 	@Override
-	public ProfileInfoResponseDto getProfile(long userId, int pageNo) {
-		genreScoreResult = new HashMap<String, Integer>();
+	public ProfileInfoResponseDto getProfile(long userId, int pageNo) 
+			throws IOException, ParseException, NotFoundException {
+		Map<String, Integer> genreScoreResult = new HashMap<String, Integer>();
 
 		User user = userRepository.findById(userId).orElseThrow(/* here! */);
 
-		// userId 기반 play기록, play기록 기반 장르를 추적하여 각 장르 name을 key값으로 삼아 play time을 value로
-		// 축적합니다.
+		// userId 기반 play기록, play기록 기반 장르를 추적하여 각 장르 name을 key값으로 삼아 play time을 value로 축적합니다.
 		List<GameHistory> gameHistoryList = gamehistoryRepository.findAllByUser(user);
 		for (GameHistory gameHistory : gameHistoryList) {
 			List<Genre> genreList = genreRepository.findAllByGame(gameHistory.getGame());
@@ -92,16 +97,24 @@ public class ProfileServiceImpl implements ProfileService {
 		// userId기반 스크랩한 게임을 조회하여 반환합니다.
 		Pageable pageable = PageRequest.of(pageNo, 6);
 		Page<LikeGame> likeList = likeGameRepository.findAllByUser(user, pageable);
-		List<ScrapInfoVo> scrapList = likeList.stream()
-				.map(l -> ScrapInfoVo.of(l.getGame(),
+		List<GameInfoVo> scrapList = likeList.stream()
+				.map(l -> GameInfoVo.of(l.getGame(),
 						imageRepository.findByTypeAndTypeId("GAME_HEADER", l.getGame().getGameId()).orElseThrow(/* here! */).getImagePath()))
 				.collect(Collectors.toList());
-		Optional<Image> image = imageRepository.findByTypeAndTypeId("USER_PROFILE", user.getUserId());
-		UserInfoResponseVo userInfo = null;
-		if(!image.isPresent()) {
-			userInfo = UserInfoResponseVo.of(user, "");
+		
+		List<User> userList = new ArrayList<User>();
+		userList.add(user);
+		List<UserInfoVo> realUserInfoList = realTimeUserInfoService.getUserInfoResponseVo(userList);
+		UserInfoVo userInfo = null;
+		if (realUserInfoList != null) {
+			userInfo = realUserInfoList.get(0);
 		} else {
-			userInfo = UserInfoResponseVo.of(user, image.get().getImagePath());
+			Optional<Image> image = imageRepository.findByTypeAndTypeId("USER_PROFILE", user.getUserId());
+			if(!image.isPresent()) {
+				userInfo = UserInfoVo.of(user, "");
+			} else {
+				userInfo = UserInfoVo.of(user, image.get().getImagePath());
+			}
 		}
 		return ProfileInfoResponseDto.builder()
 				.user(userInfo)

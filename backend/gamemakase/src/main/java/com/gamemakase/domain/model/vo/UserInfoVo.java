@@ -4,16 +4,19 @@ import com.gamemakase.domain.model.entity.User;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Builder
 @Getter
-public class UserInfoResponseVo {
+@ToString
+public class UserInfoVo {
+	private long userId;
+	private boolean state;
 	private String userImagePath;
 	private String userName;
-	private long userId;
 	
-	public static UserInfoResponseVo of(User user, String userImgPath) {
-		return UserInfoResponseVo.builder()
+	public static UserInfoVo of(User user, String userImgPath) {
+		return UserInfoVo.builder()
 				.userImagePath(userImgPath)
 				.userName(user.getUserName())
 				.userId(user.getUserId())
