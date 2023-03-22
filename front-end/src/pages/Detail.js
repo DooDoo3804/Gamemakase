@@ -8,6 +8,7 @@ import {
   ChatBtn,
   DetailWrapper,
   FaStar,
+  LoadingWrapper,
   RecommendUsers,
   ReviewWrapper,
   SingleReview,
@@ -30,7 +31,9 @@ import {
   faStar as faRegularStar,
 } from "@fortawesome/free-regular-svg-icons";
 import no_game from "../assets/lottie/no-game.json";
-import Loading from "../assets/loading.gif";
+import reviewLoading from "../assets/tinyLoading.gif";
+import defaultUserImg from "../assets/profileImg.svg";
+import loading from "../assets/lottie/loading.json";
 
 import TranslucentBtn from "../components/TranslucentBtn";
 import useBodyScrollLock from "../components/ScrollLock";
@@ -48,11 +51,12 @@ const Detail = () => {
   const [recommendedUsers, setRecommendedUsers] = useState(null);
   const [reviewData, setReviewData] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [isLoading, setLoading] = useState(false);
+  const [reviewLoading, setReviewLoading] = useState(false);
   const [ref, inView] = useInView();
-  const pageNo = useRef(0);
+  const pageNo = useRef(1);
 
   const { lockScroll } = useBodyScrollLock();
   const location = useLocation();
@@ -60,7 +64,7 @@ const Detail = () => {
 
   useEffect(() => {
     axios
-      .get(`${BACKEND_URL}/api/game/${gameId}`, {
+      .get(`${BACKEND_URL}api/game/${gameId}`, {
         // todo : userId 수정해야함
         headers: { "Content-Type": "application/json", userId: 1 },
       })
@@ -69,28 +73,30 @@ const Detail = () => {
         setGameData(response.data);
         setRecommendedUsers(response.data.recommendedUsers);
         setReviewData(response.data.reviews);
+        setIsLoading(false);
       })
       .catch(function (error) {
         console.log(error);
-        // if (error.response.status === 404) {
-        //   navigate("/*");
-        // } else if (error.response.status === 401) {
-        // }
+        if (error.response.status === 500) {
+          window.location.replace("/500");
+        } else {
+          setIsLoading(false);
+        }
       });
   }, []);
 
   useEffect(() => {
     if (inView && hasNextPage) {
-      setLoading(true);
+      setReviewLoading(true);
       getReviews();
     }
   }, [inView]);
 
   const getReviews = useCallback(async () => {
-    setLoading(true);
+    setReviewLoading(true);
 
     await axios
-      .get(`${BACKEND_URL}/api/reviews/${gameId}`, {
+      .get(`${BACKEND_URL}api/reviews/${gameId}`, {
         params: {
           pageNo: pageNo.current,
         },
@@ -105,11 +111,11 @@ const Detail = () => {
         }
         setReviewData((reviewData) => [...reviewData, ...response.data]);
         setHasNextPage(response.data.length === 12);
-        setLoading(false);
+        setReviewLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        setLoading(false);
+        setReviewLoading(false);
       });
   });
 
@@ -218,7 +224,11 @@ const Detail = () => {
               onClick={() => navigate(`/profile/${reviewData[i].userId}`)}
             >
               <img
-                src={reviewData[i].userImagePath}
+                src={
+                  reviewData[i].userImagePath
+                    ? reviewData[i].userImagePath
+                    : defaultUserImg
+                }
                 alt="profile"
                 className="profile-img"
               />
@@ -254,6 +264,16 @@ const Detail = () => {
     console.log(!isLiked);
     setIsLiked(!isLiked);
   };
+
+  if (isLoading) {
+    return (
+      <LoadingWrapper>
+        <Lottie options={options(loading)} height={300} width={300}></Lottie>
+        <p className="title-text">페이지를 불러오는 중입니다.</p>
+        <p className="info-text">잠시만 기다려주세요.</p>
+      </LoadingWrapper>
+    );
+  }
 
   return (
     <div>
@@ -360,9 +380,9 @@ const Detail = () => {
             {reviewData ? (
               <>
                 <div className="review-wrapper">{renderReviews()}</div>
-                {isLoading ? (
+                {reviewLoading ? (
                   <div className="review-loading">
-                    <img src={Loading} alt="loading..."></img>
+                    <img src={reviewLoading} alt="loading..."></img>
                   </div>
                 ) : (
                   <div ref={ref} className="scroll-handler" />
