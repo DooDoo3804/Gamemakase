@@ -1,24 +1,19 @@
 package com.gamemakase.global.config.jwt;
 
-import com.gamemakase.domain.model.entity.Authority;
-import com.gamemakase.domain.model.entity.Authority.AuthorityName;
-import com.gamemakase.domain.model.entity.User;
+import java.security.Key;
+import java.util.Date;
 
-import com.gamemakase.domain.model.repository.UserRepository;
-import com.gamemakase.domain.model.service.UserService;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+
+import com.gamemakase.domain.model.entity.Authority.AuthorityName;
+import com.gamemakase.domain.model.entity.User;
+import com.gamemakase.domain.model.repository.UserRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -28,6 +23,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
