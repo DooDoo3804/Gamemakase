@@ -16,6 +16,7 @@ from background_task.models import Task
 from background_task import background
 from .tasks import update_recommed
 from apscheduler.schedulers.background import BackgroundScheduler
+
 # user_id : 유저 모델 의 아이디 값
 # user_steam_id : 유저 스팀 아이디
 # steam_id : 스팀 아이디
@@ -122,9 +123,6 @@ def get_recommend(user, neighbor_list, df):
 # big 데이터 추천 결과
 # users : user 전체 리스트
 def get_recommended_games(users):
-    # check1 = Recommendation(steam_id = 111, game_id = 10, rating = 6.0)
-    # check1.save()
-
     # 데이터 불러와서 테이블 만들기
     conn = pymysql.connect(
         host="43.201.61.185",
@@ -141,18 +139,12 @@ def get_recommended_games(users):
 
     df = pd.DataFrame(result)
 
-    # check2 = Recommendation(steam_id = 222, game_id = 10, rating = 6.0)
-    # check2.save()
-
-
 
     # 가까운 유저 찾아서 테이블에 반영
     print(df.tail(10))
     df = B(df, users)
     print(df.tail(10))
 
-    # check3 = Recommendation(steam_id = 333, game_id = 10, rating = 6.0)
-    # check3.save()
 
     print("get recommendation")
     print("--------------------------------------------------------------------------------------------------------------------------------")
@@ -170,8 +162,6 @@ def get_recommended_games(users):
         knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
         knn = list(knn.index)
 
-        # check4 = Recommendation(steam_id = 444, game_id = 10, rating = 6.0)
-        # check4.save()
 
         json_data_2 = df
         json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
@@ -216,21 +206,15 @@ def get_recommended_games_small(request, user_id):
 
     pivot_table = pd.pivot_table(df, values='rating', index=[
                                  'steam_id'], columns=['game_id'])
-    # print(f"pivot_table:{pivot_table}")
     cos_sim_matrix = cosine_similarity(pivot_table.fillna(0))
-    # print(f"cos_sim_matrix:{cos_sim_matrix}")
     cos_sim_df = pd.DataFrame(
         cos_sim_matrix, columns=pivot_table.index, index=pivot_table.index)
-    # print(f"cos_sim_df:{cos_sim_df}")
     knn = cos_sim_df[user_steamid].sort_values(ascending=False)[:30]
     knn = list(knn.index)
-    # print(knn)
 
     json_data_2 = df
     json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
-    # print(json_data_2)
     recommend = get_recommend(user_steamid, knn, json_data_2)
-    # print(recommend[:5])
 
     Recommendation.objects.filter(steam_id=user_steamid).delete()
     for game_id, rating in recommend[:10]:
@@ -268,6 +252,16 @@ def get_recommended_games_small(request, user_id):
     return HttpResponse(status=HTTP_201_CREATED)
 
 
+
+
+
+
+
+
+
+
+
+# 스케줄러 관련
 def job():
     print("***************************************************")
     update_recommed()
@@ -277,7 +271,7 @@ def job():
 def schedule_api():
     print("start big data recommend start")
     sched = BackgroundScheduler()
-    sched.add_job(job, 'cron', minute='3', second='0')
+    sched.add_job(job, 'cron', hour='11', minute='0', second='0')
     try:
         sched.start()
     except Exception as e:
