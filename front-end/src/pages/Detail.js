@@ -33,7 +33,6 @@ import {
 import no_game from "../assets/lottie/no-game.json";
 import reviewLoading from "../assets/tinyLoading.gif";
 import defaultUserImg from "../assets/profileImg.svg";
-import loading from "../assets/lottie/loading.json";
 
 import TranslucentBtn from "../components/TranslucentBtn";
 import useBodyScrollLock from "../components/ScrollLock";
@@ -41,6 +40,7 @@ import ChatModal from "../components/ChatModal";
 
 import { BACKEND_URL } from "../config";
 import { useInView } from "react-intersection-observer";
+import LoadingPage from "../components/LoadingPage";
 
 const Detail = () => {
   const navigate = useNavigate();
@@ -275,13 +275,7 @@ const Detail = () => {
   };
 
   if (isLoading) {
-    return (
-      <LoadingWrapper>
-        <Lottie options={options(loading)} height={300} width={300}></Lottie>
-        <p className="title-text">페이지를 불러오는 중입니다.</p>
-        <p className="info-text">잠시만 기다려주세요.</p>
-      </LoadingWrapper>
-    );
+    return <LoadingPage></LoadingPage>;
   }
 
   return (
