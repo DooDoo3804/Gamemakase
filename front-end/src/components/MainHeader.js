@@ -17,8 +17,22 @@ const MainHeader = () => {
   // const { lockScroll } = useBodyScrollLock();
   const keyword = useRef();
 
-  const searchBarHandler = (e) => {
-    keyword.current = e.target.value;
+  const enterSearchHandler = (e) => {
+    if(e.key === "Enter") {
+      if (keyword && keyword.current && keyword.current.value) {
+        navigate("/search/" + keyword.current.value);
+      } else {
+        navigate("/search/");
+      }
+    }
+  };
+
+  const clickSearchHandler = () => {
+    if (keyword && keyword.current && keyword.current.value) {
+      navigate("/search/" + keyword.current.value);
+    } else {
+      navigate("/search/");
+    }
   };
 
   const handleLoginOpen = () => {
@@ -53,15 +67,15 @@ const MainHeader = () => {
         </div>
         <SearchWrapper>
           <input
+            type="text"
             className="search-bar"
             placeholder="search here..."
-            onChange={searchBarHandler}
+            ref={keyword}
+            onKeyDown={(e) => enterSearchHandler(e)}
           ></input>
           <FontAwesomeIcon
             icon={faSearch}
-            onClick={() =>
-              navigate("/search", { state: { keyword: keyword.current } })
-            }
+            onClick={() => clickSearchHandler()}
             className="search-icon"
           />
           {/* search 페이지에서 useLocation().state.keyword 로 받아서 사용 */}

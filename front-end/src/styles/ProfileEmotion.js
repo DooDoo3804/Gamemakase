@@ -47,6 +47,7 @@ export const ProfileImgWrapper = styled.div`
   }
   
   img {
+    border-radius: 70%;
     width: 120px;
     height: 120px;
       @media (max-width: 450px) {

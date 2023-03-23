@@ -41,7 +41,7 @@ const GameSummary = (props) => {
         }}>
             <img className="scrap" src={star} alt="scrapStar"></img>
         </div>
-        <div className="price">{props.price} $</div>
+        <div className="price">${props.price}</div>
       </div>
     </GameSummaryClip>
   );
