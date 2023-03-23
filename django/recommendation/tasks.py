@@ -117,9 +117,9 @@ def get_recommended_games(users):
         try:
             knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
             knn = list(knn.index)
-            return
         except Exception as e:
             print(e, steam_id)
+            return HttpResponse(status=HTTP_201_CREATED)
         
 
 
@@ -139,6 +139,7 @@ def get_recommended_games(users):
             recommendation.save()
         except Exception as e:
             print(game_id, e)
+    return HttpResponse(status=HTTP_201_CREATED)
 
 def update_recommed():
     print("start big data recommend start")
