@@ -32,6 +32,9 @@ export const Banner = styled.div`
     display: flex;
     height: 100%;
     align-items: center;
+    background-image: url(${banner_bg});
+    background-size: 150px;
+    background-repeat: repeat-x;
 
     @media (min-width: 530px) {
       justify-content: space-evenly;
