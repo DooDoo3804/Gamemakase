@@ -276,6 +276,12 @@ export const DetailWrapper = styled.div`
     height: 100%;
     border-radius: 0.5rem;
     object-fit: cover;
+
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   .gradient {
@@ -303,6 +309,12 @@ export const DetailWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     font-family: "Noto Sans KR", serif;
+
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 
     p {
       margin-bottom: 2rem;
@@ -443,6 +455,12 @@ export const RecommendUsers = styled.div`
 
     transition: all 0.3s ease-in-out;
 
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
     @media (min-width: 768px) {
       font-size: 1.2rem;
     }
@@ -522,6 +540,12 @@ export const ReviewWrapper = styled.div`
     margin: 3rem 0rem;
     font-family: "Noto Sans KR", serif;
 
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
     @media (min-width: 768px) {
       font-size: 1.2rem;
     }
@@ -536,6 +560,12 @@ export const ReviewWrapper = styled.div`
   .review-loading {
     display: flex;
     justify-content: center;
+
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 
     img {
       max-width: 3rem;
