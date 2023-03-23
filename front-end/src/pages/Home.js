@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y, Autoplay } from "swiper";
 import Lottie from "react-lottie";
 import axios from "axios";
+import { motion } from "framer-motion";
 import {
   HomeWrapper,
   Banner,
@@ -13,6 +14,7 @@ import {
 } from "../styles/HomeEmotion";
 import banner_img from "../assets/banner_img.json";
 import banner_img2 from "../assets/banner_img2.json";
+import tinyLoading from "../assets/tinyLoading.gif";
 
 // Import Swiper styles
 import "swiper/css";
@@ -29,6 +31,8 @@ const Home = () => {
   // const [moreGames, setMoreGames] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [recommendLoading, setRecommendLoading] = useState(true);
+  const [popularLoading, setPopularLoading] = useState(true);
   const swiperRef = useRef(null);
   const popularNo = useRef(0);
   const recommendNo = useRef(0);
@@ -117,6 +121,7 @@ const Home = () => {
       .then(function (response) {
         // console.log(response.data);
         setRecommendGames(response.data);
+        setRecommendLoading(false);
       })
       .catch(function (error) {
         console.log(error);
@@ -126,15 +131,13 @@ const Home = () => {
         }
       });
     axios
-      .get(
-        `${BACKEND_URL}api/recommend/games/${userId}?page=${popularNo.current}&size=${size}`,
-        {
-          headers: { "Content-Type": "application/json", userId: 1 },
-        }
-      )
+      .get(`${BACKEND_URL}api/recommend/popular?size=${size}`, {
+        headers: { "Content-Type": "application/json" },
+      })
       .then(function (response) {
         // console.log(response.data);
         setPopularGames(response.data);
+        setPopularLoading(false);
       })
       .catch(function (error) {
         console.log(error);
@@ -299,8 +302,18 @@ const Home = () => {
         </SwiperSlide>
       </Swiper>
       <RecommendWrapper>
-        {recommendGames ? (
-          <div>
+        {recommendLoading ? (
+          <div className="loading-wrapper">
+            <img src={tinyLoading} alt="loading..." />
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+          >
             <div className="rcm-title">나를 위한 게임</div>
             <Swiper
               modules={[Navigation]}
@@ -320,10 +333,20 @@ const Home = () => {
             >
               {renderGames(recommendGames)}
             </Swiper>
+          </motion.div>
+        )}
+        {popularLoading ? (
+          <div className="loading-wrapper">
+            <img src={tinyLoading} alt="loading..." />
           </div>
-        ) : null}
-        {popularGames ? (
-          <div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+          >
             <div className="rcm-title">인기 게임</div>
             <Swiper
               modules={[Navigation]}
@@ -343,8 +366,8 @@ const Home = () => {
             >
               {renderGames(popularGames)}
             </Swiper>
-          </div>
-        ) : null}
+          </motion.div>
+        )}
         {popularGames ? (
           <div>
             <div className="rcm-title">많은 게임</div>

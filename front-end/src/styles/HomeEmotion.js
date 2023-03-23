@@ -285,6 +285,19 @@ export const RecommendWrapper = styled.div`
     -ms-transform: scale(1.05);
     -o-transform: scale(1.05);
   }
+
+  .loading-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    max-height: 3rem;
+    margin: 3rem 0rem;
+
+    img {
+      object-fit: contain;
+    }
+  }
 `;
 
 export const MoreGamesWrapper = styled.div`
