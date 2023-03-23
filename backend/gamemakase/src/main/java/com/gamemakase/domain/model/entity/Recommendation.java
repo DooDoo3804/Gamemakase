@@ -21,7 +21,7 @@ public class Recommendation {
     private Long recommendationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "user_steam_id", name = "steam_id", nullable = false)
+    @JoinColumn(name = "steam_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)

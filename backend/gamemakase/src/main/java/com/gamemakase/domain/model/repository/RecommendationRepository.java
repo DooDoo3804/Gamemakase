@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface RecommendationRepository extends JpaRepository<Recommendation, Long> {
     List<Recommendation> findAllByGameGameIdOrderByRatingDesc(Long gameId);
-    Page<Recommendation> findAllByUserUserSteamIdOrderByRatingDesc(Long userSteamId, Pageable pageable);
+    Page<Recommendation> findAllByUserUserIdOrderByRatingDesc(Long userId, Pageable pageable);
 }
