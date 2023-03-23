@@ -14,6 +14,7 @@ import com.gamemakase.domain.model.dto.SearchResponseDto;
 import com.gamemakase.domain.model.entity.Game;
 import com.gamemakase.domain.model.entity.User;
 import com.gamemakase.domain.model.repository.GameRepository;
+import com.gamemakase.domain.model.repository.GenreRepository;
 import com.gamemakase.domain.model.repository.ImageRepository;
 import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.domain.model.vo.GameInfoVo;
@@ -29,14 +30,20 @@ public class SearchServiceImpl implements SearchService {
 	private final GameRepository gameRepository;
 	private final UserRepository UserRepository;
 	private final ImageRepository imageRepository;
+	private final GenreRepository genreRepository;
 	private final RealTimeUserInfoService realTimeUserInfoService;
 
 	@Override
 	public SearchResponseDto getSearchResult(String niddle, int gamePageNo, int userPageNo) throws IOException, ParseException, NotFoundException {
-		Pageable GamePageable = PageRequest.of(gamePageNo, 6);
+		Pageable GamePageable = PageRequest.of(gamePageNo, 12);
 		Page<Game> gameList = gameRepository.findAllByGameNameLikeOrderByGameName("%" + niddle + "%", GamePageable);
 		List<GameInfoVo> gameResults = gameList.stream()
-				.map(g -> GameInfoVo.of(g, imageRepository.findByTypeAndTypeId("GAME_HEADER", g.getGameId()).orElse(null).getImagePath()))
+				.map(g -> GameInfoVo.of(
+						g,
+						imageRepository.findByTypeAndTypeId("GAME_HEADER", g.getGameId()).orElse(null).getImagePath(),
+						genreRepository.findAllByGame(g)
+										)
+					)
 				.collect(Collectors.toList());
 
 		Pageable UserPageable = PageRequest.of(userPageNo, 5);
@@ -54,7 +61,7 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public List<GameInfoVo> getSearchGameResult(String niddle, int gamePageNo)
 			throws IOException, ParseException, NotFoundException {
-		Pageable GamePageable = PageRequest.of(gamePageNo, 6);
+		Pageable GamePageable = PageRequest.of(gamePageNo, 12);
 		Page<Game> gameList = gameRepository.findAllByGameNameLikeOrderByGameName("%" + niddle + "%", GamePageable);
 		return gameList.stream()
 				.map(g -> GameInfoVo.of(g, imageRepository.findByTypeAndTypeId("GAME_HEADER", g.getGameId()).orElse(null).getImagePath()))
