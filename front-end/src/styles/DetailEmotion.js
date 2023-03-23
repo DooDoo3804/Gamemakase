@@ -195,6 +195,7 @@ export const DetailWrapper = styled.div`
     font-weight: 400;
     transition: all 0.5s ease-in-out;
     margin: 0;
+    text-align: center;
 
     @media (min-width: 768px) {
       font-size: 1rem;
