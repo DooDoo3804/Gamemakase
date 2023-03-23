@@ -80,15 +80,17 @@ public class RealTimeUserInfoService {
 				for (int i = 0; i < playerInfoJsons.size(); i++) {
 					JSONObject playerInfoJson = (JSONObject) playerInfoJsons.get(i);
 					String realTimeUserName = playerInfoJson.get("personaname").toString();
+					String steamId = playerInfoJson.get("steamid").toString();
 					
+					// steamId를 토대로 User 검사
+					User user = userRepository.findByUserSteamId(Long.parseLong(steamId));
 					// 지금 db name이 실시간 name정보와 다르면 db값을 변경
-					if (!userList.get(i).getUserName().equals(realTimeUserName)) {
-						User user = userList.get(i);
+					if (!user.getUserName().equals(realTimeUserName)) {
 						user.setUserName(realTimeUserName);
 						userRepository.save(user);
 					}
 					result.add(UserInfoVo.builder()
-							.userId(userList.get(i).getUserId())
+							.userId(user.getUserId())
 							.state(playerInfoJson.get("personastate").toString().equals("0") ? false : true)
 							.userImagePath(playerInfoJson.get("avatar").toString())
 							.userName(realTimeUserName).build());
