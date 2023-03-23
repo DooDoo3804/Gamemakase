@@ -71,39 +71,6 @@ const Home = () => {
     },
   ];
 
-  // const popularGames = [
-  //   {
-  //     gameId: 10,
-  //     gameName: "Stray",
-  //     gameImage:
-  //       "https://cdn.akamai.steamstatic.com/steam/apps/1332010/header_292x136.jpg?t=1670349423",
-  //   },
-  //   {
-  //     gameId: 2,
-  //     gameName: "Cult of the Lamb",
-  //     gameImage:
-  //       "https://cdn.akamai.steamstatic.com/steam/apps/1313140/header_292x136.jpg?t=1674826230",
-  //   },
-  //   {
-  //     gameId: 3,
-  //     gameName: "Help Me!",
-  //     gameImage:
-  //       "https://cdn.akamai.steamstatic.com/steam/apps/1557780/header_292x136_koreana.jpg?t=1640234732",
-  //   },
-  //   {
-  //     gameId: 4,
-  //     gameName: "Call of Duty",
-  //     gameImage:
-  //       "https://cdn.akamai.steamstatic.com/steam/apps/1767320/header_292x136_koreana.jpg?t=1642579277",
-  //   },
-  //   {
-  //     gameId: 5,
-  //     gameName: "The Past Within",
-  //     gameImage:
-  //       "https://cdn.akamai.steamstatic.com/steam/apps/1515210/header_292x136.jpg?t=1676931955",
-  //   },
-  // ];
-
   const moreGames = [
     {
       gameId: 1,
@@ -292,7 +259,7 @@ const Home = () => {
                 <p className="title">오늘의 게임 5선</p>
               </div>
               <div className="games-wrapper">
-                <GameCarousel></GameCarousel>
+                <GameCarousel gameData={todayGames}></GameCarousel>
               </div>
             </div>
           </Banner>

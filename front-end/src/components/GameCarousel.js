@@ -1,5 +1,6 @@
-import styled from "@emotion/styled";
 import { useRef } from "react";
+import { useNavigate } from "react-router";
+import styled from "@emotion/styled";
 import { Common } from "../styles/Common";
 import plate from "../assets/banner_plate.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -89,6 +90,7 @@ const Wrapper = styled.div`
   .game-plate-img {
     width: 100%;
     object-fit: cover;
+    cursor: pointer;
   }
 
   .plate-container {
@@ -212,8 +214,9 @@ const Wrapper = styled.div`
   }
 `;
 
-const GameCarousel = () => {
+const GameCarousel = ({ gameData }) => {
   const carousel = useRef(null);
+  const navigate = useNavigate();
   const itemAngle = 72;
   let currdeg = 0;
 
@@ -231,80 +234,44 @@ const GameCarousel = () => {
   };
 
   return (
-    <Wrapper>
-      <div className="container">
-        <div className="carousel" ref={carousel}>
-          <div className="item a">
-            <div className="img-container">
-              <img
-                className="game-plate-img"
-                alt="game-img"
-                src="https://cdn.cloudflare.steamstatic.com/steam/apps/1135690/header.jpg?t=1667779371"
-              />
-            </div>
-            <div className="plate-container">
-              <img className="plate-img" alt="plate-img" src={plate} />
-            </div>
-          </div>
-          <div className="item b">
-            <div className="img-container">
-              <img
-                className="game-plate-img"
-                alt="game-img"
-                src="https://cdn.cloudflare.steamstatic.com/steam/apps/1210320/header.jpg?t=1671467586"
-              />
-            </div>
-            <div className="plate-container">
-              <img className="plate-img" alt="plate-img" src={plate} />
-            </div>
-          </div>
-          <div className="item c">
-            <div className="img-container">
-              <img
-                className="game-plate-img"
-                alt="game-img"
-                src="https://cdn.cloudflare.steamstatic.com/steam/apps/1868140/header.jpg?t=1678794959"
-              />
-            </div>
-            <div className="plate-container">
-              <img className="plate-img" alt="plate-img" src={plate} />
+    <div>
+      {gameData ? (
+        <Wrapper>
+          <div className="container">
+            <div className="carousel" ref={carousel}>
+              {gameData.map((item, idx) => {
+                return (
+                  <div
+                    className={"item " + String.fromCharCode(97 + idx)}
+                    key={idx}
+                  >
+                    <div className="img-container">
+                      <img
+                        className="game-plate-img"
+                        alt="game-img"
+                        src={item.gameImage}
+                        onClick={() => navigate(`/detail/${item.gameId}`)}
+                      />
+                    </div>
+                    <div className="plate-container">
+                      <img className="plate-img" alt="plate-img" src={plate} />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
-          <div className="item d">
-            <div className="img-container">
-              <img
-                className="game-plate-img"
-                alt="game-img"
-                src="https://cdn.akamai.steamstatic.com/steam/apps/1557780/header_292x136_koreana.jpg?t=1640234732"
-              />
+          <div className="btns-wrapper">
+            <div className="prev" onClick={handlePrevClick}>
+              <FontAwesomeIcon icon={faArrowLeft} />
             </div>
-            <div className="plate-container">
-              <img className="plate-img" alt="plate-img" src={plate} />
+            <div className="next" onClick={handleNextClick}>
+              <FontAwesomeIcon icon={faArrowRight} />
             </div>
           </div>
-          <div className="item e">
-            <div className="img-container">
-              <img
-                className="game-plate-img"
-                alt="game-img"
-                src="https://cdn.cloudflare.steamstatic.com/steam/apps/1210320/header.jpg?t=1671467586"
-              />
-            </div>
-            <div className="plate-container">
-              <img className="plate-img" alt="plate-img" src={plate} />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="btns-wrapper">
-        <div className="prev" onClick={handlePrevClick}>
-          <FontAwesomeIcon icon={faArrowLeft} />
-        </div>
-        <div className="next" onClick={handleNextClick}>
-          <FontAwesomeIcon icon={faArrowRight} />
-        </div>
-      </div>
-    </Wrapper>
+        </Wrapper>
+      ) : null}
+    </div>
   );
 };
 
