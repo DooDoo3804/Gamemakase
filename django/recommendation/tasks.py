@@ -112,33 +112,33 @@ def get_recommended_games(users):
     print(f"cos_sim_df:{cos_sim_df[:30]}")
     print(users)
     for user in users:
-        steam_id = user.user_id
-        print(steam_id)
         try:
+            steam_id = user.user_id
             knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
             knn = list(knn.index)
+            json_data_2 = df
+            json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
+            print(json_data_2)
+            recommend = get_recommend(steam_id, knn, json_data_2)
+            print(recommend[:5])
+
+            games = []
+            Recommendation.objects.filter(steam_id=steam_id).delete()
+            for game_id, rating in recommend[:100]:
+                try:
+                    game = Game.objects.get(game_id=game_id)
+                    images = Image.objects.filter(type_id = game_id)
+                    recommendation = Recommendation(steam_id = steam_id, game_id = game.game_id, rating = rating)
+                    recommendation.save()
+                except Exception as e:
+                    print(game_id, e)
         except Exception as e:
             print(e, steam_id)
-            return HttpResponse(status=HTTP_201_CREATED)
+            continue
+    return HttpResponse(status=HTTP_201_CREATED)
+
+
         
-
-
-        json_data_2 = df
-        json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
-        print(json_data_2)
-        recommend = get_recommend(steam_id, knn, json_data_2)
-        print(recommend[:5])
-
-        games = []
-        Recommendation.objects.filter(steam_id=steam_id).delete()
-    for game_id, rating in recommend[:100]:
-        try:
-            game = Game.objects.get(game_id=game_id)
-            images = Image.objects.filter(type_id = game_id)
-            recommendation = Recommendation(steam_id = steam_id, game_id = game.game_id, rating = rating)
-            recommendation.save()
-        except Exception as e:
-            print(game_id, e)
     return HttpResponse(status=HTTP_201_CREATED)
 
 def update_recommed():
