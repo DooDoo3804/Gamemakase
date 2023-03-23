@@ -31,7 +31,7 @@ public class ChatRestController {
   public ResponseEntity<ChatInsertRequestDto> sendChat(@RequestBody ChatInsertRequestDto requestDto) throws ClassNotFoundException{
 
     System.out.println("message보내기 성공");
-    chatService.insertChat(requestDto);
+//    chatService.insertChat(requestDto);
 //    MongoChat chat = chatService.findBySeq(insertChat);
 //    MongoChat chat2 = chatService.findByChatRoomId();
 
