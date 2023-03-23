@@ -24,6 +24,9 @@ import time
 # recommendation steam_id, game_id
 # rating steam_id, game_id
 
+'''
+rating의 steam_id -1부터 증가시키자
+'''
 
 def A(df, userid, steamid):
     user_game = GameHistory.objects.filter(user=userid)
@@ -171,11 +174,15 @@ def get_recommended_games(users):
         print(recommend[:5])
 
         games = []
-        Recommendation.objects.filter(steam_id=steam_id).delete()
-        for game_id, rating in recommend[:100]:
+    Recommendation.objects.filter(steam_id=steam_id).delete()
+    for game_id, rating in recommend[:100]:
+        try:
             game = Game.objects.get(game_id=game_id)
+            images = Image.objects.filter(type_id = game_id)
             recommendation = Recommendation(steam_id = steam_id, game_id = game.game_id, rating = rating)
             recommendation.save()
+        except Exception as e:
+            print(game_id, e)
 
 
 # small 데이터 추천 결과
@@ -216,11 +223,17 @@ def get_recommended_games_small(request, user_id):
     json_data_2 = df
     json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
     recommend = get_recommend(user_steamid, knn, json_data_2)
-
+    print(recommend)
+    
     Recommendation.objects.filter(steam_id=user_steamid).delete()
     for game_id, rating in recommend[:100]:
-        game = Game.objects.get(game_id=game_id)
-        images = Image.objects.filter(type_id = game_id)
+        try:
+            game = Game.objects.get(game_id=game_id)
+            images = Image.objects.filter(type_id = game_id)
+            recommendation = Recommendation(steam_id = user_steamid, game_id = game.game_id, rating = rating)
+            recommendation.save()
+        except Exception as e:
+            print(game_id, e)
         # new_game = {
         #     'game_id' : game_id,
         #     "game_name" : game.game_name, 
@@ -230,8 +243,6 @@ def get_recommended_games_small(request, user_id):
         # games.append(new_game)
 
         # recommendation 테이블에 저장
-        recommendation = Recommendation(steam_id = user_steamid, game_id = game.game_id, rating = rating)
-        recommendation.save()
 
 
     # serializer 주석 처리
@@ -251,15 +262,6 @@ def get_recommended_games_small(request, user_id):
     # }
     # print(context)
     return HttpResponse(status=HTTP_201_CREATED)
-
-
-
-
-
-
-
-
-
 
 
 # 스케줄러 관련
