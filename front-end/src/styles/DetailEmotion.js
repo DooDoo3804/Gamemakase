@@ -514,21 +514,21 @@ export const ReviewWrapper = styled.div`
   }
 
   .no-review {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 3rem 0rem;
+    font-family: "Noto Sans KR", serif;
 
     @media (min-width: 768px) {
-      height: 25rem;
-      font-size: 1rem;
+      font-size: 1.2rem;
     }
     @media (max-width: 768px) {
-      height: 20rem;
-      font-size: 0.8rem;
+      font-size: 1rem;
     }
     @media (max-width: 500px) {
-      height: 15rem;
-      font-size: 0.6rem;
+      font-size: 0.8rem;
     }
   }
 
