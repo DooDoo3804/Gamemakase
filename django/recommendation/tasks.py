@@ -17,7 +17,7 @@ from background_task import background
 def B(df, users):
     for user in users:
         userid = user.user_id
-        steamid = user.user_steam_id
+        steamid = user.user_id
 
         user_game = GameHistory.objects.filter(user=userid)
         print(user_game)
@@ -112,7 +112,7 @@ def get_recommended_games(users):
     print(f"cos_sim_df:{cos_sim_df[:30]}")
     print(users)
     for user in users:
-        steam_id = user.user_steam_id
+        steam_id = user.user_id
         print(steam_id)
         knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
         knn = list(knn.index)
@@ -126,10 +126,14 @@ def get_recommended_games(users):
 
         games = []
         Recommendation.objects.filter(steam_id=steam_id).delete()
-        for game_id, rating in recommend[:10]:
+    for game_id, rating in recommend[:100]:
+        try:
             game = Game.objects.get(game_id=game_id)
+            images = Image.objects.filter(type_id = game_id)
             recommendation = Recommendation(steam_id = steam_id, game_id = game.game_id, rating = rating)
             recommendation.save()
+        except Exception as e:
+            print(game_id, e)
 
 def update_recommed():
     print("start big data recommend start")

@@ -14,6 +14,7 @@ from django.core.paginator import Paginator
 import logging
 from background_task.models import Task
 from background_task import background
+from .tasks import update_recommed
 from apscheduler.schedulers.background import BackgroundScheduler
 import time
 
@@ -274,7 +275,7 @@ def job():
 def schedule_api():
     print("start big data recommend start")
     sched = BackgroundScheduler()
-    sched.add_job(job, 'cron', hour='14', minute='24', second='0')
+    sched.add_job(job, 'cron', hour='14', minute='26', second='0')
     try:
         sched.start()
     except Exception as e:
