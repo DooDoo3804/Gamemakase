@@ -1,5 +1,6 @@
 package com.gamemakase.domain.controller;
 
+import com.gamemakase.domain.model.dto.PopularGameResponseDto;
 import com.gamemakase.domain.model.dto.RecommendationResponseDto;
 import com.gamemakase.domain.model.service.RecommendationService;
 import com.gamemakase.global.Exception.NotFoundException;
@@ -45,6 +46,14 @@ public class RecommendationController {
             throws NotFoundException, TokenValidFailedException
     {
         return ResponseEntity.status(HttpStatus.OK).body(recommendationService.getByUserIdTest(pageNo, pageSize, userId));
+    }
+
+    @ApiOperation(value = "인기게임 추천", notes = "상위 100개 중에 12개씩 페이징 처리해서 랜덤으로 보냅니다")
+    @GetMapping("/api/recommend/popular")
+    public ResponseEntity<List<PopularGameResponseDto>> getPopular(
+            @RequestParam(name = "size", required = false) Integer pageSize
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(recommendationService.getTopGamesInRandomOrder(pageSize));
     }
 
 
