@@ -32,18 +32,15 @@ public class ChatRestController {
 
     System.out.println("message보내기 성공");
     chatService.insertChat(requestDto);
-//    MongoChat chat = chatService.findBySeq(insertChat);
-//    MongoChat chat2 = chatService.findByChatRoomId();
 
-//    ChatListResponse chatListResponse = new ChatListResponse(requestDto);
-    sendingOperations.convertAndSend("/sub/chat/" + requestDto.getChatRoomId(), requestDto);
-    System.out.println(requestDto.getChatRoomId());
+    sendingOperations.convertAndSend("/sub/chat/" +requestDto.getGameId() + requestDto.getChatRoomId(), requestDto);
     return ResponseEntity.status(HttpStatus.CREATED).body(requestDto);
   }
 
-  @GetMapping(value = "/chat/{chatRoomId}")
-  public ResponseEntity<List<ChatListResponse>> getChatByChatRoomNum(@PathVariable Long chatRoomId) throws ClassNotFoundException{
+  @GetMapping(value = "/chat/{gameId}/{chatRoomId}")
+  public ResponseEntity<List<ChatListResponse>> getChatByChatRoomNum(@PathVariable Long gameId, @PathVariable Long chatRoomId) throws ClassNotFoundException{
     System.out.println("조회 성공");
+
 
     List<MongoChat> chatList = chatService.findByRoomNumOrderByCreatedAtDesc(chatRoomId);
 
