@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface GameRepository extends JpaRepository<Game, Long> {
     Optional<Game> findByGameId(Long gameId);
     
-    @Query(value = "select * from game g where upper(g.game_name) like upper(:gameName) order by g.gameName"
+    @Query(value = "select * from game g where upper(g.game_name) like upper(:gameName) order by g.game_name"
     		, nativeQuery = true)
     Page<Game> findAllByGameNameLikeOrderByGameName(String gameName, Pageable pageable);
     
