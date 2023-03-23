@@ -95,52 +95,35 @@ const Sidebar = ({ gameData, sideView, setSideView, channel, setChannel }) => {
 const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
   const [sideView, setSideView] = useState(false);
   const [channel, setChannel] = useState(1);
-  const outSection = useRef();
-  const [message, setMessage] = useState("");
-  const client = useRef({});
-
   const [chatList, setChatList] = useState([]);
-  const tempData = [
-    {
-      id: "1",
-      chatRoomId: "1",
-      writerId: "1",
-      gameId: "1",
-      content: "첫번째 채팅입니다",
-      createdAt: "2023-03-03 14:39:20",
-    },
-    {
-      id: "2",
-      chatRoomId: "1",
-      writerId: "2",
-      gameId: "1",
-      content: "두번째 채팅입니다",
-      createdAt: "2023-03-03 14:39:19",
-    },
-    {
-      id: "3",
-      chatRoomId: "1",
-      writerId: "3",
-      gameId: "1",
-      content:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.      ",
-      createdAt: "2023-03-03 14:39:18",
-    },
-  ];
+  const [message, setMessage] = useState("");
+
+  const outSection = useRef();
+  const client = useRef({});
+  const chatRef = useRef();
+
+  const { openScroll } = useBodyScrollLock();
 
   // 임시로 설정해둔 인자 변수 (나중에 프론트에서 넣어주세요)
   const chatRoomId = 1;
   const userId = 1;
 
-  const { openScroll } = useBodyScrollLock();
-
   useEffect(() => {
     connect();
 
     return () => disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // todo : 채널 관련 설정
   useEffect(() => {}, [channel]);
+
+  // 채팅 새로 생기면 아래로 스크롤
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [chatList]);
 
   // connect: 웹소켓(stomp) 연결
   const connect = () => {
@@ -150,7 +133,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
 
       // 연결 확인용 출력 문구
       debug: function (str) {
-        console.log(str);
+        // console.log(str);
       },
 
       // 에러 발생 시 재연결 시도 딜레이
@@ -160,13 +143,13 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
 
       // 연결 시
       onConnect: () => {
-        console.log("success");
+        // console.log("success");
         subscribe(); // 메세지(채팅)을 받을 주소를 구독합니다.
       },
 
       // 에러 발생 시 로그 출력
       onStompError: (frame) => {
-        console.log(frame);
+        // console.log(frame);
       },
     });
 
@@ -179,18 +162,20 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
     // 구독한 주소로 메세지 받을 시 이벤트 발생
     // (/sub: 웹소켓 공통 구독 주소), (/chat: 기능별(1:1, 3:3, 친구 추가후) 구독 주소), (/chatRoomSeq: 하위 구독 주소(채팅방))
     client.current.subscribe("/sub/chat/" + chatRoomId, (body) => {
-      // 받아온 제이슨 파싱
       const json_body = JSON.parse(body.body);
 
-      console.log("메세지 받았당"); // 확인용 출력 (이처럼 메세지 수령 시 특정 이벤트를 발생 시킬 수 있습니다.)
-      console.log(body.body);
+      // 확인용 출력 (이처럼 메세지 수령 시 특정 이벤트를 발생 시킬 수 있습니다.)
+      // console.log("메세지 받았당");
+      // console.log(body.body);
 
-      // 받아온 채팅 채팅 리스트에 넣기 (이부분은 임시로 한 거고 이후 프론트에서 필요에 따라 받아온 메서지를 렌더링 하면 됩니다.)
       setChatList((_chat_list) => [
         ..._chat_list,
-        json_body.senderSeq,
-        json_body.message,
-        json_body.createdAt,
+        {
+          chatRoomId: json_body.chatRoomId,
+          writerId: json_body.writerId,
+          gameId: json_body.gameId,
+          content: json_body.content,
+        },
       ]);
     });
   };
@@ -199,13 +184,13 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
   const publish = () => {
     // 연결이 안되어있을 경우
     if (!client.current.connected) {
-      alert("연결이 안 되어있어");
+      alert("서버와 연결에 실패했습니다.");
       return;
     }
 
     // 입력된 메세지가 없는 경우
     if (!message) {
-      alert("메세지 입력 해");
+      alert("메시지를 입력해주세요.");
       return;
     }
 
@@ -221,15 +206,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
         chatRoomId: chatRoomId,
         gameId: gameData.gameId,
         writerId: userId,
-        // receiverSeq: receiverSeq,
       }),
-    });
-
-    console.log({
-      content: message,
-      chatRoomId: chatRoomId,
-      gameId: gameData.gameId,
-      writerId: userId,
     });
 
     // 보내고 메세지 초기화
@@ -238,7 +215,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
 
   // disconnect: 웹소켓 연결 끊기
   const disconnect = () => {
-    console.log("연결이 끊어졌습니다");
+    // console.log("연결이 끊어졌습니다");
     client.current.deactivate();
   };
 
@@ -262,33 +239,40 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
   const renderChatLogs = (chatLogs) => {
     const result = [];
 
-    // todo : motion.div 쓸지말지 결정하기
     if (chatLogs) {
-      <div className="my-msg-wrapper"></div>;
       for (let i = 0; i < chatLogs.length; i++) {
-        if (parseInt(chatLogs[i].writerId) === userId) {
-          result.push(
-            <div className="my-msg-wrapper" key={i}>
-              <motion.div
-                className="my message"
-                initial={{ opacity: 0, y: 500 }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-              >
-                {chatLogs[i].content}
-              </motion.div>
-            </div>
-          );
-        } else {
-          result.push(
-            <div className="others-msg-wrapper" key={i}>
-              <motion.div className="others message">
-                {chatLogs[i].content}
-              </motion.div>
-            </div>
-          );
+        if (chatLogs[i]) {
+          if (chatLogs[i].writerId === userId) {
+            result.push(
+              <div className="my-msg-wrapper" key={i}>
+                <motion.div
+                  className="my message"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                >
+                  {chatLogs[i].content}
+                </motion.div>
+              </div>
+            );
+          } else {
+            result.push(
+              <div className="others-msg-wrapper" key={i}>
+                <motion.div
+                  className="others message"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                >
+                  {chatLogs[i].content}
+                </motion.div>
+              </div>
+            );
+          }
         }
       }
     }
@@ -339,8 +323,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
                     onClick={() => handleClose()}
                   />
                 </SmallSidebar>
-                <div className="chat-logs">
-                  {renderChatLogs(tempData)}
+                <div className="chat-logs" ref={chatRef}>
                   {renderChatLogs(chatList)}
                 </div>
                 {/* todo : 메시지바는 로그인했을 때만 노출 */}
