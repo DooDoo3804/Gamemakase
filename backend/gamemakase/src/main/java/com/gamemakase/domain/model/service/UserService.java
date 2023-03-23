@@ -16,6 +16,5 @@ public interface UserService {
 
     HttpHeaders getAccessTokenByRefreshToken(String refreshToken);
 
-
-
+    void deleteUser(User user);
 }

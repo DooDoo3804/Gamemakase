@@ -12,17 +12,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ChatListResponse {
-  private Long sender;
-  private Long roomNum;
+  private long gameId;
+  private long chatRoomId;
+  private long writerId;
 
-  private Long receiver;
-
-  private String msg;
+  private String content;
 
   public ChatListResponse(MongoChat entity){
-    this.sender = entity.getSender();
-    this.receiver = entity.getReceiver();
-    this.msg = entity.getMsg();
-    this.roomNum = entity.getRoomNum();
+    this.chatRoomId = entity.getChatRoomId();
+    this.writerId = entity.getWriterId();
+    this.gameId = entity.getGameId();
+    this.content = entity.getContent();
   }
 }

@@ -25,7 +25,8 @@ public class JwtFilter extends GenericFilter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         System.out.println("JWT 토큰 조회 시작");
         String jwt = makeToken(httpServletRequest);
-        System.out.println(jwt);
+        System.out.println("jwt : "+jwt);
+
         String requestURI = httpServletRequest.getRequestURI();
         if(StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(jwt);    // authentication 객체 반환
