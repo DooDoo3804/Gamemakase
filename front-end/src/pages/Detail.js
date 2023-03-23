@@ -8,7 +8,6 @@ import {
   ChatBtn,
   DetailWrapper,
   FaStar,
-  LoadingWrapper,
   RecommendUsers,
   ReviewWrapper,
   SingleReview,
@@ -31,7 +30,7 @@ import {
   faStar as faRegularStar,
 } from "@fortawesome/free-regular-svg-icons";
 import no_game from "../assets/lottie/no-game.json";
-import reviewLoading from "../assets/tinyLoading.gif";
+import reviewLoadingImg from "../assets/tinyLoading.gif";
 import defaultUserImg from "../assets/profileImg.svg";
 
 import TranslucentBtn from "../components/TranslucentBtn";
@@ -83,6 +82,7 @@ const Detail = () => {
           setIsLoading(false);
         }
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -90,8 +90,10 @@ const Detail = () => {
       setReviewLoading(true);
       getReviews();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getReviews = useCallback(async () => {
     setReviewLoading(true);
 
@@ -387,7 +389,7 @@ const Detail = () => {
                 <div className="review-wrapper">{renderReviews()}</div>
                 {reviewLoading ? (
                   <div className="review-loading">
-                    <img src={reviewLoading} alt="loading..."></img>
+                    <img src={reviewLoadingImg} alt="loading..."></img>
                   </div>
                 ) : (
                   <div ref={ref} className="scroll-handler" />
