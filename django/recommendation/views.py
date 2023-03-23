@@ -220,53 +220,54 @@ def get_recommended_games_small(request, user_id):
     try:
         knn = cos_sim_df[user_steamid].sort_values(ascending=False)[:30]
         knn = list(knn.index)
-        return
+        json_data_2 = df
+        json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
+        recommend = get_recommend(user_steamid, knn, json_data_2)
+        print(recommend)
+        
+        Recommendation.objects.filter(steam_id=user_steamid).delete()
+        for game_id, rating in recommend[:100]:
+            try:
+                game = Game.objects.get(game_id=game_id)
+                images = Image.objects.filter(type_id = game_id)
+                recommendation = Recommendation(steam_id = user_steamid, game_id = game.game_id, rating = rating)
+                recommendation.save()
+            except Exception as e:
+                print(game_id, e)
+            # new_game = {
+            #     'game_id' : game_id,
+            #     "game_name" : game.game_name, 
+            #     "score" : rating,
+            #     "game_image" : images
+            # }
+            # games.append(new_game)
+
+            # recommendation 테이블에 저장
+
+
+        # serializer 주석 처리
+        # serializer = GameRecommendationSerializer(games, many=True)
+        
+        # # pagination
+        # p = Paginator(serializer.data, 5)
+        # page = {
+        #     'pageNum' : 1,
+        #     'size' : 5,
+        #     'count' : len(p.page(1)),
+        # }
+        
+        # context = {
+        #     'results' : serializer.data,
+        #     'page' : page
+        # }
+        # print(context)
+        return HttpResponse(status=HTTP_201_CREATED)
     except Exception as e:
         print(user_steamid, e)
+        return
     
 
-    json_data_2 = df
-    json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
-    recommend = get_recommend(user_steamid, knn, json_data_2)
-    print(recommend)
-    
-    Recommendation.objects.filter(steam_id=user_steamid).delete()
-    for game_id, rating in recommend[:100]:
-        try:
-            game = Game.objects.get(game_id=game_id)
-            images = Image.objects.filter(type_id = game_id)
-            recommendation = Recommendation(steam_id = user_steamid, game_id = game.game_id, rating = rating)
-            recommendation.save()
-        except Exception as e:
-            print(game_id, e)
-        # new_game = {
-        #     'game_id' : game_id,
-        #     "game_name" : game.game_name, 
-        #     "score" : rating,
-        #     "game_image" : images
-        # }
-        # games.append(new_game)
 
-        # recommendation 테이블에 저장
-
-
-    # serializer 주석 처리
-    # serializer = GameRecommendationSerializer(games, many=True)
-    
-    # # pagination
-    # p = Paginator(serializer.data, 5)
-    # page = {
-    #     'pageNum' : 1,
-    #     'size' : 5,
-    #     'count' : len(p.page(1)),
-    # }
-    
-    # context = {
-    #     'results' : serializer.data,
-    #     'page' : page
-    # }
-    # print(context)
-    return HttpResponse(status=HTTP_201_CREATED)
 
 
 # 스케줄러 관련
