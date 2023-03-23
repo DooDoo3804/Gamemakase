@@ -12,18 +12,18 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ChatInsertRequestDto {
 
-  private long roomNum;
-  private long sender;
-  private long receiver;
-  private String msg;
+  private long chatRoomId;
+  private long writerId;
+  private long gameId;
+  private String content;
 
-//  @Builder
-//  public MongoChat toEntity() {
-//    return MongoChat.builder()
-//        .msg(msg)
-//        .roomNum(roomNum)
-//        .sender(sender)
-//        .receiver(receiver)
-//        .build();
-//  }
+  @Builder
+  public MongoChat toEntity() {
+    return MongoChat.builder()
+        .content(content)
+        .chatRoomId(chatRoomId)
+        .writerId(writerId)
+        .gameId(gameId)
+        .build();
+  }
 }

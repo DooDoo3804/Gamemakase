@@ -21,6 +21,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     //the url is for Websocket handshake
     registry.addEndpoint("/ws")
         .setAllowedOriginPatterns("*");
-//        .withSockJS();  => apic로 테스트할 때는 주석처리, 프론트와 연동해서 테스트할 땐 주석 풀기
+//        .withSockJS();
+    //=> apic로 테스트할 때는 주석처리, 프론트와 연동해서 테스트할 땐 주석 풀기
   }
 }

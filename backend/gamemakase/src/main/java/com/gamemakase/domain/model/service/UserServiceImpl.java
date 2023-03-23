@@ -1,7 +1,6 @@
 package com.gamemakase.domain.model.service;
 
 import com.gamemakase.domain.model.dto.SignUpRequestDto;
-import com.gamemakase.domain.model.dto.UserRequestDto;
 import com.gamemakase.domain.model.entity.Authority;
 import com.gamemakase.domain.model.entity.Authority.AuthorityName;
 import com.gamemakase.domain.model.entity.User;
@@ -66,10 +65,12 @@ public class UserServiceImpl implements UserService {
         logger.info("ACCESS : {}",accessToken);
         logger.info("REFRESH : {}", refreshToken);
         logger.info("user UID : {}", user.getUserId());
+        logger.info("user SteamId : {}", user.getUserSteamId());
         logger.info("save refresh token");
 
         return new HashMap<String, Object>(){{
             put("userId", user.getUserId());
+            put("steamId", user.getUserSteamId());
             put("access-token", accessToken);
             put("refresh-token", refreshToken);
             put("name", user.getUserName());
@@ -96,5 +97,10 @@ public class UserServiceImpl implements UserService {
             httpHeaders.add(ACCESS_HEADER, "Bearer " + accessToken);
         }
         return httpHeaders;
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        userRepository.delete(user);
     }
 }
