@@ -696,31 +696,3 @@ export const ChatBtn = styled(motion.div)`
     font-size: 1.5rem;
   }
 `;
-
-export const LoadingWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  color: ${Common.colors.white01};
-  font-family: "Noto Sans KR", serif;
-
-  .title-text {
-    font-weight: 700;
-    transition: all 0.3s ease-in-out;
-    margin-top: 0;
-
-    @media (min-width: 768px) {
-      font-size: 2rem;
-    }
-    @media (max-width: 768px) {
-      font-size: 1.5rem;
-    }
-    @media (max-width: 500px) {
-      font-size: 1.2rem;
-    }
-  }
-
-  .info-text {
-    margin: 0.4rem 0rem;
-  }
-`;
