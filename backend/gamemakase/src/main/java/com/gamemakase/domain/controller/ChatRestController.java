@@ -15,6 +15,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -27,22 +28,27 @@ public class ChatRestController {
 
   //front와 연동할 때는 인자 값에 @RequestBody 어노테이션 추가
   @MessageMapping("/send")
-  public ResponseEntity<ChatListResponse> sendChat(ChatInsertRequestDto requestDto) throws ClassNotFoundException{
+  public ResponseEntity<ChatInsertRequestDto> sendChat(@RequestBody ChatInsertRequestDto requestDto) throws ClassNotFoundException{
 
     System.out.println("message보내기 성공");
-    String insertChat = chatService.insertChat(requestDto);
-    MongoChat chat = chatService.findBySeq(insertChat);
+    chatService.insertChat(requestDto);
+//    MongoChat chat = chatService.findBySeq(insertChat);
+//    MongoChat chat2 = chatService.findByChatRoomId();
 
-    ChatListResponse chatListResponse = new ChatListResponse(chat);
-    sendingOperations.convertAndSend("/sub/chat/" + chat.getRoomNum(), chatListResponse);
-
-    return ResponseEntity.status(HttpStatus.CREATED).body(chatListResponse);
+//    ChatListResponse chatListResponse = new ChatListResponse(requestDto);
+    sendingOperations.convertAndSend("/sub/chat/" + requestDto.getChatRoomId(), requestDto);
+    System.out.println(requestDto.getChatRoomId());
+    return ResponseEntity.status(HttpStatus.CREATED).body(requestDto);
   }
 
-  @GetMapping(value = "/chat/{roomNum}")
-  public ResponseEntity<List<ChatListResponse>> getChatByChatRoomNum(@PathVariable Long roomNum) throws ClassNotFoundException{
+  @GetMapping(value = "/chat/{chatRoomId}")
+  public ResponseEntity<List<ChatListResponse>> getChatByChatRoomNum(@PathVariable Long chatRoomId) throws ClassNotFoundException{
     System.out.println("조회 성공");
-    List<MongoChat> chatList = chatService.findByRoomNumOrderByCreatedAtDesc(roomNum);
+
+    List<MongoChat> chatList = chatService.findByRoomNumOrderByCreatedAtDesc(chatRoomId);
+
+//    List<ChatListResponse> chatResList = chatList.stream().map(ChatListResponse::new).collect(
+//        Collectors.toList());
 
     List<ChatListResponse> chatResList = chatList.stream().map(ChatListResponse::new).collect(
         Collectors.toList());

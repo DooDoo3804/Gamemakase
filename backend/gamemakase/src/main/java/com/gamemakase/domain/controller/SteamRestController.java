@@ -38,8 +38,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @RequiredArgsConstructor
 public class SteamRestController{
   static final String PLAYER_SUMMARIES_BASE_URL = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/";
-  static final String KEY = "5CD56CE3B454EDB2502D85A6C39E55D0";
-
+//  static final String KEY = "5CD56CE3B454EDB2502D85A6C39E55D0";
+  static final String KEY = "C148F5B21C5FBC3BB556671569985F8C";
   private static final String STEAM_OPENID = "http://steamcommunity.com/openid";
   @PostMapping(value = "/member/{steamID}")
   public static JSONArray getMemberData(@PathVariable("steamID") String steamID) throws NullPointerException, IOException, ParseException {

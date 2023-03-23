@@ -13,5 +13,7 @@ public interface ChatRepository extends MongoRepository<MongoChat, String> {
   MongoChat findBySeq(String seq);
   MongoChat findTopByOrderByCreatedAtDesc();
 
-  List<MongoChat> findByRoomNumOrderByCreatedAtDesc(Long roomNum);
+  MongoChat findByChatRoomId(long chatRoomId);
+
+  List<MongoChat> findBychatRoomIdOrderByCreatedAtDesc(Long chatRoomId);
 }
