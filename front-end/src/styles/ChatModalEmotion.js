@@ -195,7 +195,77 @@ export const ChatRoomBody = styled.div`
   );
 
   .chat-logs {
-    height: 100%;
+    margin: 1rem;
+    font-family: "Noto Sans KR", serif;
+    transition: all 0.3s ease-in-out;
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* 인터넷 익스플로러는 스타일 적용 안될 수도 있어서 hidden 처리 */
+
+    @media (min-width: 768px) {
+      height: calc(100% - 12rem);
+    }
+    @media (max-width: 768px) {
+      height: calc(100% - 11rem);
+    }
+    @media (max-width: 500px) {
+      height: calc(100% - 9rem);
+    }
+
+    .my-msg-wrapper {
+      display: flex;
+      justify-content: end;
+    }
+
+    .others-msg-wrapper {
+      display: flex;
+      justify-content: start;
+    }
+
+    .message {
+      padding: 0.9rem 1.2rem;
+      margin: 0.5rem;
+      min-width: 0rem;
+      display: flex;
+      line-height: 1.8rem;
+
+      @media (min-width: 1024px) {
+        max-width: 35rem;
+        border-radius: 2rem;
+      }
+      @media (max-width: 1024px) {
+        max-width: 30rem;
+        border-radius: 2rem;
+      }
+      @media (max-width: 768px) {
+        max-width: 20rem;
+        border-radius: 2rem;
+      }
+      @media (max-width: 500px) {
+        max-width: 15rem;
+        border-radius: 2rem;
+      }
+    }
+
+    .my {
+      background-color: ${Common.colors.mainColor05};
+    }
+
+    .others {
+      background-color: ${Common.colors.mainColor04};
+    }
+  }
+
+  .chat-logs::-webkit-scrollbar {
+    width: 0.2rem;
+  }
+
+  .chat-logs::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 1rem;
+  }
+
+  .chat-logs::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
   }
 
   .messagebar-wrapper {
