@@ -217,7 +217,10 @@ def get_recommended_games_small(request, user_id):
     cos_sim_matrix = cosine_similarity(pivot_table.fillna(0))
     cos_sim_df = pd.DataFrame(
         cos_sim_matrix, columns=pivot_table.index, index=pivot_table.index)
-    knn = cos_sim_df[user_steamid].sort_values(ascending=False)[:30]
+    try:
+        knn = cos_sim_df[user_steamid].sort_values(ascending=False)[:30]
+    except Exception as e:
+        print(user_steamid, e)
     knn = list(knn.index)
 
     json_data_2 = df
