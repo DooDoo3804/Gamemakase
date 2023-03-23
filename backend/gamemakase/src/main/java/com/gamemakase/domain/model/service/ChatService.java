@@ -7,6 +7,7 @@ import java.util.List;
 public interface ChatService {
 
   MongoChat findBySeq(String seq);
+  MongoChat findByChatRoomId(long chatRoomId);
   String insertChat(ChatInsertRequestDto requestDto);
   List<MongoChat> findByRoomNumOrderByCreatedAtDesc(Long roomNum);
 

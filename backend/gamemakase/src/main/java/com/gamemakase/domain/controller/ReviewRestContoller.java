@@ -1,7 +1,9 @@
 package com.gamemakase.domain.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -36,9 +38,9 @@ import lombok.RequiredArgsConstructor;
 @Api(value = "리뷰 관련 컨트롤러")
 @RestController
 @RequiredArgsConstructor
-public class ReviewContoller {
+public class ReviewRestContoller {
 
-	private final Logger logger = LoggerFactory.getLogger(ReviewContoller.class);
+	private final Logger logger = LoggerFactory.getLogger(ReviewRestContoller.class);
 	private final ReviewService reviewService;
 	private final ProfileService profileService;
 	private final JwtTokenProvider jwtTokenProvider;
@@ -48,7 +50,7 @@ public class ReviewContoller {
 	public ResponseEntity<List<GameReviewResponseDto>> getReviewsByGameId (
 			@PathVariable(value = "gameId", required = true) @ApiParam(required = true) long gameId,
 			@RequestParam(required = false) @ApiParam(required = false) int pageNo
-			) throws NotFoundException {
+			) throws NotFoundException, IOException, ParseException {
 		logger.info("getReviewsByGameId : gameId, pageNo : {}", gameId, pageNo);
 		List<GameReviewResponseDto> result = reviewService.getReviewsByGameId(gameId, pageNo);
 		return new ResponseEntity<List<GameReviewResponseDto>>(result, HttpStatus.OK);
@@ -59,7 +61,7 @@ public class ReviewContoller {
 	public ResponseEntity<List<GameReviewResponseDto>> insertReview (
 			@RequestHeader(value = "accessToken", required = true) @ApiParam(required = true) String token,
 			@RequestBody @ApiParam(required = true) ReviewInsertRequestDto reviewRequest
-			) throws NotFoundException, TokenValidFailedException, UnAuthorizedException {
+			) throws NotFoundException, TokenValidFailedException, UnAuthorizedException, IOException, ParseException {
 		logger.info("insertReview : requestdto : {}", reviewRequest);
 		reviewService.insertReview(reviewRequest, token);
 		List<GameReviewResponseDto> result = reviewService.getReviewsByGameId(reviewRequest.getGameId(), 0);
@@ -71,7 +73,7 @@ public class ReviewContoller {
 	public ResponseEntity<List<GameReviewResponseDto>> editReview(
 			@RequestHeader(value = "accessToken", required = true) @ApiParam(required = true) String token,
 			@RequestBody @ApiParam(required = true) ReviewUpdateRequestDto reviewRequest
-			) throws NotFoundException, TokenValidFailedException, UnAuthorizedException {
+			) throws NotFoundException, TokenValidFailedException, UnAuthorizedException, IOException, ParseException {
 		logger.info("editReview : requestdto : {}", reviewRequest);
 		Review review = reviewService.updateReview(reviewRequest, token);
 		List<GameReviewResponseDto> result = reviewService.getReviewsByGameId(review.getGame().getGameId(), 0);
@@ -95,7 +97,7 @@ public class ReviewContoller {
 	public ResponseEntity<List<GameReviewResponseDto>> deleteReview(
 			@RequestHeader(value = "accessToken", required = true) @ApiParam(required = true) String token,
 			@PathVariable(value = "reviewId", required = true) @ApiParam(required = true) long reviewId
-			) throws NotFoundException, TokenValidFailedException {
+			) throws NotFoundException, TokenValidFailedException, IOException, ParseException {
 		logger.info("deleteReview : reviewId : {}", reviewId);
 		long gameId = reviewService.deleteReview(reviewId, token);
 		List<GameReviewResponseDto> result = reviewService.getReviewsByGameId(gameId, 0);

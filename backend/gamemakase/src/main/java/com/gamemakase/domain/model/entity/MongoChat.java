@@ -18,18 +18,18 @@ public class MongoChat {
   @Id
   @Field(value = "_id", targetType = FieldType.OBJECT_ID)
   private String seq;
-  private String msg;
-  private Long sender;
-  private Long receiver;
-  private Long roomNum;
+  private String content;
+  private long writerId;
+  private long gameId;
+  private long chatRoomId;
   @CreatedDate
   private LocalDateTime createdAt;
 
   @Builder
-  public MongoChat(String msg, Long roomNum, Long sender, Long receiver){
-    this.msg = msg;
-    this.roomNum = roomNum;
-    this.sender = sender;
-    this.receiver = receiver;
+  public MongoChat(String content, long chatRoomId, long writerId, long gameId){
+    this.content = content;
+    this.chatRoomId = chatRoomId;
+    this.writerId = writerId;
+    this.gameId = gameId;
   }
 }

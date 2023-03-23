@@ -18,12 +18,17 @@ public class ChatServiceImpl implements ChatService{
   }
 
   @Override
+  public MongoChat findByChatRoomId(long chatRoomId) {
+    return chatRepository.findByChatRoomId(chatRoomId);
+  }
+
+  @Override
   public String insertChat(ChatInsertRequestDto requestDto) {
     MongoChat chat = MongoChat.builder()
-        .roomNum(requestDto.getRoomNum())
-        .receiver(requestDto.getReceiver())
-        .sender(requestDto.getSender())
-        .msg(requestDto.getMsg())
+        .chatRoomId((int) requestDto.getChatRoomId())
+        .writerId((int) requestDto.getWriterId())
+        .gameId((int) requestDto.getGameId())
+        .content(requestDto.getContent())
         .build();
 
     MongoChat insert = chatRepository.insert(chat);
@@ -32,7 +37,7 @@ public class ChatServiceImpl implements ChatService{
   }
 
   @Override
-  public List<MongoChat> findByRoomNumOrderByCreatedAtDesc(Long roomNum){
-    return chatRepository.findByRoomNumOrderByCreatedAtDesc(roomNum);
+  public List<MongoChat> findByRoomNumOrderByCreatedAtDesc(Long chatRoomId){
+    return chatRepository.findBychatRoomIdOrderByCreatedAtDesc(chatRoomId);
   }
 }

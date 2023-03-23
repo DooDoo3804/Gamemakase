@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.gamemakase.domain.model.vo.GenreScoreVo;
 import com.gamemakase.domain.model.vo.PaginationVo;
-import com.gamemakase.domain.model.vo.ScrapInfoVo;
-import com.gamemakase.domain.model.vo.UserInfoResponseVo;
+import com.gamemakase.domain.model.vo.GameInfoVo;
+import com.gamemakase.domain.model.vo.UserInfoVo;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +17,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ProfileInfoResponseDto {
-	private UserInfoResponseVo user;
+	private UserInfoVo user;
 	private List<GenreScoreVo> statistics;
-	private List<ScrapInfoVo> scrap;
+	private List<GameInfoVo> scrap;
 	private PaginationVo page;
 }
