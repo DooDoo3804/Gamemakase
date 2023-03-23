@@ -222,7 +222,7 @@ def get_recommended_games_small(request, user_id):
         knn = list(knn.index)
     except Exception as e:
         print(user_steamid, e)
-        return
+        return HttpResponse(status=HTTP_201_CREATED)
     
 
     json_data_2 = df
