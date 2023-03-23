@@ -218,42 +218,50 @@ const Detail = () => {
   const renderReviews = () => {
     const result = [];
 
-    for (let i = 0; i < reviewData.length; i++) {
-      result.push(
-        <SingleReview
-          key={reviewData[i].reviewId}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-            transition: { delay: 0.1 },
-          }}
-        >
-          <div className="profile-wrapper">
-            <div
-              className="profile-img-wrapper"
-              onClick={() => navigate(`/profile/${reviewData[i].userId}`)}
-            >
-              <img
-                src={
-                  reviewData[i].userImagePath
-                    ? reviewData[i].userImagePath
-                    : defaultUserImg
-                }
-                alt="profile"
-                className="profile-img"
-              />
-            </div>
-            <div className="profile-content-wrapper">
-              <p className="user-name">{reviewData[i].userName}</p>
-              <div className="star-wrapper">
-                {renderStars(reviewData[i].reviewGrade)}
+    if (reviewData.length) {
+      for (let i = 0; i < reviewData.length; i++) {
+        result.push(
+          <SingleReview
+            key={reviewData[i].reviewId}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+              transition: { delay: 0.1 },
+            }}
+          >
+            <div className="profile-wrapper">
+              <div
+                className="profile-img-wrapper"
+                onClick={() => navigate(`/profile/${reviewData[i].userId}`)}
+              >
+                <img
+                  src={
+                    reviewData[i].userImagePath
+                      ? reviewData[i].userImagePath
+                      : defaultUserImg
+                  }
+                  alt="profile"
+                  className="profile-img"
+                />
+              </div>
+              <div className="profile-content-wrapper">
+                <p className="user-name">{reviewData[i].userName}</p>
+                <div className="star-wrapper">
+                  {renderStars(reviewData[i].reviewGrade)}
+                </div>
               </div>
             </div>
-          </div>
-          <p className="review-title">{reviewData[i].reviewTitle}</p>
-          <p className="review-content">{reviewData[i].reviewContent}</p>
-        </SingleReview>
+            <p className="review-title">{reviewData[i].reviewTitle}</p>
+            <p className="review-content">{reviewData[i].reviewContent}</p>
+          </SingleReview>
+        );
+      }
+    } else {
+      result.push(
+        <div key={0} className="no-review">
+          <p>리뷰가 존재하지 않습니다.</p>
+        </div>
       );
     }
 
@@ -395,11 +403,7 @@ const Detail = () => {
                   <div ref={ref} className="scroll-handler" />
                 )}
               </>
-            ) : (
-              <div className="no-review">
-                <p>작성된 리뷰가 없습니다.</p>
-              </div>
-            )}
+            ) : null}
           </ReviewWrapper>
         </DetailWrapper>
       ) : (
