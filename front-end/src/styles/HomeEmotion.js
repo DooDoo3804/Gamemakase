@@ -20,13 +20,24 @@ export const HomeWrapper = styled.div`
 `;
 
 export const Banner = styled.div`
-  height: 15rem;
   color: ${Common.colors.lightGray01};
   background: linear-gradient(
     to bottom,
     ${Common.colors.mainColor02},
     ${Common.colors.lavender01}
   );
+
+  transition: all 0.3s ease-in-out;
+
+  @media (min-width: 768px) {
+    height: 17rem;
+  }
+  @media (max-width: 768px) {
+    height: 15rem;
+  }
+  @media (max-width: 500px) {
+    height: 15rem;
+  }
 
   .banner1 {
     display: flex;
