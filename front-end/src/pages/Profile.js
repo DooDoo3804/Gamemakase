@@ -129,12 +129,6 @@ const Profile = () => {
         }
       })
       .catch((error) => {
-        // if (error.response.status === 500) {
-        //   navigate("/500");
-        // } else if (error.response.status === 404) {
-        //   navigate("/*")
-        // }
-        // error logic
       });
   }, [userId]);
 
@@ -454,7 +448,7 @@ const Profile = () => {
         reviewsData != null &&
         reviewsData.length > 0 ? (
           <>
-            <div className="review-header">내가 작성한 리뷰</div>
+            <div className="review-header">작성한 리뷰</div>
             <div className="review-wrapper">{reivewRend()}</div>
             {reviewPaging()}
           </>
