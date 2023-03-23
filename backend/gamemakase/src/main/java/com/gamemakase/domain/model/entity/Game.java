@@ -57,4 +57,21 @@ public class Game {
 
   @Column(name = "linux")
   private boolean linux;
+
+  @Column(name = "peak_ccu")
+  private Integer peakCcu;
+
+  @Column(name = "average_playtime_2weeks")
+  private Integer averagePlaytime2Weeks;
+
+  @Column(name = "recommendations")
+  private Integer recommendations;
+
+  @Column(name = "estimated_owners")
+  private String estimatedOwners;
+
+  @Column(name = "reviews")
+  private String reviews;
+
+
 }

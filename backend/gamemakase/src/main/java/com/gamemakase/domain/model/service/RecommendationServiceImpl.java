@@ -1,9 +1,12 @@
 package com.gamemakase.domain.model.service;
 
+import com.gamemakase.domain.model.dto.PopularGameResponseDto;
 import com.gamemakase.domain.model.dto.RecommendationResponseDto;
+import com.gamemakase.domain.model.entity.Game;
 import com.gamemakase.domain.model.entity.Image;
 import com.gamemakase.domain.model.entity.Recommendation;
 import com.gamemakase.domain.model.entity.User;
+import com.gamemakase.domain.model.repository.GameRepository;
 import com.gamemakase.domain.model.repository.ImageRepository;
 import com.gamemakase.domain.model.repository.RecommendationRepository;
 import com.gamemakase.domain.model.repository.UserRepository;
@@ -18,7 +21,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +35,7 @@ public class RecommendationServiceImpl implements RecommendationService {
     private final ImageRepository imageRepository;
     private final RecommendationRepository recommendationRepository;
     private final Logger logger = LoggerFactory.getLogger(RecommendationServiceImpl.class);
+    private final GameRepository gameRepository;
 
 
 
@@ -52,6 +58,8 @@ public class RecommendationServiceImpl implements RecommendationService {
         Long userSteamId = userRepository.findById(userId).get().getUserSteamId();
 
 //        페이징 객체 및 추천 결과
+        pageNo = Optional.ofNullable(pageNo).orElse(0);
+        pageSize = Optional.ofNullable(pageSize).orElse(12);
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Recommendation> recommendations = recommendationRepository.findAllByUserUserSteamIdOrderByRatingDesc(userSteamId, pageable);
 
@@ -87,6 +95,8 @@ public class RecommendationServiceImpl implements RecommendationService {
         Long userSteamId = userRepository.findById(Long.parseLong(userId)).get().getUserSteamId();
 
 //        페이징 객체 및 추천 결과
+        pageNo = Optional.ofNullable(pageNo).orElse(0);
+        pageSize = Optional.ofNullable(pageSize).orElse(12);
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Recommendation> recommendations = recommendationRepository.findAllByUserUserSteamIdOrderByRatingDesc(userSteamId, pageable);
 
@@ -101,6 +111,31 @@ public class RecommendationServiceImpl implements RecommendationService {
                         .rating(recommendation.getRating())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PopularGameResponseDto> getTopGamesInRandomOrder(Integer pageSize) {
+
+//        페이지 사이즈 (기본 12)
+        pageSize = Optional.ofNullable(pageSize).orElse(12);
+
+//        인기게임 100개
+        List<Game> top100 = gameRepository.findTop100ByOrderByPeakCcuDesc();
+
+//        랜덤 개수
+        Collections.shuffle(top100);
+        List<Game> games = top100.subList(0, Math.min(pageSize, top100.size()));
+
+        return games.stream()
+                .map(r -> PopularGameResponseDto.builder()
+                        .gameId(r.getGameId())
+                        .gameName(r.getGameName())
+                        .gameImage(imageRepository.findByTypeAndTypeId("GAME_HEADER", r.getGameId())
+                                .map(Image::getImagePath)
+                                .orElse(""))
+                        .build())
+                .collect(Collectors.toList());
+
     }
 }
 
