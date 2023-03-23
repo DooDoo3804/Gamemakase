@@ -41,7 +41,7 @@ public class RecommendationController {
     public ResponseEntity<List<RecommendationResponseDto>> getByUserId(
             @RequestParam(name = "page", required = false) Integer pageNo,
             @RequestParam(name = "size", required = false) Integer pageSize,
-            @PathVariable String userId
+            @PathVariable Long userId
     )
             throws NotFoundException, TokenValidFailedException
     {
