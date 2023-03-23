@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BACKEND_URL } from "../config";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router";
 //Components
 import Tag from "../components/Tag";
 import CheckBox from "../components/CheckBox";
@@ -15,15 +16,16 @@ import {
   UserSearchResultsWrapper,
 } from "../styles/SearchEmotion";
 
-//임시
-import gameImg from "../assets/임시게임이미지.svg";
-
 const Search = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  
   const [userName, setUserName] = useState(String);
   const [searchHistory, setSearchHistory] = useState([]);
+  const [searchGameResults, setSearchGameResults] = useState([]);
+  const [searchUserResults, setSearchUserResults] = useState([]);
+
   const [genreCheckedList, setGenreCheckList] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
   const [priceStr, setPriceStr] = useState("Any Price");
   const [isMulti, setIsMulti] = useState(false);
   const [isKoreanSupport, setIsKoreanSupport] = useState(false);
@@ -59,55 +61,31 @@ const Search = () => {
   const priceLimitArr = [
     0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 99999999,
   ];
+  
+  useEffect(() => {
+    dataSetting();
+  }, []);
 
   const priceInput = useRef();
-
+  
   const dataSetting = () => {
-    setUserName("Name");
-    const getSeachHistory = ["star", "universe"];
-    setSearchResults({
-      games: [
-        {
-          gameId: 1,
-          title: "title",
-          imgUrl: { gameImg },
-          price: 50,
-          window: true,
-          apple: true,
-          linux: false,
-        },
-        {
-          gameId: 2,
-          title: "title",
-          imgUrl: { gameImg },
-          price: 50,
-          window: true,
-          apple: true,
-          linux: true,
-        },
-      ],
-      users: [
-        {
-          userId: 1,
-          profileImg: { gameImg },
-          name: "star",
-          online: true,
-        },
-        {
-          userId: 2,
-          profileImg: { gameImg },
-          name: "starload",
-          online: false,
-        },
-        {
-          userId: 3,
-          profileImg: { gameImg },
-          name: "starking",
-          online: true,
-        },
-      ],
-    });
-    setSearchHistory(getSeachHistory);
+    console.log();
+    axios
+    .get(`${BACKEND_URL}api/search`, {
+      params: {
+        niddle: "",
+        gamePageNo: 0,
+        userPageNo: 0,
+      },
+    })
+    .then((response) => {
+      setSearchGameResults(response.data.games);
+      setSearchUserResults(response.data.users);
+      setUserName("Name");
+      const getSeachHistory = ["star", "universe"];
+      setSearchHistory(getSeachHistory);
+    })
+    .catch((error) => {});
   };
 
   //////////////////////////////////
@@ -173,9 +151,6 @@ const Search = () => {
     }
   };
 
-  useEffect(() => {
-    dataSetting();
-  }, []);
 
   const tagDelete = (value) => {
     console.log(value + "delete");
@@ -325,25 +300,22 @@ const Search = () => {
     const gameResultsRend = () => {
       const result = [];
       if (
-        searchResults &&
-        searchResults.games &&
-        searchResults.games.length > 0
+        searchGameResults &&
+        searchGameResults.length > 0
       ) {
-        let idx = 0;
-        searchResults.games.forEach((e) => {
+        searchGameResults.forEach((e) => {
           result.push(
             <GameClip
-              key={idx}
-              title={e.title}
+              key={e.gameId}
+              title={e.gameName}
               gameId={e.gameId}
-              imgUrl={e.imgUrl.gameImg}
+              imgUrl={e.imagePath}
               price={e.price}
               window={e.window}
               apple={e.apple}
               linux={e.linux}
             ></GameClip>
           );
-          idx++;
         });
       } else {
         result.push(
@@ -381,19 +353,18 @@ const Search = () => {
     const userResultsRend = () => {
       const result = [];
       if (
-        searchResults &&
-        searchResults.users &&
-        searchResults.users.length > 0
+        searchUserResults &&
+        searchUserResults.length > 0
       ) {
         let idx = 0;
-        searchResults.users.forEach((e) => {
+        searchUserResults.forEach((e) => {
           result.push(
             <ProfileCircle
-              key={idx}
+              key={e.userId}
               userId={e.userId}
-              profileImg={e.profileImg.gameImg}
-              name={e.name}
-              online={e.online}
+              profileImg={e.userImagePath}
+              name={e.userName}
+              online={e.state}
             ></ProfileCircle>
           );
           idx++;

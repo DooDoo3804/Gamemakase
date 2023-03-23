@@ -8,7 +8,6 @@ import {
   ChatBtn,
   DetailWrapper,
   FaStar,
-  LoadingWrapper,
   RecommendUsers,
   ReviewWrapper,
   SingleReview,
@@ -31,9 +30,8 @@ import {
   faStar as faRegularStar,
 } from "@fortawesome/free-regular-svg-icons";
 import no_game from "../assets/lottie/no-game.json";
-import reviewLoading from "../assets/tinyLoading.gif";
+import reviewLoadingImg from "../assets/tinyLoading.gif";
 import defaultUserImg from "../assets/profileImg.svg";
-import loading from "../assets/lottie/loading.json";
 
 import TranslucentBtn from "../components/TranslucentBtn";
 import useBodyScrollLock from "../components/ScrollLock";
@@ -41,6 +39,7 @@ import ChatModal from "../components/ChatModal";
 
 import { BACKEND_URL } from "../config";
 import { useInView } from "react-intersection-observer";
+import LoadingPage from "../components/LoadingPage";
 
 const Detail = () => {
   const navigate = useNavigate();
@@ -83,6 +82,7 @@ const Detail = () => {
           setIsLoading(false);
         }
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -90,8 +90,10 @@ const Detail = () => {
       setReviewLoading(true);
       getReviews();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getReviews = useCallback(async () => {
     setReviewLoading(true);
 
@@ -275,13 +277,7 @@ const Detail = () => {
   };
 
   if (isLoading) {
-    return (
-      <LoadingWrapper>
-        <Lottie options={options(loading)} height={300} width={300}></Lottie>
-        <p className="title-text">페이지를 불러오는 중입니다.</p>
-        <p className="info-text">잠시만 기다려주세요.</p>
-      </LoadingWrapper>
-    );
+    return <LoadingPage></LoadingPage>;
   }
 
   return (
@@ -393,7 +389,7 @@ const Detail = () => {
                 <div className="review-wrapper">{renderReviews()}</div>
                 {reviewLoading ? (
                   <div className="review-loading">
-                    <img src={reviewLoading} alt="loading..."></img>
+                    <img src={reviewLoadingImg} alt="loading..."></img>
                   </div>
                 ) : (
                   <div ref={ref} className="scroll-handler" />
