@@ -63,7 +63,7 @@ def A(df, userid, steamid):
 def B(df, users):
     for user in users:
         userid = user.user_id
-        steamid = user.user_steam_id
+        steamid = user.user_id
 
         user_game = GameHistory.objects.filter(user=userid)
         print(user_game)
@@ -162,7 +162,7 @@ def get_recommended_games(users):
         cos_sim_matrix, columns=pivot_table.index, index=pivot_table.index)
     print(f"cos_sim_df:{cos_sim_df[:30]}")
     for user in users:
-        steam_id = user.user_steam_id
+        steam_id = user.user_id
         knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
         knn = list(knn.index)
 
@@ -207,7 +207,7 @@ def get_recommended_games_small(request, user_id):
 
     # 가까운 유저 찾아서 테이블에 반영
     print(df.tail(10))
-    user_steamid = User.objects.get(user_id = user_id).user_steam_id
+    user_steamid = user_id
     print(user_steamid)
     df = A(df, user_id, user_steamid)
     print(df.tail(10))
@@ -275,7 +275,7 @@ def job():
 def schedule_api():
     print("start big data recommend start")
     sched = BackgroundScheduler()
-    sched.add_job(job, 'cron', hour='13', minute='30', second='0')
+    sched.add_job(job, 'cron', hour='14', minute='16', second='0')
     try:
         sched.start()
     except Exception as e:
