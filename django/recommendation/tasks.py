@@ -116,9 +116,10 @@ def get_recommended_games(users):
         print(steam_id)
         try:
             knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
+            knn = list(knn.index)
         except Exception as e:
             print(e, steam_id)
-        knn = list(knn.index)
+        
 
 
         json_data_2 = df

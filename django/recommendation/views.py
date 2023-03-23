@@ -219,9 +219,10 @@ def get_recommended_games_small(request, user_id):
         cos_sim_matrix, columns=pivot_table.index, index=pivot_table.index)
     try:
         knn = cos_sim_df[user_steamid].sort_values(ascending=False)[:30]
+        knn = list(knn.index)
     except Exception as e:
         print(user_steamid, e)
-    knn = list(knn.index)
+    
 
     json_data_2 = df
     json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
