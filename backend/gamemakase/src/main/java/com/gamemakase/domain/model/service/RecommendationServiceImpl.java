@@ -54,14 +54,14 @@ public class RecommendationServiceImpl implements RecommendationService {
             throw new TokenValidFailedException("유효하지 않은 토큰값입니다.");
         }
 
-//        스팀아이디
-        Long userSteamId = userRepository.findById(userId).get().getUserSteamId();
+//        스팀아이디 -> 디비 변경으로 주석처리
+//        Long userSteamId = userRepository.findById(userId).get().getUserSteamId();
 
 //        페이징 객체 및 추천 결과
         pageNo = Optional.ofNullable(pageNo).orElse(0);
         pageSize = Optional.ofNullable(pageSize).orElse(12);
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Recommendation> recommendations = recommendationRepository.findAllByUserUserSteamIdOrderByRatingDesc(userSteamId, pageable);
+        Page<Recommendation> recommendations = recommendationRepository.findAllByUserUserIdOrderByRatingDesc(userId, pageable);
 
 //        DTO로 반환
         return recommendations.stream()
@@ -77,7 +77,7 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
 
     @Override
-    public List<RecommendationResponseDto> getByUserIdTest(Integer pageNo, Integer pageSize, String userId) throws NotFoundException, TokenValidFailedException {
+    public List<RecommendationResponseDto> getByUserIdTest(Integer pageNo, Integer pageSize, Long userId) throws NotFoundException, TokenValidFailedException {
 
 ////        유저 파싱 및 예외처리
 //        String userIdStr = jwtTokenProvider.getUserId(token);
@@ -91,14 +91,14 @@ public class RecommendationServiceImpl implements RecommendationService {
 //            throw new TokenValidFailedException("유효하지 않은 토큰값입니다.");
 //        }
 
-//        스팀아이디
-        Long userSteamId = userRepository.findById(Long.parseLong(userId)).get().getUserSteamId();
+//        스팀아이디 -> 디비 변경으로 주석처리
+//        Long userSteamId = userRepository.findById(Long.parseLong(userId)).get().getUserSteamId();
 
 //        페이징 객체 및 추천 결과
         pageNo = Optional.ofNullable(pageNo).orElse(0);
         pageSize = Optional.ofNullable(pageSize).orElse(12);
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Recommendation> recommendations = recommendationRepository.findAllByUserUserSteamIdOrderByRatingDesc(userSteamId, pageable);
+        Page<Recommendation> recommendations = recommendationRepository.findAllByUserUserIdOrderByRatingDesc(userId, pageable);
 
 //        DTO로 반환
         return recommendations.stream()
