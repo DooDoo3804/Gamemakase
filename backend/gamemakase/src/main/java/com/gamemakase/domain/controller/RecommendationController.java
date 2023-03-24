@@ -1,6 +1,6 @@
 package com.gamemakase.domain.controller;
 
-import com.gamemakase.domain.model.dto.PopularGameResponseDto;
+import com.gamemakase.domain.model.dto.GameResponseDto;
 import com.gamemakase.domain.model.dto.RecommendationResponseDto;
 import com.gamemakase.domain.model.service.RecommendationService;
 import com.gamemakase.global.Exception.NotFoundException;
@@ -50,10 +50,18 @@ public class RecommendationController {
 
     @ApiOperation(value = "인기게임 추천", notes = "상위 100개 중에 12개씩 페이징 처리해서 랜덤으로 보냅니다")
     @GetMapping("/api/recommend/popular")
-    public ResponseEntity<List<PopularGameResponseDto>> getPopular(
+    public ResponseEntity<List<GameResponseDto>> getPopular(
             @RequestParam(name = "size", required = false) Integer pageSize
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(recommendationService.getTopGamesInRandomOrder(pageSize));
+    }
+
+    @ApiOperation(value = "랜덤 게임 제공", notes = "점수 95점 이상이거나 추천이 5만개 이상인 게임 중에 페이징해서 랜덤으로 보냅니다")
+    @GetMapping("/api/recommend/random")
+    public ResponseEntity<List<GameResponseDto>> getRandom(
+            @RequestParam(name = "size", required = false) Integer pageSize
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(recommendationService.getGamesInRandomOrder(pageSize));
     }
 
 
