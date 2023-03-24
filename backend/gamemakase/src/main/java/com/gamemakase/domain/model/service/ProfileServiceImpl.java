@@ -67,7 +67,7 @@ public class ProfileServiceImpl implements ProfileService {
 			throws IOException, ParseException, NotFoundException {
 		Map<String, Integer> genreScoreResult = new HashMap<String, Integer>();
 
-		User user = userRepository.findById(userId).orElseThrow(/* here! */);
+		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("유저 정보를 조회할 수 없습니다."));
 
 		// userId 기반 play기록, play기록 기반 장르를 추적하여 각 장르 name을 key값으로 삼아 play time을 value로 축적합니다.
 		List<GameHistory> gameHistoryList = gamehistoryRepository.findAllByUser(user);
@@ -130,6 +130,18 @@ public class ProfileServiceImpl implements ProfileService {
 						.count(scrapList.size())
 						.build())
 				.build();
+	}
+
+	@Override
+	public List<GameInfoVo> getScrap(long userId, int pageNo) throws NotFoundException {
+		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("유저 정보를 조회할 수 없습니다."));
+		Pageable pageable = PageRequest.of(pageNo, 6);
+		List<LikeGame> totalList = likeGameRepository.findAllByUser(user);
+		Page<LikeGame> likeList = likeGameRepository.findAllByUserOrderByLikeIdDesc(user, pageable);
+		return likeList.stream()
+				.map(l -> GameInfoVo.of(l.getGame(),
+						imageRepository.findByTypeAndTypeId("GAME_HEADER", l.getGame().getGameId()).orElseThrow(/* here! */).getImagePath()))
+				.collect(Collectors.toList());
 	}
 
 	@Override
