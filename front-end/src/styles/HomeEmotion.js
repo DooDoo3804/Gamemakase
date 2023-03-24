@@ -254,6 +254,9 @@ export const RecommendWrapper = styled.div`
     font-size: 1.5rem;
     font-weight: 600;
     padding: 0.5rem 0rem;
+
+    display: flex;
+    align-items: center;
   }
 
   .game-title {
