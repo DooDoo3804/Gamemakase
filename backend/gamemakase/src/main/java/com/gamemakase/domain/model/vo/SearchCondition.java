@@ -9,10 +9,7 @@ import java.util.List;
 @Getter
 public class SearchCondition {
     private String niddle;
-
     private int price;
-
-    private boolean useIsKorean;
     private boolean isKorean;
     private List<String> genreList;
     private int offset;
