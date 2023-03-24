@@ -105,8 +105,8 @@ public class SearchServiceImpl implements SearchService {
         String jpql = "select g from Game g " +
                 "where upper(g.gameName) like :niddle " +
                 "and g.gamePrice <= :price ";
-        if (condition.isUseIsKorean()) {
-            jpql += "and g.isKorean = :isKorean ";
+        if (condition.isKorean()) {
+            jpql += "and g.isKorean = 1 ";
         }
         for (int i = 0; i < genreList.size(); i++) {
             String sentance = "and :genre" + i + " in (select gen.genreName from Genre gen where gen.game.gameId = g.gameId) ";
@@ -116,9 +116,6 @@ public class SearchServiceImpl implements SearchService {
         TypedQuery<Game> query = entityManager.createQuery(jpql, Game.class)
                 .setParameter("niddle", "%" + condition.getNiddle().toUpperCase() + "%")
                 .setParameter("price", condition.getPrice());
-		if (condition.isUseIsKorean()) {
-			query.setParameter("isKorean", condition.isKorean());
-		}
         for (int i = 0; i < genreList.size(); i++) {
             query.setParameter("genre" + i, genreList.get(i));
         }
