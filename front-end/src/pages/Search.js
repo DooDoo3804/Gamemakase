@@ -364,7 +364,7 @@ const Search = () => {
     } else {
       result.push(
         <div key="noGameResults" className="no-game-results-msg">
-          Sorry 0 results match your search. : (
+          검색과 매칭되는 결과가 0개입니다. : (
         </div>
       );
     }
@@ -406,7 +406,7 @@ const Search = () => {
     } else {
       result.push(
         <div key="noUserResults" className="no-user-results">
-          0 results match your search.
+          검색과 매칭되는 결과가 0개 입니다.
         </div>
       );
     }
@@ -417,10 +417,13 @@ const Search = () => {
     const result = [];
     result.push(
       <div key="userGearchResultHeader" className="user-search-results-header">
-        User search results
+        유저 검색 결과
       </div>
     );
-    if (width <= 1160) {
+    if (
+      searchUserResults &&
+      searchUserResults.length > 0
+      && width <= 1160) {
       result.push(
         <div key="userResults" className="user-results">
           <Swiper
@@ -450,7 +453,7 @@ const Search = () => {
       return (
         <SearchWrapper>
           <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
-          <div className="game-search-results-header">Game search results</div>
+          <div className="game-search-results-header">게임 검색 결과</div>
           <SearchResultsWrapper className="search-result-wrapper" key="gameResult">
             <FilterWrapper className="filter-wrapper">
               {gameFilterRend()}
@@ -473,7 +476,7 @@ const Search = () => {
               {userSearchResultsRend()}
             </UserSearchResultsWrapper>
             <GameSearchResultsWrapper>
-              <div className="game-search-results-header-mobile">Game search results</div>
+              <div className="game-search-results-header-mobile">게임 검색 결과</div>
               <MobileGameResult>
                 <FilterWrapper className="filter-wrapper">
                   {gameFilterRend()}
