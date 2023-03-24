@@ -74,6 +74,23 @@ export const SearchWrapper = styled.div`
     margin-top: 25px;
     margin-bottom: 25px;
   }
+  .no-game-results-msg {
+    color: ${Common.colors.white01};
+    font-family: "Noto Sans KR";
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .no-user-results {
+    display: flex;
+    font-family: "Noto Sans KR";
+    font-size: 15px;
+    width: 270px;
+    height: 100px;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 // 검색내역
@@ -126,14 +143,6 @@ export const SearchResultsWrapper = styled(motion.div)`
   .loading {
     position: relative;
     opacity: 0.3;
-  }
-  .no-game-results-msg {
-    color: ${Common.colors.white01};
-    font-family: "Sarpanch";
-    font-size: 24px;
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
   }
 `;
 
@@ -311,10 +320,10 @@ export const UserSearchResultsWrapper = styled.div`
   .user-search-results-header {
     display: flex;
     justify-content: center;
+    font-family: "Noto Sans KR";
     @media (max-width: 1160px) {
       justify-content: flex-start;
       font-size: 22px;
-      font-family: "Noto Sans KR";
       font-style: normal;
       font-weight: 400;
       text-decoration: none;
@@ -327,14 +336,5 @@ export const UserSearchResultsWrapper = styled.div`
     margin-top: 15px;
     margin-bottom: 15px;
     color: ${Common.colors.white01};
-  }
-
-  .no-user-results {
-    display: flex;
-    font-size: 15px;
-    width: 270px;
-    height: 200px;
-    align-items: center;
-    justify-content: center;
   }
 `;
