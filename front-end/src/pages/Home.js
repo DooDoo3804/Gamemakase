@@ -163,14 +163,11 @@ const Home = () => {
     setIsLoading(true);
 
     await axios
-      .get(
-        `${BACKEND_URL}api/recommend/games/${userId}?page=${popularNo.current}&size=${size}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .get(`${BACKEND_URL}api/recommend/random?size=${size}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
         // console.log(response.data);
         if (response.data.length) {
