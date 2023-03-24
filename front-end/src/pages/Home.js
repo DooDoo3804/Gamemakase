@@ -158,6 +158,7 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getMoreGames = useCallback(async () => {
     setIsLoading(true);
 
