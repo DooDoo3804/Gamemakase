@@ -2,6 +2,8 @@ import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "react-router";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper";
 //Components
 import Tag from "../components/Tag";
 import CheckBox from "../components/CheckBox";
@@ -15,7 +17,14 @@ import {
   SearchHistoryWrapper,
   SearchResultsWrapper,
   UserSearchResultsWrapper,
+  FilterWrapper,
+  GameSearchResult,
+  GameSearchResultsWrapper,
+  MobileGameResult,
 } from "../styles/SearchEmotion";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 const Search = () => {
   const location = useLocation();
@@ -35,6 +44,11 @@ const Search = () => {
   const [priceLimit, setPriceLimit] = useState(99999);
   const [genreList, setGenreList] = useState([]);
   const [isKoreanSupport, setIsKoreanSupport] = useState(false);
+
+  const [width, setWidth] = useState(window.innerWidth);
+  // paging
+  const [curGamePageNo, setCurGamePageNo] = useState(0);
+  const [curUserPageNo, setCurUserPageNo] = useState(0);
 
   // static info
   const genreNameList = [
@@ -107,6 +121,16 @@ const Search = () => {
     dataSetting(niddle);
   }, [dataSetting, niddle]);
 
+  const handleResize = () => {
+    setWidth(window.innerWidth);
+  };
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    }
+  }, []);
+
   const priceInput = useRef();
 
   //////////////////////////////////
@@ -177,27 +201,9 @@ const Search = () => {
       .catch((error) => { });
   };
 
-  const changeKoreanFilter = (str) => {
+  const changeKoreanFilter = () => {
     gameResultWrapper.current.className = "results-wrapper loading";
-    let state = false;
-    if (str === "on") {
-      if (!isKoreanSupport) {
-        setIsKoreanSupport(true);
-        state = true;
-      }
-    } else if (str === "off") {
-      if (isKoreanSupport) {
-        setIsKoreanSupport(false);
-        state = false;
-      }
-    } else {
-      setIsKoreanSupport(!isKoreanSupport);
-      if (!isKoreanSupport) {
-        state = true;
-      } else {
-        state = false;
-      }
-    }
+    setIsKoreanSupport(!isKoreanSupport);
     let genreParamString = "";
     for (let i = 0; i < genreList.length; i++) {
       genreParamString += genreList[i];
@@ -210,8 +216,8 @@ const Search = () => {
         params: {
           niddle: niddle,
           price: priceLimit,
-          userIsKorean: state ? true : false,
-          isKorean: isKoreanSupport,
+          userIsKorean: !isKoreanSupport,
+          isKorean: !isKoreanSupport,
           genreList: genreParamString,
           gamePageNo: 0,
         },
@@ -231,6 +237,7 @@ const Search = () => {
     console.log(value + "search");
   };
 
+  ///////////////////////////////////////
   ///////////////////////////////////////
   // RENDING
 
@@ -268,147 +275,122 @@ const Search = () => {
     return result;
   };
 
-  const searchResultsRend = () => {
-    ////////// Filter //////////
-    const gameFilterRend = () => {
+  const gameFilterRend = () => {
+    const result = [];
+    // price
+    result.push(
+      <div key="price" className="price-section">
+        <div className="filter-header">가격</div>
+        <div className="range-wrapper">
+          <input
+            type="range"
+            min="0"
+            max="13"
+            step="1"
+            ref={priceInput}
+            onChange={changePriceFilter}
+          />
+          <div className="price-str">{priceStr}</div>
+        </div>
+        <div className="filter-line-wrapper">
+          <div className="filter-line"></div>
+        </div>
+      </div>
+    );
+    // genre
+    const genreRend = () => {
       const result = [];
-      // price
-      result.push(
-        <div key="price" className="price-section">
-          <div className="filter-header">가격</div>
-          <div className="range-wrapper">
-            <input
-              type="range"
-              min="0"
-              max="13"
-              step="1"
-              ref={priceInput}
-              onChange={changePriceFilter}
-            />
-            <div className="price-str">{priceStr}</div>
-          </div>
-          <div className="filter-line-wrapper">
-            <div className="filter-line"></div>
-          </div>
-        </div>
-      );
-      // genre
-      const genreRend = () => {
-        const result = [];
-        for (let i = 0; i < genreEngNameList.length; i++) {
-          result.push(
-            <div key={i}>
-              <CheckBox
-                engName={genreEngNameList[i]}
-                korName={genreNameList[i]}
-                list={genreList}
-                event={changeGenreFilter}
-                label={true}
-              ></CheckBox>
-            </div>
-          );
-        };
-        return result;
-      };
-      result.push(
-        <div key="genre" className="genre-section">
-          <div className="filter-header">장르</div>
-          <div className="genre-wrapper">{genreRend()}</div>
-          <div className="filter-line-wrapper">
-            <div className="filter-line"></div>
-          </div>
-        </div>
-      );
-      // korean
-      result.push(
-        <div key="MultiPlayer" className="korean-support-section">
-          <div className="filter-header">한국어 지원</div>
-          <div className="korean-support-wrapper">
-            <div
-              onClick={() => {
-                changeKoreanFilter("off");
-              }}
-              className="korean-off"
-            >
-            </div>
-            <Switch
-              isOn={isKoreanSupport}
-              onClick={() => {
-                changeKoreanFilter("toggle");
-              }}
-            />
-            <div
-              onClick={() => {
-                changeKoreanFilter("on");
-              }}
-              className="korean-on"
-            >
-            </div>
-          </div>
-        </div>
-      );
-      return result;
-    };
-    ////////// Items //////////
-    const gameResultsRend = () => {
-      const result = [];
-      if (
-        searchGameResults &&
-        searchGameResults.length > 0
-      ) {
-        searchGameResults.forEach((e) => {
-          result.push(
-            <GameClip
-              key={e.gameId}
-              title={e.gameName}
-              gameId={e.gameId}
-              imgUrl={e.imagePath}
-              price={e.price}
-              window={e.window}
-              apple={e.apple}
-              linux={e.linux}
-            ></GameClip>
-          );
-        });
-      } else {
+      for (let i = 0; i < genreEngNameList.length; i++) {
         result.push(
-          <div key="noGameResults" className="no-game-results-msg">
-            Sorry 0 results match your search. : (
+          <div key={i}>
+            <CheckBox
+              engName={genreEngNameList[i]}
+              korName={genreNameList[i]}
+              list={genreList}
+              event={changeGenreFilter}
+              label={true}
+            ></CheckBox>
           </div>
         );
-      }
+      };
       return result;
     };
-    const result = [];
     result.push(
-      <SearchResultsWrapper className="search-result-wrapper" key="gameResult">
-        <div key="gameFilter" className="filter-wrapper">
-          {gameFilterRend()}
+      <div key="genre" className="genre-section">
+        <div className="filter-header">장르</div>
+        <div className="genre-wrapper">{genreRend()}</div>
+        <div className="filter-line-wrapper">
+          <div className="filter-line"></div>
         </div>
-        <div key="gameResults" className="results-wrapper" ref={gameResultWrapper}>
-          {gameResultsRend()}
+      </div>
+    );
+    // korean
+    result.push(
+      <div key="MultiPlayer" className="korean-support-section">
+        <div className="filter-header">한국어 지원</div>
+        <div className="korean-support-wrapper">
+          <Switch
+            isOn={isKoreanSupport}
+            onClick={() => {
+              changeKoreanFilter();
+            }}
+          />
         </div>
-        <UserSearchResultsWrapper>
-          {userSearchResultsRend()}
-        </UserSearchResultsWrapper>
-      </SearchResultsWrapper>
+      </div>
     );
     return result;
   };
 
-  const userSearchResultsRend = () => {
+  const gameResultsRend = () => {
     const result = [];
-    result.push(
-      <div key="userGearchResultHeader" className="user-search-results-header">
-        User search results
-      </div>
-    );
-    const userResultsRend = () => {
-      const result = [];
-      if (
-        searchUserResults &&
-        searchUserResults.length > 0
-      ) {
+    if (
+      searchGameResults &&
+      searchGameResults.length > 0
+    ) {
+      searchGameResults.forEach((e) => {
+        result.push(
+          <GameClip
+            key={e.gameId}
+            title={e.gameName}
+            gameId={e.gameId}
+            imgUrl={e.imagePath}
+            price={e.price}
+            window={e.window}
+            apple={e.apple}
+            linux={e.linux}
+          ></GameClip>
+        );
+      });
+    } else {
+      result.push(
+        <div key="noGameResults" className="no-game-results-msg">
+          Sorry 0 results match your search. : (
+        </div>
+      );
+    }
+    return result;
+  };
+
+  const userResultsRend = () => {
+    const result = [];
+    if (
+      searchUserResults &&
+      searchUserResults.length > 0
+    ) {
+      if (width <= 1160) {
+        searchUserResults.forEach((e) => {
+          result.push(
+            <SwiperSlide key={e.userId}>
+              <ProfileCircle
+                userId={e.userId}
+                profileImg={e.userImagePath}
+                name={e.userName}
+                online={e.state}
+              ></ProfileCircle>
+            </SwiperSlide>
+          );
+        });
+      } else {
         searchUserResults.forEach((e) => {
           result.push(
             <ProfileCircle
@@ -420,34 +402,91 @@ const Search = () => {
             ></ProfileCircle>
           );
         });
-      } else {
-        result.push(
-          <div key="noUserResults" className="no-user-results">
-            0 results match your search.
-          </div>
-        );
       }
-      return result;
-    };
-    result.push(
-      <div key="userResults" className="user-results">
-        {userResultsRend()}
-      </div>
-    );
+    } else {
+      result.push(
+        <div key="noUserResults" className="no-user-results">
+          0 results match your search.
+        </div>
+      );
+    }
     return result;
   };
 
+  const userSearchResultsRend = () => {
+    const result = [];
+    result.push(
+      <div key="userGearchResultHeader" className="user-search-results-header">
+        User search results
+      </div>
+    );
+    if (width <= 1160) {
+      result.push(
+        <div key="userResults" className="user-results">
+          <Swiper
+            modules={[Navigation, Pagination]}
+            spaceBetween={0}
+            slidesPerView='auto'
+            navigation
+            pagination={{ clickable: true }}
+          >
+            {userResultsRend()}
+          </Swiper>
+        </div>);
+    } else {
+      result.push(
+        <div key="userResults" className="user-results">
+          {userResultsRend()}
+        </div>
+      );
+    }
+    return result;
+  };
 
   if (isLoading) {
     return <LoadingPage></LoadingPage>;
+  } else {
+    if (width > 1160) {
+      return (
+        <SearchWrapper>
+          <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
+          <div className="game-search-results-header">Game search results</div>
+          <SearchResultsWrapper className="search-result-wrapper" key="gameResult">
+            <FilterWrapper className="filter-wrapper">
+              {gameFilterRend()}
+            </FilterWrapper>
+            <div key="gameResults" className="results-wrapper" ref={gameResultWrapper}>
+              {gameResultsRend()}
+            </div>
+            <UserSearchResultsWrapper>
+              {userSearchResultsRend()}
+            </UserSearchResultsWrapper>
+          </SearchResultsWrapper>
+        </SearchWrapper>
+      );
+    } else {
+      return (
+        <SearchWrapper>
+          <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
+          <div className="search-result-wrapper">
+            <UserSearchResultsWrapper>
+              {userSearchResultsRend()}
+            </UserSearchResultsWrapper>
+            <GameSearchResultsWrapper>
+              <div className="game-search-results-header-mobile">Game search results</div>
+              <MobileGameResult>
+                <FilterWrapper className="filter-wrapper">
+                  {gameFilterRend()}
+                </FilterWrapper>
+                <GameSearchResult className="results-wrapper" ref={gameResultWrapper}>
+                  {gameResultsRend()}
+                </GameSearchResult>
+              </MobileGameResult>
+            </GameSearchResultsWrapper>
+          </div>
+        </SearchWrapper >);
+    }
   }
-  return (
-    <SearchWrapper>
-      <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
-      <div className="game-search-results-header">Game search results</div>
-      {searchResultsRend()}
-    </SearchWrapper>
-  );
 };
 
 export default Search;
