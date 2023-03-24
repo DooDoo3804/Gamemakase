@@ -1,15 +1,18 @@
 import { useRef, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { AnimatePresence } from "framer-motion";
+
 import TranslucentBtn from "./TranslucentBtn";
 import StarRating from "./StarRating";
 import useBodyScrollLock from "./ScrollLock";
-
 import {
   ReviewModalBody,
   ReviewModalWrapper,
 } from "../styles/ReviewModalEmotion";
-import { AnimatePresence } from "framer-motion";
+import { BACKEND_URL } from "../config";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
   const [contentLength, setContentLength] = useState(0);
@@ -34,11 +37,42 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
   const handleContent = (e) => {
     reviewContent.current = e.target.value;
     setContentLength(e.target.value.length);
-    // console.log(reviewContent.current);
   };
 
   const handleTitle = (e) => {
     reviewTitle.current = e.target.value;
+  };
+
+  const handleWriting = () => {
+    if (!reviewTitle.current) {
+      alert("리뷰 제목을 작성해주세요.");
+    } else if (!reviewContent.current) {
+      alert("내용을 입력해주세요.");
+    } else {
+      axios
+        .post(
+          `${BACKEND_URL}auth/reviews/new`,
+          {
+            gamdId: gameData.gamdId,
+            userId: 1, // todo : 임시 userId 수정하기
+            reviewTitle: reviewTitle.current,
+            reviewContent: reviewContent.current,
+            reviewGrade: rating,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          handleClose();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
@@ -99,7 +133,7 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
               </div>
               <TranslucentBtn
                 text={"작성하기"}
-                onClick={() => handleClose()}
+                onClick={() => handleWriting()}
               ></TranslucentBtn>
             </ReviewModalBody>
           </ReviewModalWrapper>
