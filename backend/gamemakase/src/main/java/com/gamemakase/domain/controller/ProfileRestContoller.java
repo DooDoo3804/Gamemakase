@@ -41,6 +41,16 @@ public class ProfileRestContoller {
 		return new ResponseEntity<ProfileInfoResponseDto>(result, HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "스크랩 게임 리스트", notes = "개인 profile 페이지의 main탭 속 스크랩한 리스트에 대한 요청에 대한 응답")
+	@GetMapping("/scraps")
+	public ResponseEntity<ProfileInfoResponseDto> getScrap(
+			@RequestParam(required = true) @ApiParam(required = true) long userId,
+			@RequestParam(required = true) @ApiParam(required = true) int pageNo) throws IOException, ParseException, NotFoundException {
+		logger.info("get mapping, userId : {}", userId);
+		ProfileInfoResponseDto result = profileService.getProfile(userId, pageNo);
+		return new ResponseEntity<ProfileInfoResponseDto>(result, HttpStatus.OK);
+	}
+
 	@ApiOperation(value = "해당 유저가 작성한 리뷰 리스트", notes = "개인 profile 페이지의 review탭 요청에 대한 응답")
 	@GetMapping("/reviews")
 	public ResponseEntity<ProfileReviewsResponseDto> getReviews(
