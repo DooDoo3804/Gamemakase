@@ -8,7 +8,7 @@ import com.gamemakase.domain.model.entity.LikeGame;
 import com.gamemakase.domain.model.entity.User;
 
 public interface LikeGameRepository extends JpaRepository<LikeGame, Long> {
-	Page<LikeGame> findAllByUser(User user, Pageable page);
+	Page<LikeGame> findAllByUserOrderByLikeIdDesc(User user, Pageable page);
 
     boolean existsByGameGameIdAndUserUserId(Long gameId, Long userId);
 
