@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import gamemakase_logo from "../assets/gamemakase_logo.svg";
 import { faSteam } from "@fortawesome/free-brands-svg-icons";
+import axios from "axios";
+import { BACKEND_URL } from "../config";
 
 const LoginModalWrapper = styled(motion.div)`
   z-index: 999;
@@ -133,8 +135,23 @@ const LoginModal = ({ loginView, setLoginView }) => {
   };
 
   const handleLogin = () => {
-    // axios 요청해서 쿠키에 저장
-    // setCookie('token', response.data.token)
+    axios
+      .get(`${BACKEND_URL}api/login/steam`, {
+        headers: { "Content-Type": "application/json" },
+      })
+      .then(function (response) {
+        console.log(response.data);
+        // axios 요청해서 쿠키에 저장
+        // setCookies('token', response.data.token)
+      })
+      .catch(function (error) {
+        console.log(error);
+        // if (error.response.status === 500) {
+        //   window.location.replace("/500");
+        // } else {
+        // }
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
   return (
