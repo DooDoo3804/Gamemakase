@@ -29,9 +29,9 @@ const Home = () => {
   const navigate = useNavigate();
   const [recommendGames, setRecommendGames] = useState([]);
   const [popularGames, setPopularGames] = useState([]);
-  // const [moreGames, setMoreGames] = useState([]);
+  const [moreGames, setMoreGames] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [recommendLoading, setRecommendLoading] = useState(true);
   const [popularLoading, setPopularLoading] = useState(true);
   const swiperRef = useRef(null);
@@ -76,38 +76,38 @@ const Home = () => {
     },
   ];
 
-  const moreGames = [
-    {
-      gameId: 1,
-      gameName: "Stray",
-      gameImage:
-        "https://cdn.akamai.steamstatic.com/steam/apps/1332010/header_292x136.jpg?t=1670349423",
-    },
-    {
-      gameId: 2,
-      gameName: "Cult of the Lamb",
-      gameImage:
-        "https://cdn.akamai.steamstatic.com/steam/apps/1313140/header_292x136.jpg?t=1674826230",
-    },
-    {
-      gameId: 3,
-      gameName: "Help Me!",
-      gameImage:
-        "https://cdn.akamai.steamstatic.com/steam/apps/1557780/header_292x136_koreana.jpg?t=1640234732",
-    },
-    {
-      gameId: 4,
-      gameName: "Call of Duty",
-      gameImage:
-        "https://cdn.akamai.steamstatic.com/steam/apps/1767320/header_292x136_koreana.jpg?t=1642579277",
-    },
-    {
-      gameId: 5,
-      gameName: "The Past Within",
-      gameImage:
-        "https://cdn.akamai.steamstatic.com/steam/apps/1515210/header_292x136.jpg?t=1676931955",
-    },
-  ];
+  // const moreGames = [
+  //   {
+  //     gameId: 1,
+  //     gameName: "Stray",
+  //     gameImage:
+  //       "https://cdn.akamai.steamstatic.com/steam/apps/1332010/header_292x136.jpg?t=1670349423",
+  //   },
+  //   {
+  //     gameId: 2,
+  //     gameName: "Cult of the Lamb",
+  //     gameImage:
+  //       "https://cdn.akamai.steamstatic.com/steam/apps/1313140/header_292x136.jpg?t=1674826230",
+  //   },
+  //   {
+  //     gameId: 3,
+  //     gameName: "Help Me!",
+  //     gameImage:
+  //       "https://cdn.akamai.steamstatic.com/steam/apps/1557780/header_292x136_koreana.jpg?t=1640234732",
+  //   },
+  //   {
+  //     gameId: 4,
+  //     gameName: "Call of Duty",
+  //     gameImage:
+  //       "https://cdn.akamai.steamstatic.com/steam/apps/1767320/header_292x136_koreana.jpg?t=1642579277",
+  //   },
+  //   {
+  //     gameId: 5,
+  //     gameName: "The Past Within",
+  //     gameImage:
+  //       "https://cdn.akamai.steamstatic.com/steam/apps/1515210/header_292x136.jpg?t=1676931955",
+  //   },
+  // ];
 
   useEffect(() => {
     // todo : 로그인했을 때만 실행하도록 수정
@@ -149,32 +149,41 @@ const Home = () => {
       });
   }, []);
 
-  // const getMoreGames = useCallback(async () => {
-  //   setIsLoading(true);
+  useEffect(() => {
+    // console.log(inView, hasNextPage);
+    if (inView && hasNextPage) {
+      setIsLoading(true);
+      getMoreGames();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
 
-  //   await axios
-  //     .get(
-  //       `${BACKEND_URL}api/recommend/games/${userId}?page=${popularNo.current}&size=${size}`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     )
-  //     .then((response) => {
-  //       console.log(response.data);
-  //       if (response.data.length) {
-  //         popularNo.current += 1;
-  //       }
-  //       set((reviewData) => [...reviewData, ...response.data]);
-  //       setHasNextPage(response.data.length === 12);
-  //       setReviewLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       setReviewLoading(false);
-  //     });
-  // });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getMoreGames = useCallback(async () => {
+    setIsLoading(true);
+
+    await axios
+      .get(
+        `${BACKEND_URL}api/recommend/games/${userId}?page=${popularNo.current}&size=${size}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        // console.log(response.data);
+        if (response.data.length) {
+          popularNo.current += 1;
+        }
+        setMoreGames((moreGames) => [...moreGames, ...response.data]);
+        setHasNextPage(response.data.length === 20);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 
   const options = (lottiefile) => {
     return {
@@ -188,10 +197,10 @@ const Home = () => {
   };
 
   const recommendText =
-    "나에게 딱 맞는 게임을 찾아보세요!\n겜마카세는 개인의 플레이 내역과 12000여개의 게임, 100만 여개의 리뷰 정보를 결합하여 코사인 유사도를 계산하고, KNN 알고리즘을 활용해 매일매일 개인 맞춤형 게임을 추천해드립니다. \nKNN 알고리즘은 나와 플레이 성향이 비슷한 유저들의 플레이 기록을 바탕으로, 내가 플레이하지 않은 게임에 대한 나의 평가를 예측해 계산합니다. \n<나를 위한 게임>에서 지금 바로 새롭고 즐거운 게임 라이프를 즐겨보세요! \n * 개인 추천 내역은 (내 플레이 기록에 변동이 있을 경우)24시간마다 갱신됩니다.";
+    "나에게 딱 맞는 게임을 찾아보세요!\n겜마카세는 나의 게임 플레이 내역과 12000여개의 게임, 100만 여개의 리뷰 정보를 결합하여 코사인 유사도를 계산하고, KNN 알고리즘을 활용해 매일매일 개인 맞춤형 게임을 추천해드립니다. \nKNN 알고리즘은 나와 플레이 성향이 비슷한 유저들의 플레이 기록을 바탕으로, 내가 플레이하지 않은 게임에 대한 나의 평가를 예측해 계산합니다. \n<나를 위한 게임>에서 지금 바로 새롭고 즐거운 게임 라이프를 즐겨보세요! \n * 개인 추천 내역은(내 플레이 기록에 변동이 있을 경우) 24시간마다 갱신됩니다.";
 
   const popularText =
-    "지금 인기 있는 게임들을 만나보세요! \n겜마카세는 Peak CCU(Peak Concurrent Users) 최고 동시 접속자 수를 기준으로 하여 다양한 장르의 최신 인기게임들을 제공합니다. \n<인기게임>에서 지금 이 순간 가장 핫한 게임들을 즐겨보세요!";
+    "지금 인기 있는 게임들을 만나보세요! \n겜마카세는 Peak CCU(Peak Concurrent Users, 최고 동시 접속자 수)를 기준으로 하여 다양한 장르의 최신 인기게임들을 제공합니다. \n<인기게임>에서 지금 이 순간 가장 핫한 게임들을 즐겨보세요!";
 
   const renderGames = (games) => {
     const result = [];
@@ -385,6 +394,13 @@ const Home = () => {
             <MoreGamesWrapper>{renderMoreGames()}</MoreGamesWrapper>
           </div>
         ) : null}
+        {isLoading ? (
+          <div className="loading-wrapper">
+            <img src={tinyLoading} alt="loading..."></img>
+          </div>
+        ) : (
+          <div ref={ref} className="scroll-handler" />
+        )}
       </RecommendWrapper>
     </HomeWrapper>
   );

@@ -311,6 +311,12 @@ export const RecommendWrapper = styled.div`
     max-height: 3rem;
     margin: 3rem 0rem;
 
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
     img {
       object-fit: contain;
     }
@@ -321,5 +327,14 @@ export const MoreGamesWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin: 1rem 2rem;
+
+  @media (min-width: 768px) {
+    margin: 1rem 5rem;
+  }
+  @media (max-width: 768px) {
+    margin: 1rem 2rem;
+  }
+  @media (max-width: 500px) {
+    margin: 1rem 1rem;
+  }
 `;
