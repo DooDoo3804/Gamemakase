@@ -32,7 +32,10 @@ import com.gamemakase.global.config.jwt.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 	
