@@ -1,17 +1,12 @@
-
 import pandas as pd
-import numpy as np
 import pymysql
 import pymysql.cursors
-from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED
-from django.http import HttpResponse, JsonResponse
-from .models import GameHistory, Game, Image, GameSmall, Recommendation, User
+from django.http import HttpResponse
+from .models import GameHistory, Game, Image, Recommendation, User
 from sklearn.metrics.pairwise import cosine_similarity
 from .serializers import *
-from django.core.paginator import Paginator
 import logging
-from background_task import background
 
 
 def B(df, users):
@@ -98,7 +93,6 @@ def get_recommended_games(users):
     df = B(df, users)
     print(df.tail(10))
 
-
     print("get recommendation")
     print("--------------------------------------------------------------------------------------------------------------------------------")
 
@@ -137,9 +131,6 @@ def get_recommended_games(users):
             continue
     return HttpResponse(status=HTTP_201_CREATED)
 
-
-        
-    return HttpResponse(status=HTTP_201_CREATED)
 
 def update_recommed():
     print("start big data recommend start")

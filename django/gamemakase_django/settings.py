@@ -16,11 +16,9 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-
-
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['43.201.61.185', 'gamemakase.com', 'www.gamemakase.com']
 # ALLOWED_HOSTS = ['*']
@@ -35,7 +33,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'rest_framework',
     "recommendation",
     'django_apscheduler',
@@ -43,7 +40,7 @@ INSTALLED_APPS = [
 
 ]
 
-APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"  # Default
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 300
 SCHEDULER_DEFAULT = True
 

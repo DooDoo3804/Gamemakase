@@ -1,32 +1,21 @@
 import pandas as pd
-import numpy as np
 import pymysql
 import pymysql.cursors
-from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.status import HTTP_201_CREATED
-from rest_framework.views import APIView
-from django.http import HttpResponse, JsonResponse
-from .models import GameHistory, Game, Image, GameSmall, Recommendation, User
+from django.http import HttpResponse
+from .models import GameHistory, Game, Image, GameSmall, Recommendation
 from sklearn.metrics.pairwise import cosine_similarity
 from .serializers import *
-from django.core.paginator import Paginator
 import logging
-from background_task.models import Task
-from background_task import background
 from .tasks import update_recommed
 from apscheduler.schedulers.background import BackgroundScheduler
 import time
-
-# user_id : 유저 모델 의 아이디 값
+# user_id : 유저 모델 의 아이디 값 > user_steam_id 로 대체
 # user_steam_id : 유저 스팀 아이디
 # steam_id : 스팀 아이디
 # recommendation steam_id, game_id
 # rating steam_id, game_id
 
-'''
-rating의 steam_id -1부터 증가시키자
-'''
 
 def A(df, userid, steamid):
     user_game = GameHistory.objects.filter(user=userid)
@@ -60,42 +49,6 @@ def A(df, userid, steamid):
         'playtime': int})
     return df
 
-def B(df, users):
-    for user in users:
-        userid = user.user_id
-        steamid = user.user_id
-
-        user_game = GameHistory.objects.filter(user=userid)
-        print(user_game)
-        # 순회를 돌면서 모든 게임
-        dtypes = {'steam_id': int, 'game_id': int,
-                    'playtime': int}
-        for game in user_game:
-            exists_game = Game.objects.filter(game_id=game.game.game_id)
-            print(exists_game)
-            # 없는 게임에 대한 예외처리
-            if exists_game:
-                gameid = game.game.game_id
-                playtime = game.total_play_game
-                # 가까운 유저 찾기
-                game_df = df[df['game_id'] == gameid]
-                game_df['playtime_diff'] = abs(game_df['playtime'] - playtime)
-                game_df_sorted = game_df.sort_values('playtime_diff')
-                closest_rating = game_df_sorted[game_df_sorted['steam_id']
-                                                != steamid].iloc[0]['rating']
-                
-                # 기존 테이블에 추가
-                new_row = {'steam_id': steamid, 'game_id': gameid,
-                        'playtime': playtime, 'rating': closest_rating}
-                
-                df = df.astype(dtypes).append(new_row, ignore_index=True)
-            else:
-                print(f"None : {exists_game}")
-
-    df = df.astype({'steam_id': int, 'game_id': int,
-        'playtime': int})
-    return df
- 
 
 def get_recommend(user, neighbor_list, df):
     user_games = df[df['steam_id'] == user]
@@ -122,67 +75,6 @@ def get_recommend(user, neighbor_list, df):
             count += 1
     sort_list = sorted(rec_list, key=lambda x: x[1], reverse=True)
     return (sort_list)
-
-
-# big 데이터 추천 결과
-# users : user 전체 리스트
-def get_recommended_games(users):
-    # 데이터 불러와서 테이블 만들기
-    conn = pymysql.connect(
-        host="43.201.61.185",
-        user="root",
-        password="banapresso77",
-        db="gamemakase",
-        charset="utf8",
-        cursorclass=pymysql.cursors.DictCursor        
-    )
-    cursor = conn.cursor()
-    sql = "select * from gamemakase.rating"
-    cursor.execute(sql)
-    result = cursor.fetchall()
-
-    df = pd.DataFrame(result)
-
-
-    # 가까운 유저 찾아서 테이블에 반영
-    print(df.tail(10))
-    df = B(df, users)
-    print(df.tail(10))
-
-
-    print("get recommendation")
-    print("--------------------------------------------------------------------------------------------------------------------------------")
-
-    pivot_table = pd.pivot_table(df, values='rating', index=[
-                                 'steam_id'], columns=['game_id'])
-    print(f"pivot_table:{pivot_table}")
-    cos_sim_matrix = cosine_similarity(pivot_table.fillna(0))
-    print(f"cos_sim_matrix:{cos_sim_matrix}")
-    cos_sim_df = pd.DataFrame(
-        cos_sim_matrix, columns=pivot_table.index, index=pivot_table.index)
-    print(f"cos_sim_df:{cos_sim_df[:30]}")
-    for user in users:
-        steam_id = user.user_id
-        knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
-        knn = list(knn.index)
-
-
-        json_data_2 = df
-        json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
-        print(json_data_2)
-        recommend = get_recommend(steam_id, knn, json_data_2)
-        print(recommend[:5])
-
-        games = []
-    Recommendation.objects.filter(steam_id=steam_id).delete()
-    for game_id, rating in recommend[:100]:
-        try:
-            game = Game.objects.get(game_id=game_id)
-            images = Image.objects.filter(type_id = game_id)
-            recommendation = Recommendation(steam_id = steam_id, game_id = game.game_id, rating = rating)
-            recommendation.save()
-        except Exception as e:
-            print(game_id, e)
 
 
 # small 데이터 추천 결과
@@ -223,7 +115,6 @@ def get_recommended_games_small(request, user_id):
     except Exception as e:
         print(user_steamid, e)
         return HttpResponse(status=HTTP_201_CREATED)
-    
 
     json_data_2 = df
     json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
@@ -239,42 +130,20 @@ def get_recommended_games_small(request, user_id):
             recommendation.save()
         except Exception as e:
             print(game_id, e)
-        # new_game = {
-        #     'game_id' : game_id,
-        #     "game_name" : game.game_name, 
-        #     "score" : rating,
-        #     "game_image" : images
-        # }
-        # games.append(new_game)
-
-        # recommendation 테이블에 저장
-
-
-    # serializer 주석 처리
-    # serializer = GameRecommendationSerializer(games, many=True)
-    
-    # # pagination
-    # p = Paginator(serializer.data, 5)
-    # page = {
-    #     'pageNum' : 1,
-    #     'size' : 5,
-    #     'count' : len(p.page(1)),
-    # }
-    
-    # context = {
-    #     'results' : serializer.data,
-    #     'page' : page
-    # }
-    # print(context)
     return HttpResponse(status=HTTP_201_CREATED)
+
+
+# 오늘의 추천
+def today_games():
+    pass
 
 
 # 스케줄러 관련
 def job():
-    print("***************************************************")
+    print("***********************************************************************************")
     update_recommed()
     print(f"End Time : {time.strftime('%c')}")
-    print("***************************************************")
+    print("***********************************************************************************")
 
 
 def schedule_api():
