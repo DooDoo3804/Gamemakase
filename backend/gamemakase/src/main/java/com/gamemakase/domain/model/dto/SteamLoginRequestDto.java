@@ -6,5 +6,5 @@ import lombok.Data;
 public class SteamLoginRequestDto {
     String id;
 
-    String passwrod;
+    String password;
 }
