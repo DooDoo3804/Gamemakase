@@ -73,14 +73,15 @@ public class SteamController {
             String access_token = (String) token.get("access-token");
             jwtTokenProvider.validateToken(access_token);
             System.out.println(access_token);
-            headers.setLocation(URI.create("http://gamemakase.com"));
-            return new ResponseEntity<>(access_token, headers, HttpStatus.MOVED_PERMANENTLY);
+            headers.setLocation(URI.create("http://localhost:3000"));
+            headers.set("access-token", access_token);
+            return new ResponseEntity<Object>(headers, HttpStatus.OK);
         } else {
             //회원가입
             String name = userService.getUserName(steamId);
             userService.signUp(signUpRequestDto, steamIdNum, name);
             System.out.println("회원가입도 왔지?");
-            headers.setLocation(URI.create("http://gamemakase.com"));
+            headers.setLocation(URI.create("https://localhost:3000"));
             return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
         }
     }
