@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PopularGameResponseDto {
+public class GameResponseDto {
 
     Long gameId;
 
