@@ -7,7 +7,6 @@ export const MainHeaderWrapper = styled.div`
   z-index: 99;
   background-color: rgba(50, 50, 50, 0.3);
   color: ${Common.colors.lightGray01};
-  height: 3.5rem;
   margin: 0;
   padding: 0.2rem 0.5rem;
   justify-content: space-between;
@@ -19,20 +18,57 @@ export const MainHeaderWrapper = styled.div`
   -webkit-user-select: none;
   user-select: none;
 
+  transition: all 0.3s ease-in-out;
+
+  @media (min-width: 768px) {
+    height: 4rem;
+  }
+  @media (max-width: 768px) {
+    height: 3.5rem;
+  }
+  @media (max-width: 500px) {
+    height: 3rem;
+  }
+
   .logo-wrapper {
     display: flex;
-    width: 4rem;
-    height: 3rem;
     align-items: center;
     margin: 0rem 0.5rem;
+    margin-top: 0.2rem;
     cursor: pointer;
+
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      width: 4rem;
+      height: 3rem;
+    }
+    @media (max-width: 768px) {
+      width: 3.5rem;
+      height: 2.5rem;
+    }
+    @media (max-width: 500px) {
+      width: 3rem;
+      height: 2rem;
+    }
   }
 
   .logo-img {
     object-fit: contain;
     position: absolute;
-    height: 2.5rem;
     opacity: 1;
+
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      height: 2.5rem;
+    }
+    @media (max-width: 768px) {
+      height: 2.2rem;
+    }
+    @media (max-width: 500px) {
+      height: 1.8rem;
+    }
   }
 
   .hover {
@@ -47,6 +83,16 @@ export const MainHeaderWrapper = styled.div`
     display: flex;
     font-family: "Sarpanch", sans-serif;
     align-items: center;
+
+    @media (min-width: 768px) {
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) {
+      font-size: 0.9rem;
+    }
+    @media (max-width: 500px) {
+      font-size: 0.8rem;
+    }
   }
 
   .single-menu {
