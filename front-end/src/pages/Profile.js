@@ -52,7 +52,7 @@ const Profile = () => {
   const [scrapGames, setScrapGames] = useState([]);
 
   // paging state
-  const [gamesCount, setGamesCount] = useState(0);
+  const [gamesTotalCount, setGamesTotalCount] = useState(0);
   const [gameCurrentpage, setGameCurrentpage] = useState(0);
   const [reviewCurrentpage, setReviewCurrentpage] = useState(0);
   //const [countPerPage] = useState(6);
@@ -119,7 +119,7 @@ const Profile = () => {
         );
         setStatisticsSum(calStatisticsSum(statistics));
         setScrapGames(response.data.scrap);
-        setGamesCount(response.data.scrap.length);
+        setGamesTotalCount(response.data.page.size);
         setUserName(response.data.user.userName);
         const userImg = response.data.user.userImagePath;
         if (userImg == null || userImg.length <= 0) {
@@ -145,22 +145,22 @@ const Profile = () => {
         setReviewsData(response.data.reviews);
         setReviewDataSize(response.data.page.size);
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   const reviewEdit = () => {
     console.log("edit!");
   };
-  
+
   const reviewDelete = () => {
     console.log("리뷰 삭제!");
   };
-  
+
   const scrapDelete = () => {
     console.log("스크랩 삭제");
   };
 
-  useEffect(() => {setMainTapData()}, [setMainTapData]);
+  useEffect(() => { setMainTapData() }, [setMainTapData]);
 
   /////////////////////////////////////////////
   /////         rending function         //////
@@ -311,18 +311,30 @@ const Profile = () => {
       return result;
     };
     const setPage = (e) => {
-      console.log("스크랩 페이징");
       setGameCurrentpage(e);
+
+      axios
+      .get(`${BACKEND_URL}api/profile/scraps`, {
+        params: {
+          userId: userId,
+          pageNo: (e - 1),
+        },
+      })
+      .then((response) => {
+        setScrapGames(response.data);
+      })
+      .catch((error) => {
+      });
     };
     const result = [];
     if (scrapGames && scrapGames.length > 0) {
       result.push(
         <div key={"scrapGames"}>
           <div className="box">{singleScrapDataRend()}</div>
-          {gamesCount > 6 ? (
+          {gamesTotalCount > 6 ? (
             <Paging
               page={gameCurrentpage}
-              count={gamesCount}
+              count={gamesTotalCount}
               setPage={setPage}
               countPerPage={6}
             />
@@ -445,8 +457,8 @@ const Profile = () => {
     result.push(
       <ProfileReviewsWrapper key="reviewTapData">
         {reviewsData != null &&
-        reviewsData != null &&
-        reviewsData.length > 0 ? (
+          reviewsData != null &&
+          reviewsData.length > 0 ? (
           <>
             <div className="review-header">작성한 리뷰</div>
             <div className="review-wrapper">{reivewRend()}</div>
