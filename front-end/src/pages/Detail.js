@@ -23,6 +23,9 @@ import "swiper/css/pagination";
 
 import scrap_img from "../assets/scrap_img.svg";
 import scrap_hover from "../assets/fontAwesomeSvg/scrap_hover.svg";
+import appleSvg from "../assets/fontAwesomeSvg/apple.svg";
+import windowSvg from "../assets/fontAwesomeSvg/windows.svg";
+import linuxSvg from "../assets/fontAwesomeSvg/linux.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -321,7 +324,37 @@ const Detail = () => {
                     transition: { delay: 0.1 },
                   }}
                 >
-                  <p className="title">{gameData.gameName}</p>
+                  <div className="title-logo">
+                    <p className="title">{gameData.gameName}</p>
+                    <div className="logo-box">
+                      {gameData.windows ? (
+                        <img
+                          src={windowSvg}
+                          className="brand-logo"
+                          alt="windowSvg"
+                        />
+                      ) : null}
+                      {gameData.mac ? (
+                        <img
+                          src={appleSvg}
+                          className="brand-logo"
+                          alt="appleSvg"
+                        />
+                      ) : (
+                        ""
+                      )}
+                      {gameData.linux ? (
+                        <img
+                          src={linuxSvg}
+                          className="brand-logo"
+                          alt="linuxSvg"
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+
                   <p className="discription">{gameData.gameDescription}</p>
                 </motion.div>
               </div>
