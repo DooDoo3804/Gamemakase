@@ -7,7 +7,7 @@ import windowSvg from "../assets/fontAwesomeSvg/windows.svg";
 import linuxSvg from "../assets/fontAwesomeSvg/linux.svg";
 
 export const StyleGameClip = styled(motion.div)`
-cursor: pointer;
+  cursor: pointer;
   background: rgba(217, 217, 217, 0.08);
   border-radius: 15px;
   margin-bottom: 20px;
@@ -68,7 +68,7 @@ cursor: pointer;
         height: 30px;
         overflow: hidden;
         text-overflow: ellipsis;
-      } 
+      }
       font-family: "Noto Sans KR";
       font-style: normal;
       font-size: 18px;
@@ -103,14 +103,16 @@ cursor: pointer;
     right: 1rem;
     margin-left: auto;
     font-size: 18px;
-}
+  }
 `;
 
 const GameClip = (props) => {
   const navigate = useNavigate();
   return (
     <StyleGameClip
-      onClick={() => { navigate(`/detail/${props.gameId}`) }}
+      onClick={() => {
+        navigate(`/detail/${props.gameId}`);
+      }}
       whileHover={{ scale: 1.03 }}
       transition={{ type: "spring", stiffness: 400, damping: 10 }}
     >
@@ -137,7 +139,7 @@ const GameClip = (props) => {
           )}
         </div>
       </div>
-      <div className="price">${props.price}</div>
+      {props.price ? <div className="price">${props.price}</div> : null}
     </StyleGameClip>
   );
 };

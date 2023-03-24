@@ -29,9 +29,9 @@ const Home = () => {
   const navigate = useNavigate();
   const [recommendGames, setRecommendGames] = useState([]);
   const [popularGames, setPopularGames] = useState([]);
-  // const [moreGames, setMoreGames] = useState([]);
+  const [moreGames, setMoreGames] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [recommendLoading, setRecommendLoading] = useState(true);
   const [popularLoading, setPopularLoading] = useState(true);
   const swiperRef = useRef(null);
@@ -76,38 +76,38 @@ const Home = () => {
     },
   ];
 
-  const moreGames = [
-    {
-      gameId: 1,
-      gameName: "Stray",
-      gameImage:
-        "https://cdn.akamai.steamstatic.com/steam/apps/1332010/header_292x136.jpg?t=1670349423",
-    },
-    {
-      gameId: 2,
-      gameName: "Cult of the Lamb",
-      gameImage:
-        "https://cdn.akamai.steamstatic.com/steam/apps/1313140/header_292x136.jpg?t=1674826230",
-    },
-    {
-      gameId: 3,
-      gameName: "Help Me!",
-      gameImage:
-        "https://cdn.akamai.steamstatic.com/steam/apps/1557780/header_292x136_koreana.jpg?t=1640234732",
-    },
-    {
-      gameId: 4,
-      gameName: "Call of Duty",
-      gameImage:
-        "https://cdn.akamai.steamstatic.com/steam/apps/1767320/header_292x136_koreana.jpg?t=1642579277",
-    },
-    {
-      gameId: 5,
-      gameName: "The Past Within",
-      gameImage:
-        "https://cdn.akamai.steamstatic.com/steam/apps/1515210/header_292x136.jpg?t=1676931955",
-    },
-  ];
+  // const moreGames = [
+  //   {
+  //     gameId: 1,
+  //     gameName: "Stray",
+  //     gameImage:
+  //       "https://cdn.akamai.steamstatic.com/steam/apps/1332010/header_292x136.jpg?t=1670349423",
+  //   },
+  //   {
+  //     gameId: 2,
+  //     gameName: "Cult of the Lamb",
+  //     gameImage:
+  //       "https://cdn.akamai.steamstatic.com/steam/apps/1313140/header_292x136.jpg?t=1674826230",
+  //   },
+  //   {
+  //     gameId: 3,
+  //     gameName: "Help Me!",
+  //     gameImage:
+  //       "https://cdn.akamai.steamstatic.com/steam/apps/1557780/header_292x136_koreana.jpg?t=1640234732",
+  //   },
+  //   {
+  //     gameId: 4,
+  //     gameName: "Call of Duty",
+  //     gameImage:
+  //       "https://cdn.akamai.steamstatic.com/steam/apps/1767320/header_292x136_koreana.jpg?t=1642579277",
+  //   },
+  //   {
+  //     gameId: 5,
+  //     gameName: "The Past Within",
+  //     gameImage:
+  //       "https://cdn.akamai.steamstatic.com/steam/apps/1515210/header_292x136.jpg?t=1676931955",
+  //   },
+  // ];
 
   useEffect(() => {
     // todo : 로그인했을 때만 실행하도록 수정
@@ -149,32 +149,40 @@ const Home = () => {
       });
   }, []);
 
-  // const getMoreGames = useCallback(async () => {
-  //   setIsLoading(true);
+  useEffect(() => {
+    // console.log(inView, hasNextPage);
+    if (inView && hasNextPage) {
+      setIsLoading(true);
+      getMoreGames();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
 
-  //   await axios
-  //     .get(
-  //       `${BACKEND_URL}api/recommend/games/${userId}?page=${popularNo.current}&size=${size}`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     )
-  //     .then((response) => {
-  //       console.log(response.data);
-  //       if (response.data.length) {
-  //         popularNo.current += 1;
-  //       }
-  //       set((reviewData) => [...reviewData, ...response.data]);
-  //       setHasNextPage(response.data.length === 12);
-  //       setReviewLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       setReviewLoading(false);
-  //     });
-  // });
+  const getMoreGames = useCallback(async () => {
+    setIsLoading(true);
+
+    await axios
+      .get(
+        `${BACKEND_URL}api/recommend/games/${userId}?page=${popularNo.current}&size=${size}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        // console.log(response.data);
+        if (response.data.length) {
+          popularNo.current += 1;
+        }
+        setMoreGames((moreGames) => [...moreGames, ...response.data]);
+        setHasNextPage(response.data.length === 20);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 
   const options = (lottiefile) => {
     return {
@@ -385,6 +393,13 @@ const Home = () => {
             <MoreGamesWrapper>{renderMoreGames()}</MoreGamesWrapper>
           </div>
         ) : null}
+        {isLoading ? (
+          <div className="loading-wrapper">
+            <img src={tinyLoading} alt="loading..."></img>
+          </div>
+        ) : (
+          <div ref={ref} className="scroll-handler" />
+        )}
       </RecommendWrapper>
     </HomeWrapper>
   );
