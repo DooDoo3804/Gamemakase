@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void signUp(SignUpRequestDto signUpRequestDto, long steamId, String name) {
         User user = signUpRequestDto.toEntity(steamId, name);
-
         System.out.println(user.getUserId());
         System.out.println("이름 : " + user.getUserName());
         System.out.println("아이디 : " + user.getUserSteamId());
