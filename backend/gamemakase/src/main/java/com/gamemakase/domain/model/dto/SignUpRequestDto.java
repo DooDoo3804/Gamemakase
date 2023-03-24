@@ -10,14 +10,13 @@ import lombok.Data;
 public class SignUpRequestDto {
 
     Long userSteamId;
-
     String userName;
     AuthorityName authority;
 
-    public User toEntity(long steamId) {
+    public User toEntity(long steamId, String name) {
         return User.builder()
                 .userSteamId(steamId)
-                .userName("ADMIN")
+                .userName(name)
                 .build();
     }
 }
