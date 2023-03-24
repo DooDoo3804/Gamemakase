@@ -1,7 +1,14 @@
 package com.gamemakase.domain.controller;
 
-import java.io.IOException;
-
+import com.gamemakase.domain.model.dto.ProfileInfoResponseDto;
+import com.gamemakase.domain.model.dto.ProfileReviewsResponseDto;
+import com.gamemakase.domain.model.service.ProfileService;
+import com.gamemakase.domain.model.vo.GameInfoVo;
+import com.gamemakase.global.Exception.NotFoundException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,15 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gamemakase.domain.model.dto.ProfileInfoResponseDto;
-import com.gamemakase.domain.model.dto.ProfileReviewsResponseDto;
-import com.gamemakase.domain.model.service.ProfileService;
-import com.gamemakase.global.Exception.NotFoundException;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.List;
 
 @Api(value = "프로필 페이지 관련 컨트롤러")
 @RestController
@@ -43,12 +43,12 @@ public class ProfileRestContoller {
 
 	@ApiOperation(value = "스크랩 게임 리스트", notes = "개인 profile 페이지의 main탭 속 스크랩한 리스트에 대한 요청에 대한 응답")
 	@GetMapping("/scraps")
-	public ResponseEntity<ProfileInfoResponseDto> getScrap(
+	public ResponseEntity<List<GameInfoVo>> getScrap(
 			@RequestParam(required = true) @ApiParam(required = true) long userId,
 			@RequestParam(required = true) @ApiParam(required = true) int pageNo) throws IOException, ParseException, NotFoundException {
 		logger.info("get mapping, userId : {}", userId);
-		ProfileInfoResponseDto result = profileService.getProfile(userId, pageNo);
-		return new ResponseEntity<ProfileInfoResponseDto>(result, HttpStatus.OK);
+		List<GameInfoVo> result = profileService.getScrap(userId, pageNo);
+		return new ResponseEntity<List<GameInfoVo>>(result, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "해당 유저가 작성한 리뷰 리스트", notes = "개인 profile 페이지의 review탭 요청에 대한 응답")
