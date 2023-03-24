@@ -7,7 +7,6 @@ export const DetailWrapper = styled.div`
 
   .detail-main {
     display: flex;
-    margin-top: -3.9rem;
     width: 100%;
     height: 56vw;
     background-image: linear-gradient(
@@ -20,12 +19,15 @@ export const DetailWrapper = styled.div`
     transition: height 0.2s ease-in-out;
 
     @media (min-width: 768px) {
+      margin-top: -4.4rem;
       height: 40rem;
     }
     @media (max-width: 768px) {
+      margin-top: -3.9rem;
       height: 30rem;
     }
     @media (max-width: 500px) {
+      margin-top: -3.4rem;
       height: 400px;
     }
   }
@@ -33,17 +35,20 @@ export const DetailWrapper = styled.div`
   .main-wrapper {
     width: 100%;
     display: flex;
-    margin-top: 3.9rem;
+
     justify-content: space-between;
     transition: all 0.5s ease-in-out;
 
     @media (min-width: 768px) {
+      margin-top: 4.4rem;
       padding: 0rem 4rem;
     }
     @media (max-width: 768px) {
+      margin-top: 3.9rem;
       padding: 0rem 4rem;
     }
     @media (max-width: 500px) {
+      margin-top: 3.4rem;
       padding: 0rem 2rem;
     }
   }
@@ -67,6 +72,11 @@ export const DetailWrapper = styled.div`
     @media (max-width: 500px) {
       width: 90%;
     }
+  }
+
+  .title-logo {
+    display: flex;
+    justify-content: space-between;
   }
 
   .title {
@@ -99,6 +109,40 @@ export const DetailWrapper = styled.div`
     }
     @media (max-width: 500px) {
       font-size: 10px;
+    }
+  }
+
+  .logo-box {
+    display: flex;
+    justify-content: end;
+
+    @media (min-width: 768px) {
+      margin: 0.5rem 0rem;
+    }
+    @media (max-width: 768px) {
+      margin: 0.5rem 0rem;
+    }
+    @media (max-width: 500px) {
+      margin: 0.5rem 0rem;
+    }
+  }
+
+  .brand-logo {
+    transition: all 0.3s ease-in-out;
+    @media (min-width: 768px) {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin: 0rem 0.5rem;
+    }
+    @media (max-width: 768px) {
+      width: 1.2rem;
+      height: 1.2rem;
+      margin: 0rem 0.3rem;
+    }
+    @media (max-width: 500px) {
+      width: 1rem;
+      height: 1rem;
+      margin: 0rem 0.3rem;
     }
   }
 
@@ -196,6 +240,12 @@ export const DetailWrapper = styled.div`
     transition: all 0.5s ease-in-out;
     margin: 0;
     text-align: center;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 라인수 */
+    -webkit-box-orient: vertical;
 
     @media (min-width: 768px) {
       font-size: 1rem;
