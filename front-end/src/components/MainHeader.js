@@ -19,19 +19,21 @@ const MainHeader = () => {
 
   const enterSearchHandler = (e) => {
     if(e.key === "Enter") {
-      if (keyword && keyword.current && keyword.current.value) {
-        navigate("/search/" + keyword.current.value);
+      if (keyword.current && keyword.current.value) {
+        navigate("/search?query=" + keyword.current.value);
+        keyword.current.value = "";
       } else {
-        navigate("/search/");
+        navigate("/search?query=");
       }
     }
   };
 
   const clickSearchHandler = () => {
-    if (keyword && keyword.current && keyword.current.value) {
-      navigate("/search/" + keyword.current.value);
+    if (keyword.current && keyword.current.value) {
+      navigate("/search?query=" + keyword.current.value);
+      keyword.current.value = "";
     } else {
-      navigate("/search/");
+      navigate("/search?query=");
     }
   };
 

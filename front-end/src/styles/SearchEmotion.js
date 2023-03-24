@@ -66,10 +66,11 @@ export const SearchHistoryWrapper = styled.div`
 `;
 
 export const SearchResultsWrapper = styled(motion.div)`
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
   display: flex;
   position: relative;
   justify-content: space-between;
@@ -183,34 +184,36 @@ export const SearchResultsWrapper = styled(motion.div)`
       background: ${Common.colors.white01};
       cursor: pointer;
     }
-
     .genre-wrapper {
       display: flex;
       flex-direction: column;
     }
-
-    .multi-wrapper {
+    .korean-support-section {
+      margin-top: 10px;
+      display: flex;
+    }
+    .korean-support-wrapper {
+      margin-left: 35px;
+      margin-bottom: 7px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .multi-str {
-      cursor: pointer;
-      font-family: "Noto Sans KR";
-      font-style: normal;
-      font-size: 15px;
-      margin-left: 15px;
-      margin-right: 15px;
-    }
-    .korean-support-section {
-      display: flex;
+    .korean-on {
     }
   }
 
+  
   ////////////////////////////
   // game
-
+  
+  .loading {
+    position: relative;
+    opacity: .3;
+  }
   .results-wrapper {
+
+
     width: 100%;
     @media (max-width: 1160px) {
       width: 70%;
