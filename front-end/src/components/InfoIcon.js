@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 import infoSVG from "../assets/fontAwesomeSvg/circle-info-solid.svg";
 import { Common } from "../styles/Common";
 
@@ -18,12 +19,8 @@ const InfoIconWrapper = styled.div`
     cursor: pointer;
   }
 
-  .icon-wrapper:hover + .box-body {
-    display: flex;
-  }
-
   .box-body {
-    display: none;
+    display: flex;
     position: absolute;
     z-index: 9;
 
@@ -39,12 +36,14 @@ const InfoIconWrapper = styled.div`
 
     @media (min-width: 1024px) {
       max-width: 35rem;
+      margin-left: 0rem;
       font-size: 1rem;
       line-height: 1.7rem;
       padding: 2rem;
     }
     @media (max-width: 1024px) {
       max-width: 20rem;
+      margin-left: 0rem;
       font-size: 1rem;
       line-height: 1.7rem;
       padding: 2rem;
@@ -57,6 +56,7 @@ const InfoIconWrapper = styled.div`
       padding: 2rem;
     }
     @media (max-width: 500px) {
+      margin-left: 0rem;
       max-width: 13rem;
       font-size: 0.8rem;
       left: 2rem;
@@ -67,21 +67,33 @@ const InfoIconWrapper = styled.div`
 `;
 
 const InfoIcon = ({ text }) => {
+  const [infoView, setInfoView] = useState(false);
+
   return (
     <InfoIconWrapper>
-      <div className="icon-wrapper">
+      <div
+        className="icon-wrapper"
+        onClick={() => setInfoView(true)}
+        onMouseEnter={() => setInfoView(true)}
+      >
         <img src={infoSVG} alt="info-icon" />
       </div>
-      <motion.div
-        className="box-body"
-        initial={{ opacity: 0 }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-        }}
-      >
-        {text}
-      </motion.div>
+      <AnimatePresence>
+        {infoView ? (
+          <motion.div
+            className="box-body"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{ opacity: 0 }}
+            onClick={() => setInfoView(false)}
+            onMouseLeave={() => setInfoView(false)}
+          >
+            {text}
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </InfoIconWrapper>
   );
 };
