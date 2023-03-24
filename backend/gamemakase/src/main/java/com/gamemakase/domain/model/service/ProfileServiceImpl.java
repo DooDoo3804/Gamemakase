@@ -99,6 +99,7 @@ public class ProfileServiceImpl implements ProfileService {
 
 		// userId기반 스크랩한 게임을 조회하여 반환합니다.
 		Pageable pageable = PageRequest.of(pageNo, 6);
+		List<LikeGame> totalList = likeGameRepository.findAllByUser(user);
 		Page<LikeGame> likeList = likeGameRepository.findAllByUserOrderByLikeIdDesc(user, pageable);
 		List<GameInfoVo> scrapList = likeList.stream()
 				.map(l -> GameInfoVo.of(l.getGame(),
@@ -123,6 +124,11 @@ public class ProfileServiceImpl implements ProfileService {
 				.user(userInfo)
 				.statistics(scoreList)
 				.scrap(scrapList)
+				.page(PaginationVo.builder()
+						.pageNum(pageNo)
+						.size(totalList.size())
+						.count(scrapList.size())
+						.build())
 				.build();
 	}
 
