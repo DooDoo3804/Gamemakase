@@ -37,7 +37,7 @@ public class SearchRestController {
 		SearchResponseDto result = searchServcie.getSearchResult(niddle, 0, 0);
 		return new ResponseEntity<SearchResponseDto>(result, HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "게임 검색 결과를 반환합니다.", notes = "검색 단어에 대한 게임(최대 6)결과를 응답합니다.")
 	@GetMapping("/game")
 	public ResponseEntity<List<GameInfoVo>> getSearchGameResult(
@@ -45,7 +45,7 @@ public class SearchRestController {
 			@RequestParam(required = false) @ApiParam(required = false) int price,
 			@RequestParam(required = false) @ApiParam(required = false) boolean useIsKorean,
 			@RequestParam(required = false) @ApiParam(required = false) boolean isKorean,
-			@RequestParam(required = false, value="genreList") @ApiParam(required = false) List<String> genreList,
+			@RequestParam(required = false, value="genreList", defaultValue = "") @ApiParam(required = false) List<String> genreList,
 			@RequestParam(required = false) @ApiParam(required = false) int gamePageNo
 			) throws IOException, ParseException, NotFoundException {
 		SearchCondition condition = SearchCondition.builder()
