@@ -14,4 +14,5 @@ public interface RecommendationService {
     List<RecommendationResponseDto> getByUserIdTest(Integer pageNo, Integer pageSize, Long userId) throws NotFoundException, TokenValidFailedException;
 
     List<PopularGameResponseDto> getTopGamesInRandomOrder(Integer pageSize);
+
 }

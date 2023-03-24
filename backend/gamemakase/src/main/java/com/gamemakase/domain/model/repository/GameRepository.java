@@ -1,5 +1,6 @@
 package com.gamemakase.domain.model.repository;
 
+import com.gamemakase.domain.model.dto.PopularGameResponseDto;
 import com.gamemakase.domain.model.entity.Game;
 
 import org.springframework.data.domain.Page;
@@ -20,6 +21,13 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     Page<Game> findAllByGameNameLikeOrderByGameName(@Param("gameName") String gameName, Pageable pageable);
 
     List<Game> findTop100ByOrderByPeakCcuDesc();
+
+    @Query("SELECT new com.gamemakase.domain.model.dto.PopularGameResponseDto(g.gameId, g.gameName, i.imagePath) " +
+            "FROM Game g " +
+            "LEFT JOIN Image i ON g.gameId = i.typeId WHERE i.type = 'GAME_HEADER' AND g.peakCcu IS NOT NULL ORDER BY g.peakCcu DESC")
+    List<PopularGameResponseDto> findTop100GamesWithImagesOrderByPeakCcuDesc();
+
+
 
 
 }
