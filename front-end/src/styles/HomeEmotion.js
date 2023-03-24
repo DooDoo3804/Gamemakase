@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { Common } from "./Common";
 import banner_bg from "../assets/banner_bg.gif";
+import { motion } from "framer-motion";
 
 export const HomeWrapper = styled.div`
   .swiper-container {
@@ -337,4 +338,10 @@ export const MoreGamesWrapper = styled.div`
   @media (max-width: 500px) {
     margin: 1rem 1rem;
   }
+`;
+
+export const ScrollToTopBtn = styled(motion.div)`
+  background-color: ${Common.colors.mainColor05};
+  border-radius: 70%;
+  border: 2px solid ${Common.colors.white01};
 `;

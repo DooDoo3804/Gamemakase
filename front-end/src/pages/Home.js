@@ -5,12 +5,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y, Autoplay } from "swiper";
 import Lottie from "react-lottie";
 import axios from "axios";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   HomeWrapper,
   Banner,
   RecommendWrapper,
   MoreGamesWrapper,
+  ScrollToTopBtn,
 } from "../styles/HomeEmotion";
 import banner_img from "../assets/banner_img.json";
 import banner_img2 from "../assets/banner_img2.json";
@@ -34,7 +35,9 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [recommendLoading, setRecommendLoading] = useState(true);
   const [popularLoading, setPopularLoading] = useState(true);
+  const [btnView, setBtnView] = useState(false);
   const swiperRef = useRef(null);
+  const scrollRef = useRef(0);
   const popularNo = useRef(0);
   const recommendNo = useRef(0);
   const [ref, inView] = useInView();
@@ -108,6 +111,16 @@ const Home = () => {
   //       "https://cdn.akamai.steamstatic.com/steam/apps/1515210/header_292x136.jpg?t=1676931955",
   //   },
   // ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      window.addEventListener("scroll", handleScroll);
+    }, 100);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     // todo : 로그인했을 때만 실행하도록 수정
@@ -248,6 +261,15 @@ const Home = () => {
     if (swiperRef.current) {
       swiperRef.current.swiper.autoplay.start();
     }
+  };
+
+  const handleScroll = () => {
+    if (window.scrollY > scrollRef.current) {
+      setBtnView(true);
+    } else {
+      setBtnView(false);
+    }
+    scrollRef.current = window.scrollY;
   };
 
   return (
@@ -399,6 +421,9 @@ const Home = () => {
           <div ref={ref} className="scroll-handler" />
         )}
       </RecommendWrapper>
+      <AnimatePresence>
+        {btnView ? <ScrollToTopBtn></ScrollToTopBtn> : null}
+      </AnimatePresence>
     </HomeWrapper>
   );
 };
