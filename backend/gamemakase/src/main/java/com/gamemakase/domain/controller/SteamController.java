@@ -1,17 +1,28 @@
 package com.gamemakase.domain.controller;
 
+import static java.net.URLEncoder.encode;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import com.gamemakase.domain.model.dto.SignUpRequestDto;
 import com.gamemakase.domain.model.dto.UserRequestDto;
 import com.gamemakase.domain.model.service.UserService;
 import com.gamemakase.global.config.jwt.JwtTokenProvider;
 import io.swagger.annotations.Api;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.openid4java.consumer.ConsumerManager;
 import org.openid4java.message.ParameterList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +37,9 @@ import java.security.Principal;
 @RestController
 @Api(value = "Steam Controller")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class SteamController {
+
 
     private ConsumerManager consumerManager = new ConsumerManager();
     private static final Logger logger = LoggerFactory.getLogger(SteamController.class);
@@ -60,25 +73,12 @@ public class SteamController {
             return new ResponseEntity<>(token, headers, HttpStatus.MOVED_PERMANENTLY);
         } else {
             //회원가입
-            userService.signUp(signUpRequestDto, steamIdNum);
+            String name = userService.getUserName(steamId);
+            userService.signUp(signUpRequestDto, steamIdNum, name);
             headers.setLocation(URI.create("http://www.gamemakase.com:3000/profile/1"));
             return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
         }
     }
 
-    @GetMapping(value = "/login/social")
-    public String index(
-            @RequestParam(value = "fail", required = false) String fail,
-            Model model, Principal principal
-    ) {
-        if (principal != null) {
-            System.out.println("로그인됨");
-        }
 
-        if (fail != null) {
-            model.addAttribute("msg", "Failed to login through Steam");
-        }
-
-        return "index";
-    }
 }

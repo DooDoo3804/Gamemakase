@@ -1,5 +1,8 @@
 package com.gamemakase.domain.model.service;
 
+import static java.net.URLEncoder.encode;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import com.gamemakase.domain.model.dto.SignUpRequestDto;
 import com.gamemakase.domain.model.entity.Authority;
 import com.gamemakase.domain.model.entity.Authority.AuthorityName;
@@ -7,11 +10,21 @@ import com.gamemakase.domain.model.entity.User;
 import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.global.Exception.DuplicatedException;
 import com.gamemakase.global.config.jwt.JwtTokenProvider;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,9 +41,17 @@ public class UserServiceImpl implements UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final String ACCESS_HEADER = "accessToken";
     private final String REFRESH_HEADER = "refreshToken";
+    static final String PLAYER_SUMMARIES_BASE_URL = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/";
+    static final String RECENTLY_PLAYED_GAMES_URL = "http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/";
+
+    @Value("${steam.api.key}") String KEY;
     @Override
-    public void signUp(SignUpRequestDto signUpRequestDto, long steamId) {
-        User user = signUpRequestDto.toEntity(steamId);
+    public void signUp(SignUpRequestDto signUpRequestDto, long steamId, String name) {
+        User user = signUpRequestDto.toEntity(steamId, name);
+
+        System.out.println(user.getUserId());
+        System.out.println("이름 : " + user.getUserName());
+        System.out.println("아이디 : " + user.getUserSteamId());
         if(userRepository.findByUserSteamId(user.getUserSteamId()) != null) {
             throw new DuplicatedException("이미 있는 유저입니다.");
         }
@@ -100,7 +121,77 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String getUserName(String steamId) throws IOException, ParseException {
+        StringBuilder urlBuilder = new StringBuilder();
+        urlBuilder
+            .append(PLAYER_SUMMARIES_BASE_URL)
+            .append("?").append(encode("key", UTF_8)).append("=").append(KEY)
+            .append("&").append(encode("steamids", UTF_8)).append("=").append(steamId);
+
+        URL url = new URL(urlBuilder.toString());
+        System.out.println(url);
+        HttpURLConnection conn = getHttpURLConnection(url);
+
+        int responseCode = conn.getResponseCode();
+        boolean isSuccess = 200 <= responseCode && responseCode <= 300;
+        String response = getResponse(conn, isSuccess);
+        System.out.println(response);
+
+        if(isSuccess) {
+            JSONParser parser = new JSONParser();
+            JSONObject totalInfoJson = (JSONObject) ((JSONObject) parser.parse(response)).get("response");
+            System.out.println(totalInfoJson.toString());
+            JSONArray playerInfoJsons = (JSONArray) totalInfoJson.get("players");
+            System.out.println(playerInfoJsons);
+
+            if (playerInfoJsons.size() == 0) {
+                throw new NullPointerException("ID값 없어");
+            }
+            JSONObject playerInfoJson = (JSONObject) playerInfoJsons.get(0);
+
+            return playerInfoJson.get("personaname").toString();
+        }
+       else {
+           return null;
+        }
+    }
+
+    @Override
     public void deleteUser(User user) {
         userRepository.delete(user);
+    }
+
+    private static String getResponse(HttpURLConnection conn, boolean isSuccess) throws IOException {
+
+        BufferedReader br;
+        if (isSuccess) {
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+
+        conn.disconnect();
+        br.close();
+
+        return sb.toString();
+    }
+
+    private static HttpURLConnection getHttpURLConnection(URL url) throws IOException {
+        // 커넥션 객체 생성
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        // HTTP 메서드 설정
+        conn.setRequestMethod("GET");
+
+        // Content Type 설정
+        conn.setRequestProperty("Content-type", "application/json");
+
+        return conn;
     }
 }
