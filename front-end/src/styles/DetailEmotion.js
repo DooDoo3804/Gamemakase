@@ -197,6 +197,12 @@ export const DetailWrapper = styled.div`
     margin: 0;
     text-align: center;
 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 라인수 */
+    -webkit-box-orient: vertical;
+
     @media (min-width: 768px) {
       font-size: 1rem;
     }
