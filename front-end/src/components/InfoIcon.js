@@ -27,7 +27,8 @@ const InfoIconWrapper = styled.div`
     position: absolute;
     z-index: 9;
 
-    margin: 0.3rem;
+    margin: 0rem 2rem;
+    margin-top: -8rem;
     background-color: rgba(50, 50, 50, 0.8);
     border-radius: 2rem;
     border: 2px solid ${Common.colors.white01};
@@ -36,7 +37,13 @@ const InfoIconWrapper = styled.div`
 
     transition: all 0.3s ease-in-out;
 
-    @media (min-width: 768px) {
+    @media (min-width: 1024px) {
+      max-width: 35rem;
+      font-size: 1rem;
+      line-height: 1.7rem;
+      padding: 2rem;
+    }
+    @media (max-width: 1024px) {
       max-width: 20rem;
       font-size: 1rem;
       line-height: 1.7rem;
