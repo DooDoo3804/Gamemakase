@@ -37,7 +37,6 @@ import java.security.Principal;
 @RestController
 @Api(value = "Steam Controller")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class SteamController {
 
 
@@ -47,36 +46,41 @@ public class SteamController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/api/login/steam") // 스팀 로그인 이미지랑 연동
-    public String steamLogin(HttpServletResponse response) throws IOException{
+    public void steamLogin(HttpServletResponse response) throws IOException{
+//        String steamLoginUrl = "https://steamcommunity.com/openid/login?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=http://localhost:8080&openid.return_to=http://localhost:8080/login/steam/callback";
 //        String steamLoginUrl = "http://steamcommunity.com/openid/login?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=http://localhost:8080&openid.return_to=http://localhost:8080/login/steam/callback";
-        String steamLoginUrl = "http://steamcommunity.com/openid/login?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=http://localhost:8080&openid.return_to=http://localhost:8080/login/steam/callback";
+        String steamLoginUrl = "http://steamcommunity.com/openid/login?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=http://gamemakase.com&openid.return_to=http://gamemakase.com/login/steam/callback";
 
+        System.out.println("여긴 들어왔다.");
         response.sendRedirect(steamLoginUrl);
-        return null;
     }
 
     @GetMapping("/login/steam/callback")
     public ResponseEntity<?> steamLoginCallBack(HttpServletRequest request, SignUpRequestDto signUpRequestDto, UserRequestDto userRequestDto) throws Exception {
+
         ParameterList res = new ParameterList(request.getParameterMap());
+        System.out.println("여기도 되나?");
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("http://www.gamemakase.com:3000"));
 
         String steamId = res.getParameters().get(4).toString().substring(53);
         long steamIdNum = Long.parseLong(steamId);
+        System.out.println("steamid 받았어?");
 
         if (userService.isUser(steamIdNum)) {
             //로그인
             Map<String, Object> token = userService.login(steamIdNum);
             String access_token = (String) token.get("access-token");
             jwtTokenProvider.validateToken(access_token);
-            headers.setLocation(URI.create("http://www.gamemakase.com:3000"));
-            return new ResponseEntity<>(token, headers, HttpStatus.MOVED_PERMANENTLY);
+            System.out.println(access_token);
+            headers.setLocation(URI.create("http://gamemakase.com"));
+            return new ResponseEntity<>(access_token, headers, HttpStatus.MOVED_PERMANENTLY);
         } else {
             //회원가입
             String name = userService.getUserName(steamId);
             userService.signUp(signUpRequestDto, steamIdNum, name);
-            headers.setLocation(URI.create("http://www.gamemakase.com:3000/profile/1"));
+            System.out.println("회원가입도 왔지?");
+            headers.setLocation(URI.create("http://gamemakase.com"));
             return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
         }
     }
