@@ -25,20 +25,25 @@ cursor: pointer;
   }
 
   @media (max-width: 550px) {
-    min-height: 180px;
+    min-height: 210px;
     min-width: 100%;
     flex-direction: column;
   }
+  .img-wrapper {
+    display: flex;
+    justify-content: center;
+  }
   .gameImg {
     height: 120px;
+    width: auto;
     border-radius: 15px;
     @media (min-width: 1560px) {
       height: 155px;
     }
     @media (max-width: 550px) {
       margin-top: 15px;
-      min-height: 120px;
-      min-width: 260px;
+      min-height: 130px;
+      width: auto;
     }
     width: auto;
   }
@@ -105,11 +110,13 @@ const GameClip = (props) => {
   const navigate = useNavigate();
   return (
     <StyleGameClip
-      onClick={() => {navigate(`/detail/${props.gameId}`)}}
+      onClick={() => { navigate(`/detail/${props.gameId}`) }}
       whileHover={{ scale: 1.03 }}
       transition={{ type: "spring", stiffness: 400, damping: 10 }}
     >
-      <img src={props.imgUrl} className="gameImg" alt="gameImage"></img>
+      <div className="img-wrapper">
+        <img src={props.imgUrl} className="gameImg" alt="gameImage"></img>
+      </div>
       <div className="game-explain">
         <div className="title">{props.title}</div>
         <div className="logo-box">

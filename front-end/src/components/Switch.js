@@ -18,7 +18,7 @@ const SwitchEmotion = styled(motion.div)`
     box-sizing: border-box;
   }
   .switch {
-    width: 80px;
+    width: 60px;
     height: 5px;
     border-radius: 10px;
     display: flex;

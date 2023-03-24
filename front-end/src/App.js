@@ -27,8 +27,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/detail/:gameId" element={<Detail />} />
             <Route path="/profile/:userId" element={<Profile />} />
-            <Route path="/search/" element={<Search />} />
-            <Route path="/search/:niddle" element={<Search />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/test" element={<Test />} />
             <Route path="/testResult/:resultId" element={<TestResult />} />
             <Route path="/500" element={<ServerError />} />

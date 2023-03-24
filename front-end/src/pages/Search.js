@@ -1,13 +1,14 @@
 import axios from "axios";
 import { BACKEND_URL } from "../config";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useLocation } from "react-router";
 //Components
 import Tag from "../components/Tag";
 import CheckBox from "../components/CheckBox";
 import Switch from "../components/Switch";
 import ProfileCircle from "../components/ProfileCircle";
 import GameClip from "../components/GameClip";
+import LoadingPage from "../components/LoadingPage";
 //Emotion
 import {
   SearchWrapper,
@@ -17,19 +18,39 @@ import {
 } from "../styles/SearchEmotion";
 
 const Search = () => {
-  const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const niddle = params.get('query');
+
   const [isLoading, setIsLoading] = useState(true);
-  
   const [userName, setUserName] = useState(String);
   const [searchHistory, setSearchHistory] = useState([]);
   const [searchGameResults, setSearchGameResults] = useState([]);
   const [searchUserResults, setSearchUserResults] = useState([]);
 
-  const [genreCheckedList, setGenreCheckList] = useState([]);
+  const gameResultWrapper = useRef();
+
+  // condition
   const [priceStr, setPriceStr] = useState("Any Price");
-  const [isMulti, setIsMulti] = useState(false);
+  const [priceLimit, setPriceLimit] = useState(99999);
+  const [genreList, setGenreList] = useState([]);
   const [isKoreanSupport, setIsKoreanSupport] = useState(false);
-  const genreList = [
+
+  // static info
+  const genreNameList = [
+    "액션",
+    "어드벤쳐",
+    "전략",
+    "RPG",
+    "인디",
+    "캐쥬얼",
+    "시뮬레이션",
+    "레이싱",
+    "스포츠",
+    "디자인",
+    "유틸리티",
+  ];
+  const genreEngNameList = [
     "Action",
     "Adventure",
     "Strategy",
@@ -61,96 +82,146 @@ const Search = () => {
   const priceLimitArr = [
     0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 99999999,
   ];
-  
-  useEffect(() => {
-    dataSetting();
+
+  const dataSetting = useCallback((niddle) => {
+    axios
+      .get(`${BACKEND_URL}api/search`, {
+        params: {
+          niddle: niddle,
+          gamePageNo: 0,
+          userPageNo: 0,
+        },
+      })
+      .then((response) => {
+        setSearchGameResults(response.data.games);
+        setSearchUserResults(response.data.users);
+        setUserName("김아무개");
+        const getSeachHistory = ["star", "universe"];
+        setSearchHistory(getSeachHistory);
+        setIsLoading(false);
+      })
+      .catch((error) => { });
   }, []);
 
+  useEffect(() => {
+    dataSetting(niddle);
+  }, [dataSetting, niddle]);
+
   const priceInput = useRef();
-  
-  const dataSetting = () => {
-    console.log();
-    axios
-    .get(`${BACKEND_URL}api/search`, {
-      params: {
-        niddle: "",
-        gamePageNo: 0,
-        userPageNo: 0,
-      },
-    })
-    .then((response) => {
-      setSearchGameResults(response.data.games);
-      setSearchUserResults(response.data.users);
-      setUserName("Name");
-      const getSeachHistory = ["star", "universe"];
-      setSearchHistory(getSeachHistory);
-    })
-    .catch((error) => {});
-  };
 
   //////////////////////////////////
   // filter func
+
   const changePriceFilter = () => {
+    gameResultWrapper.current.className = "results-wrapper loading";
     const idx = Number(priceInput.current.value);
     setPriceStr(priceStrArr[idx]);
-    //setPriceLimit(priceLimitArr[idx]);
-    const list = [
-      { price: 2, name: "2$" },
-      { price: 40, name: "40$" },
-      { price: 0, name: "free" },
-      { price: 300, name: "300$" },
-    ];
-    const result = [];
-    list.forEach((e) => {
-      if (e.price <= priceLimitArr[idx]) {
-        result.push(e.name);
+    setPriceLimit(priceLimitArr[idx]);
+    let genreParamString = "";
+    for (let i = 0; i < genreList.length; i++) {
+      genreParamString += genreList[i];
+      if (i !== genreList.length - 1) {
+        genreParamString += ",";
       }
-    });
-    console.log(result);
+    }
+    axios
+      .get(`${BACKEND_URL}api/search/game`, {
+        params: {
+          niddle: niddle,
+          price: priceLimitArr[idx],
+          userIsKorean: isKoreanSupport ? true : false,
+          isKorean: isKoreanSupport,
+          genreList: genreParamString,
+          gamePageNo: 0,
+        },
+      })
+      .then((response) => {
+        setSearchGameResults(response.data);
+        gameResultWrapper.current.className = "results-wrapper";
+      })
+      .catch((error) => { });
   };
 
   const changeGenreFilter = (name, state) => {
-    const tmp = genreCheckedList;
+    gameResultWrapper.current.className = "results-wrapper loading";
+    const tmp = genreList;
     if (state === "push") {
       tmp.push(name);
     } else if (state === "remove") {
       const idx = tmp.indexOf(name);
       tmp.splice(idx, 1);
     }
-    setGenreCheckList(tmp);
-    console.log(genreCheckedList);
+    setGenreList(tmp);
+    let paramString = "";
+    for (let i = 0; i < tmp.length; i++) {
+      paramString += tmp[i];
+      if (i !== tmp.length - 1) {
+        paramString += ",";
+      }
+    }
+    axios
+      .get(`${BACKEND_URL}api/search/game`, {
+        params: {
+          niddle: niddle,
+          price: priceLimit,
+          userIsKorean: isKoreanSupport ? true : false,
+          isKorean: isKoreanSupport,
+          genreList: paramString,
+          gamePageNo: 0,
+        },
+      })
+      .then((response) => {
+        setSearchGameResults(response.data);
+        gameResultWrapper.current.className = "results-wrapper";
+      })
+      .catch((error) => { });
   };
 
-  const changeMultiFilter = (str) => {
+  const changeKoreanFilter = (str) => {
+    gameResultWrapper.current.className = "results-wrapper loading";
+    let state = false;
     if (str === "on") {
-      if (!isMulti) {
-        setIsMulti(true);
-        console.log("on");
+      if (!isKoreanSupport) {
+        setIsKoreanSupport(true);
+        state = true;
       }
     } else if (str === "off") {
-      if (isMulti) {
-        setIsMulti(false);
-        console.log("off");
+      if (isKoreanSupport) {
+        setIsKoreanSupport(false);
+        state = false;
       }
     } else {
-      setIsMulti(!isMulti);
-      if (!isMulti) {
-        console.log("on");
+      setIsKoreanSupport(!isKoreanSupport);
+      if (!isKoreanSupport) {
+        state = true;
       } else {
-        console.log("off");
+        state = false;
       }
     }
-  };
-
-  const changeKoreanFilter = (boolean) => {
-    setIsKoreanSupport(boolean);
-    if (boolean) {
-      console.log("on");
-    } else {
-      console.log("off");
+    let genreParamString = "";
+    for (let i = 0; i < genreList.length; i++) {
+      genreParamString += genreList[i];
+      if (i !== genreList.length - 1) {
+        genreParamString += ",";
+      }
     }
+    axios
+      .get(`${BACKEND_URL}api/search/game`, {
+        params: {
+          niddle: niddle,
+          price: priceLimit,
+          userIsKorean: state ? true : false,
+          isKorean: isKoreanSupport,
+          genreList: genreParamString,
+          gamePageNo: 0,
+        },
+      })
+      .then((response) => {
+        setSearchGameResults(response.data);
+        gameResultWrapper.current.className = "results-wrapper";
+      })
+      .catch((error) => { });
   };
-
 
   const tagDelete = (value) => {
     console.log(value + "delete");
@@ -204,7 +275,7 @@ const Search = () => {
       // price
       result.push(
         <div key="price" className="price-section">
-          <div className="filter-header">Price</div>
+          <div className="filter-header">가격</div>
           <div className="range-wrapper">
             <input
               type="range"
@@ -224,59 +295,25 @@ const Search = () => {
       // genre
       const genreRend = () => {
         const result = [];
-        let idx = 0;
-        genreList.forEach((e) => {
+        for (let i = 0; i < genreEngNameList.length; i++) {
           result.push(
-            <div key={idx}>
+            <div key={i}>
               <CheckBox
-                name={e}
-                list={genreCheckedList}
+                engName={genreEngNameList[i]}
+                korName={genreNameList[i]}
+                list={genreList}
                 event={changeGenreFilter}
                 label={true}
               ></CheckBox>
             </div>
           );
-          idx++;
-        });
+        };
         return result;
       };
       result.push(
         <div key="genre" className="genre-section">
-          <div className="filter-header">Genre</div>
+          <div className="filter-header">장르</div>
           <div className="genre-wrapper">{genreRend()}</div>
-          <div className="filter-line-wrapper">
-            <div className="filter-line"></div>
-          </div>
-        </div>
-      );
-      // multiplayer
-      result.push(
-        <div key="MultiPlayer" className="multiplayer-section">
-          <div className="filter-header">MultiPlayer</div>
-          <div className="multi-wrapper">
-            <div
-              onClick={() => {
-                changeMultiFilter("off");
-              }}
-              className="multi-str"
-            >
-              Solo
-            </div>
-            <Switch
-              isOn={isMulti}
-              onClick={() => {
-                changeMultiFilter("toggle");
-              }}
-            />
-            <div
-              onClick={() => {
-                changeMultiFilter("on");
-              }}
-              className="multi-str"
-            >
-              Multi
-            </div>
-          </div>
           <div className="filter-line-wrapper">
             <div className="filter-line"></div>
           </div>
@@ -284,14 +321,30 @@ const Search = () => {
       );
       // korean
       result.push(
-        <div key="koreanSupport" className="korean-support-section">
+        <div key="MultiPlayer" className="korean-support-section">
           <div className="filter-header">한국어 지원</div>
-          <CheckBox
-            name="한국어 지원"
-            list={[]}
-            event={changeKoreanFilter}
-            label={false}
-          ></CheckBox>
+          <div className="korean-support-wrapper">
+            <div
+              onClick={() => {
+                changeKoreanFilter("off");
+              }}
+              className="korean-off"
+            >
+            </div>
+            <Switch
+              isOn={isKoreanSupport}
+              onClick={() => {
+                changeKoreanFilter("toggle");
+              }}
+            />
+            <div
+              onClick={() => {
+                changeKoreanFilter("on");
+              }}
+              className="korean-on"
+            >
+            </div>
+          </div>
         </div>
       );
       return result;
@@ -332,7 +385,7 @@ const Search = () => {
         <div key="gameFilter" className="filter-wrapper">
           {gameFilterRend()}
         </div>
-        <div key="gameResults" className="results-wrapper">
+        <div key="gameResults" className="results-wrapper" ref={gameResultWrapper}>
           {gameResultsRend()}
         </div>
         <UserSearchResultsWrapper>
@@ -356,7 +409,6 @@ const Search = () => {
         searchUserResults &&
         searchUserResults.length > 0
       ) {
-        let idx = 0;
         searchUserResults.forEach((e) => {
           result.push(
             <ProfileCircle
@@ -367,7 +419,6 @@ const Search = () => {
               online={e.state}
             ></ProfileCircle>
           );
-          idx++;
         });
       } else {
         result.push(
@@ -386,6 +437,10 @@ const Search = () => {
     return result;
   };
 
+
+  if (isLoading) {
+    return <LoadingPage></LoadingPage>;
+  }
   return (
     <SearchWrapper>
       <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
