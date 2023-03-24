@@ -20,20 +20,20 @@ const MainHeader = () => {
   const enterSearchHandler = (e) => {
     if(e.key === "Enter") {
       if (keyword.current && keyword.current.value) {
-        navigate("/search?query=" + keyword.current.value);
+        window.location.assign("/search?query=" + keyword.current.value);
         keyword.current.value = "";
       } else {
-        navigate("/search?query=");
+        window.location.assign("/search?query=");
       }
     }
   };
 
   const clickSearchHandler = () => {
     if (keyword.current && keyword.current.value) {
-      navigate("/search?query=" + keyword.current.value);
+      window.location.assign("/search?query=" + keyword.current.value);
       keyword.current.value = "";
     } else {
-      navigate("/search?query=");
+      window.location.assign("/search?query=");
     }
   };
 
