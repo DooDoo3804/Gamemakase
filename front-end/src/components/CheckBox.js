@@ -47,29 +47,29 @@ const CheckBox = (props) => {
     const changeHandler = () => {
       setIsChecked(!isChecked);
       if (!isChecked) {
-        if (props.list && !props.list.includes(props.name)) {
-          props.event(props.name, "push");
+        if (props.list && !props.list.includes(props.engName)) {
+          props.event(props.engName, "push");
         }
       } else {
-        if (props.list && props.list.includes(props.name)) {
-          props.event(props.name, "remove");
+        if (props.list && props.list.includes(props.engName)) {
+          props.event(props.engName, "remove");
         }
       }
     };
     return (
       <ChackBoxWrapper>
         <input
-          id={props.name}
+          id={props.engName}
           type="checkbox"
           name="genre"
-          value={props.name}
+          value={props.engName}
           onChange={() => {
             changeHandler();
           }}
         />
-        <label htmlFor={props.name}>
+        <label htmlFor={props.engName}>
         </label>
-        <div>{props.name}</div>
+        <div>{props.korName}</div>
       </ChackBoxWrapper>
     );
   } else {
