@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 public class PaginationVo {
 	private int pageNum;
-	private Long size; // 페이징 고려 안한 전체 리스트 개수
+	private long size; // 페이징 고려 안한 전체 리스트 개수
 	private int count; // 이번에 가는 리스트 개수
 }
