@@ -49,13 +49,13 @@ public class SteamController {
     public void steamLogin(HttpServletResponse response) throws IOException{
 //        String steamLoginUrl = "https://steamcommunity.com/openid/login?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=http://localhost:8080&openid.return_to=http://localhost:8080/login/steam/callback";
 //        String steamLoginUrl = "http://steamcommunity.com/openid/login?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=http://localhost:8080&openid.return_to=http://localhost:8080/login/steam/callback";
-        String steamLoginUrl = "http://steamcommunity.com/openid/login?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=http://gamemakase.com&openid.return_to=http://gamemakase.com/login/steam/callback";
+        String steamLoginUrl = "http://steamcommunity.com/openid/login?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=http://gamemakase.com&openid.return_to=http://gamemakase.com/api/login/steam/callback";
 
         System.out.println("여긴 들어왔다.");
         response.sendRedirect(steamLoginUrl);
     }
 
-    @GetMapping("/login/steam/callback")
+    @GetMapping("/api/login/steam/callback")
     public ResponseEntity<?> steamLoginCallBack(HttpServletRequest request, SignUpRequestDto signUpRequestDto, UserRequestDto userRequestDto) throws Exception {
 
         ParameterList res = new ParameterList(request.getParameterMap());
