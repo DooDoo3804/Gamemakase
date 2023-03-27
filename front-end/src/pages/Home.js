@@ -6,6 +6,7 @@ import { Navigation, Pagination, A11y, Autoplay } from "swiper";
 import Lottie from "react-lottie";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
+
 import {
   HomeWrapper,
   Banner,
@@ -13,18 +14,20 @@ import {
   MoreGamesWrapper,
   ScrollToTopBtn,
 } from "../styles/HomeEmotion";
+import GameCarousel from "../components/GameCarousel";
+import GameClip from "../components/GameClip";
+import InfoIcon from "../components/InfoIcon";
+
 import banner_img from "../assets/banner_img.json";
 import banner_img2 from "../assets/banner_img2.json";
 import tinyLoading from "../assets/tinyLoading.gif";
+import arrow_top from "../assets/fontAwesomeSvg/arrow-up-solid.svg";
+import { BACKEND_URL } from "../config";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import GameCarousel from "../components/GameCarousel";
-import GameClip from "../components/GameClip";
-import { BACKEND_URL } from "../config";
-import InfoIcon from "../components/InfoIcon";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -266,8 +269,10 @@ const Home = () => {
   const handleScroll = () => {
     if (window.scrollY > scrollRef.current) {
       setBtnView(true);
+      console.log("보영");
     } else {
       setBtnView(false);
+      console.log("안보영");
     }
     scrollRef.current = window.scrollY;
   };
@@ -422,7 +427,13 @@ const Home = () => {
         )}
       </RecommendWrapper>
       <AnimatePresence>
-        {btnView ? <ScrollToTopBtn></ScrollToTopBtn> : null}
+        {btnView ? (
+          <ScrollToTopBtn>
+            <div className="img-container">
+              <img src={arrow_top} alt="Top" className="arrow-img" />
+            </div>
+          </ScrollToTopBtn>
+        ) : null}
       </AnimatePresence>
     </HomeWrapper>
   );

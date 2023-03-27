@@ -341,7 +341,45 @@ export const MoreGamesWrapper = styled.div`
 `;
 
 export const ScrollToTopBtn = styled(motion.div)`
-  background-color: ${Common.colors.mainColor05};
+  position: fixed;
+  display: flex;
+  z-index: 90;
+  background-color: ${Common.colors.mainColor04};
   border-radius: 70%;
   border: 2px solid ${Common.colors.white01};
+  justify-content: center;
+  align-items: center;
+
+  @media (min-width: 768px) {
+    width: 4rem;
+    height: 4rem;
+    bottom: 2rem;
+    right: 2rem;
+  }
+  @media (max-width: 768px) {
+    width: 3.8rem;
+    height: 3.8rem;
+    bottom: 2rem;
+    right: 2rem;
+  }
+  @media (max-width: 500px) {
+    width: 3.5rem;
+    height: 3.5rem;
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+
+  .img-container {
+    max-width: 2rem;
+    max-height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .arrow-img {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+  }
 `;
