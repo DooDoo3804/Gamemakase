@@ -11,10 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface GameHistoryRepository extends JpaRepository<GameHistory, Long>{
 	List<GameHistory> findAllByUser(User user);
-
-
-  boolean existsByGameGameIdAndUserUserId(Long gameId, Long userId);
-
+  
   List<GameHistory> findByUserUserId(long userId);
 
     boolean existsByGameGameIdAndUserUserId(Long gameId, Long userId);
