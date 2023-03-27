@@ -18,10 +18,14 @@ export const StyleGameClip = styled(motion.div)`
   flex-direction: row;
   height: 120px;
   min-width: 500px;
-  width: 100%;
-
+  
   @media (min-width: 1560px) {
+    width: 100%;
     height: 155px;
+  }
+  
+  @media (min-width: 1160px) {
+    width: 100%;
   }
 
   @media (max-width: 550px) {
@@ -35,7 +39,6 @@ export const StyleGameClip = styled(motion.div)`
   }
   .gameImg {
     height: 120px;
-    width: auto;
     border-radius: 15px;
     @media (min-width: 1560px) {
       height: 155px;
@@ -43,9 +46,7 @@ export const StyleGameClip = styled(motion.div)`
     @media (max-width: 550px) {
       margin-top: 15px;
       min-height: 130px;
-      width: auto;
     }
-    width: auto;
   }
   .game-explain {
     position: relative;
@@ -139,7 +140,7 @@ const GameClip = (props) => {
           )}
         </div>
       </div>
-      {props.price ? <div className="price">${props.price}</div> : null}
+      <div className="price">{props.price === 0 ? "Free" : `$${props.price}`}</div>
     </StyleGameClip>
   );
 };
