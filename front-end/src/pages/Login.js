@@ -9,30 +9,17 @@ import LoadingPage from "../components/LoadingPage";
 import { BACKEND_URL } from "../config";
 
 const Login = () => {
-  const httpRequest = new XMLHttpRequest();
   const [cookies, setCookies] = useCookies(["access-token"]);
   const [user, setUser] = useRecoilState(userState);
 
   useEffect(() => {
-    // if (
-    //   httpRequest.readyState === XMLHttpRequest.DONE &&
-    //   httpRequest.status === 301
-    // ) {
-    // }
-    // console.log(request.getHeaderNames());
-    setCookies(
-      "access-token",
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMyIsImV4cCI6MTY3OTg5MTcyNn0.itvzRMufou9u-w_gQQMrfgp9Al7bySObBThY262FmKV0HHolq0fbuzGcP3SUk8wHxBUNi8BvpA_p2FaNbTzbgA"
-    );
-    // console.log(httpRequest.getResponseHeader("access-token"));
-
-    console.log(cookies);
+    console.log(cookies["access-token"]);
+    
     axios
       .get(`${BACKEND_URL}auth/user`, {
         headers: {
           "Content-Type": "application/json",
-          // Authorization:
-          //   ,
+          accessToken: cookies["access-token"],
         },
       })
       .then(function (response) {
