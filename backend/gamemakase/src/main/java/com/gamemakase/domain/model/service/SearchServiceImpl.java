@@ -129,9 +129,9 @@ public class SearchServiceImpl implements SearchService {
     // max 저장 갯수는 20개로 설정합니다.
     public void insertSearchHistory(SearchHistoryRequestDto searchHistory) {
         Optional<SearchHistory> historyEntity = searchHistoryRedisRepository.findById(String.valueOf(searchHistory.getUserId()));
-        if (historyEntity.isPresent()) {
-            Map<String, LocalDateTime> historyContents = historyEntity.get().getContent();
-            if (historyContents != null && historyContents.size() > 20) {
+        Map<String, LocalDateTime> historyContents = historyEntity.get().getContent();
+        if (historyEntity.isPresent() && historyContents != null) {
+            if (historyContents.size() > 20) {
                 List<String> entry = new ArrayList<>(historyContents.keySet());
                 Collections.sort(entry, new Comparator<String>() {
                             @Override
