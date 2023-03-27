@@ -6,7 +6,7 @@ services:
     container_name: redis
     hostname: redis
     ports:
-      6379:6379
+      - "6379:6379"
   springboot:
     container_name: springboot
     build:
