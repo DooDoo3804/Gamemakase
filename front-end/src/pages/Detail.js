@@ -71,7 +71,7 @@ const Detail = () => {
         headers: { "Content-Type": "application/json", userId: 1 },
       })
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         setGameData(response.data);
         setRecommendedUsers(response.data.recommendedUsers);
         setReviewData(response.data.reviews);
@@ -110,7 +110,7 @@ const Detail = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         if (response.data.length) {
           pageNo.current += 1;
         }
@@ -282,8 +282,34 @@ const Detail = () => {
   };
 
   const handleScrap = () => {
-    // todo : 로그인 안했을 때 로그인 유도, api 연결하기
-    console.log(!isLiked);
+    // todo : 로그인 안했을 때 로그인 유도
+    // Auth 설정
+    if (isLiked) {
+      // 스크랩 취소
+    } else {
+      // 스크랩 하기
+      axios
+        .post(
+          `${BACKEND_URL}auth/user/bookmarks`,
+          {
+            game: gameData,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          setIsLiked(!isLiked);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    // todo : 개발용 코드, 추후 삭제
     setIsLiked(!isLiked);
   };
 
