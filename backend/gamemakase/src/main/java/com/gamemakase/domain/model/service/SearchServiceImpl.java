@@ -22,6 +22,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -134,6 +135,13 @@ public class SearchServiceImpl implements SearchService {
             searchHistoryRedisRepository.save(SearchHistory.builder()
                     .idx(String.valueOf(searchHistory.getUserId()))
                     .content(historyContents)
+                    .build());
+        } else {
+            List<String> newContens = new ArrayList<>();
+            newContens.add(searchHistory.getContent());
+            searchHistoryRedisRepository.save(SearchHistory.builder()
+                    .idx(String.valueOf(searchHistory.getUserId()))
+                    .content(newContens)
                     .build());
         }
     }
