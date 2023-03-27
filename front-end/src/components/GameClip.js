@@ -140,7 +140,7 @@ const GameClip = (props) => {
           )}
         </div>
       </div>
-      <div className="price">{props.price === 0 ? "Free" : `$${props.price}`}</div>
+      <div className="price">{props.price ? props.price === 0 ? "Free" : `$${props.price}` : ""}</div>
     </StyleGameClip>
   );
 };

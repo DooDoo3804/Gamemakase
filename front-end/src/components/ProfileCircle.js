@@ -6,6 +6,9 @@ const StyleProfileCirlce = styled(motion.div)`
   display: flex;
   margin : 15px;
   cursor: pointer;
+  @media (max-width: 1160px) {
+    min-width: 240px;
+  }
   .profile-img-wrapper {
     margin: 0;
     width: 80px;
