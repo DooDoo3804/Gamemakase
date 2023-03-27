@@ -349,6 +349,7 @@ export const ScrollToTopBtn = styled(motion.div)`
   border: 2px solid ${Common.colors.white01};
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 
   @media (min-width: 768px) {
     width: 4rem;

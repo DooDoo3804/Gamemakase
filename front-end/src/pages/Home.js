@@ -82,39 +82,6 @@ const Home = () => {
     },
   ];
 
-  // const moreGames = [
-  //   {
-  //     gameId: 1,
-  //     gameName: "Stray",
-  //     gameImage:
-  //       "https://cdn.akamai.steamstatic.com/steam/apps/1332010/header_292x136.jpg?t=1670349423",
-  //   },
-  //   {
-  //     gameId: 2,
-  //     gameName: "Cult of the Lamb",
-  //     gameImage:
-  //       "https://cdn.akamai.steamstatic.com/steam/apps/1313140/header_292x136.jpg?t=1674826230",
-  //   },
-  //   {
-  //     gameId: 3,
-  //     gameName: "Help Me!",
-  //     gameImage:
-  //       "https://cdn.akamai.steamstatic.com/steam/apps/1557780/header_292x136_koreana.jpg?t=1640234732",
-  //   },
-  //   {
-  //     gameId: 4,
-  //     gameName: "Call of Duty",
-  //     gameImage:
-  //       "https://cdn.akamai.steamstatic.com/steam/apps/1767320/header_292x136_koreana.jpg?t=1642579277",
-  //   },
-  //   {
-  //     gameId: 5,
-  //     gameName: "The Past Within",
-  //     gameImage:
-  //       "https://cdn.akamai.steamstatic.com/steam/apps/1515210/header_292x136.jpg?t=1676931955",
-  //   },
-  // ];
-
   useEffect(() => {
     const timer = setInterval(() => {
       window.addEventListener("scroll", handleScroll);
@@ -269,12 +236,17 @@ const Home = () => {
   const handleScroll = () => {
     if (window.scrollY > scrollRef.current) {
       setBtnView(true);
-      console.log("보영");
     } else {
       setBtnView(false);
-      console.log("안보영");
     }
     scrollRef.current = window.scrollY;
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -428,7 +400,15 @@ const Home = () => {
       </RecommendWrapper>
       <AnimatePresence>
         {btnView ? (
-          <ScrollToTopBtn>
+          <ScrollToTopBtn
+            initial={{ opacity: 0, y: 50 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{ opacity: 0, y: 50 }}
+            onClick={scrollToTop}
+          >
             <div className="img-container">
               <img src={arrow_top} alt="Top" className="arrow-img" />
             </div>
