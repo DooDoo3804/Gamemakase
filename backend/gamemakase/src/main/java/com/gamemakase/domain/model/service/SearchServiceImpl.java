@@ -158,10 +158,10 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Map<String, LocalDateTime> getSearchHistory(long userId) {
+    public List<String> getSearchHistory(long userId) {
         Optional<SearchHistory> historyEntity = searchHistoryRedisRepository.findById(String.valueOf(userId));
         if (historyEntity.isPresent()) {
-            return historyEntity.get().getContent();
+            return new ArrayList<>(historyEntity.get().getContent().keySet());
         } else return null;
     }
 
