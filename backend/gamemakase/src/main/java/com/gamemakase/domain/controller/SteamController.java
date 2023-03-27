@@ -48,8 +48,8 @@ public class SteamController {
     @GetMapping("/api/login/steam") // 스팀 로그인 이미지랑 연동
     public void steamLogin(HttpServletResponse response) throws IOException{
 //        String steamLoginUrl = "https://steamcommunity.com/openid/login?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=http://localhost:8080&openid.return_to=http://localhost:8080/login/steam/callback";
-//        String steamLoginUrl = "http://steamcommunity.com/openid/login?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=http://localhost:8080&openid.return_to=http://localhost:8080/login/steam/callback";
-        String steamLoginUrl = "http://steamcommunity.com/openid/login?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=http://gamemakase.com&openid.return_to=http://gamemakase.com/api/login/steam/callback";
+        String steamLoginUrl = "http://steamcommunity.com/openid/login?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=http://localhost:8080&openid.return_to=http://localhost:8080/api/login/steam/callback";
+//        String steamLoginUrl = "http://steamcommunity.com/openid/login?openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.mode=checkid_setup&openid.ns=http://specs.openid.net/auth/2.0&openid.realm=http://gamemakase.com&openid.return_to=http://gamemakase.com/api/login/steam/callback";
 
         System.out.println("여긴 들어왔다.");
         response.sendRedirect(steamLoginUrl);
@@ -73,15 +73,15 @@ public class SteamController {
             String access_token = (String) token.get("access-token");
             jwtTokenProvider.validateToken(access_token);
             System.out.println(access_token);
-            headers.setLocation(URI.create("http://localhost:3000"));
+            headers.setLocation(URI.create("http://localhost:3000/login"));
             headers.set("access-token", access_token);
-            return new ResponseEntity<Object>(headers, HttpStatus.OK);
+            return new ResponseEntity<Object>(headers, HttpStatus.MOVED_PERMANENTLY);
         } else {
             //회원가입
             String name = userService.getUserName(steamId);
             userService.signUp(signUpRequestDto, steamIdNum, name);
             System.out.println("회원가입도 왔지?");
-            headers.setLocation(URI.create("https://localhost:3000"));
+            headers.setLocation(URI.create("https://localhost:3000/login"));
             return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
         }
     }
