@@ -23,6 +23,7 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -124,10 +125,32 @@ public class SearchServiceImpl implements SearchService {
         return query.getResultList();
     }
 
+    @Override
     public void insertSearchHistory(SearchHistoryRequestDto searchHistory) {
-        searchHistoryRedisRepository.save(SearchHistory.builder()
-                        .userId(String.valueOf(searchHistory.getUserId()))
-                        .content(searchHistory.getContent())
-                .build());
+        Optional<SearchHistory> historyEntity = searchHistoryRedisRepository.findById(String.valueOf(searchHistory.getUserId()));
+        if (historyEntity.isPresent()) {
+            List<String> historyContents = historyEntity.get().getContent();
+            historyContents.add(searchHistory.getContent());
+            searchHistoryRedisRepository.save(SearchHistory.builder()
+                    .idx(String.valueOf(searchHistory.getUserId()))
+                    .content(historyContents)
+                    .build());
+        }
+    }
+
+    @Override
+    public List<String> getSearchHistory(long userId) {
+        Optional<SearchHistory> historyEntity = searchHistoryRedisRepository.findById(String.valueOf(userId));
+        if (historyEntity.isPresent()) {
+            return historyEntity.get().getContent();
+        } else return null;
+    }
+
+    @Override
+    public void deleteearchHistory(long userId) {
+        Optional<SearchHistory> historyEntity = searchHistoryRedisRepository.findById(String.valueOf(userId));
+        if (historyEntity.isPresent()) {
+            searchHistoryRedisRepository.delete(historyEntity.get());
+        }
     }
 }
