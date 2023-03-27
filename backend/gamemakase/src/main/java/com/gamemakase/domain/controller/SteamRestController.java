@@ -1,5 +1,13 @@
 package com.gamemakase.domain.controller;
 
+import com.gamemakase.domain.model.dto.GameHistoryResponseDto;
+import com.gamemakase.domain.model.entity.User;
+import com.gamemakase.domain.model.service.GameService;
+import com.gamemakase.domain.model.service.UserService;
+import com.gamemakase.global.Exception.NotFoundException;
+import com.gamemakase.global.Exception.TokenValidFailedException;
+import io.swagger.annotations.Api;
+import io.swagger.models.auth.In;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,10 +36,14 @@ import org.openid4java.discovery.Identifier;
 import org.openid4java.message.AuthRequest;
 import org.openid4java.message.MessageException;
 import org.openid4java.message.ParameterList;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.spring.web.json.Json;
 
@@ -39,55 +51,26 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 @RestController
 @RequiredArgsConstructor
+@Api(value = "Steam Rest Controller")
 public class SteamRestController{
-  static final String PLAYER_SUMMARIES_BASE_URL = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/";
   static final String RECENTLY_PLAYED_GAMES_URL = "http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/";
   static final String KEY = "5CD56CE3B454EDB2502D85A6C39E55D0";
-//  static final String KEY = "C148F5B21C5FBC3BB556671569985F8C";
-  @GetMapping(value = "/member/{steamID}")
-  public static JSONArray getMemberData(@PathVariable("steamID") String steamID) throws NullPointerException, IOException, ParseException {
-    Map<String, Object> responseData = new HashMap<>();
-    StringBuilder urlBuilder = new StringBuilder();
-    urlBuilder
-        .append(PLAYER_SUMMARIES_BASE_URL)
-        .append("?").append(encode("key", UTF_8)).append("=").append(KEY)
-        .append("&").append(encode("steamids", UTF_8)).append("=").append(steamID);
 
-    URL url = new URL(urlBuilder.toString());
-    System.out.println(url);
-    HttpURLConnection conn = getHttpURLConnection(url);
+  private final GameService gameService;
+  private final UserService userService;
 
-    int responseCode = conn.getResponseCode();
-    boolean isSuccess = 200 <= responseCode && responseCode <= 300;
-    String response = getResponse(conn, isSuccess);
-    System.out.println(response);
+  // User의 각 게임 별 플레이 시간 등록
+  @PostMapping(value = "/auth/user/play-record")
+  private void newRecentlyPlayedGames(@RequestHeader(value = "access-token", required = true) String token, Authentication authentication)
+      throws NullPointerException, IOException, ParseException, NotFoundException, TokenValidFailedException {
 
-    if (isSuccess) {
-      JSONParser parser = new JSONParser();
-      JSONObject totalInfoJson = (JSONObject) ((JSONObject) parser.parse(response)).get("response");
-      System.out.println(totalInfoJson.toString());
-      JSONArray playerInfoJsons = (JSONArray) totalInfoJson.get("players");
-      System.out.println(playerInfoJsons);
+    User user = (User) authentication.getPrincipal();
 
-      if (playerInfoJsons.size() == 0) {
-        throw new NullPointerException("ID값 없어");
-      }
-      JSONObject playerInfoJson = (JSONObject) playerInfoJsons.get(0);
-      System.out.println(playerInfoJson.toString());
-      return playerInfoJsons;
-//
-//      responseData.put("steamNickname", playerInfoJson.get("personaname"));
-//      responseData.put("avatarUrl", playerInfoJson.get("avatarfull"));
-//      System.out.println(responseData);
-    } else {
-//      throw new CustomException("[Error] api connection url : " + urlBuilder, ErrorStatus.API_NOT_CONNECTION);
-      return null;
-    }
-  }
+    long steamIdLong = user.getUserSteamId();
+    String steamId = String.valueOf(steamIdLong);
 
-  @GetMapping(value = "/member/game/{steamId}")
-  private static Long[] getRecentlyPlayedGames(@PathVariable String steamId) throws NullPointerException, IOException, ParseException{
-
+    System.out.println("user id : " + user.getUserId());
+    System.out.println("uyser steamid : " + user.getUserSteamId());
     StringBuilder urlBuilder = new StringBuilder();
     urlBuilder
         .append(RECENTLY_PLAYED_GAMES_URL)
@@ -95,9 +78,9 @@ public class SteamRestController{
         .append("&").append(encode("steamid", UTF_8)).append("=").append(steamId)
         .append("&").append("format").append("=").append("json");
 
-    URL url = new URL(urlBuilder.toString());
-    System.out.println(url);
-    HttpURLConnection conn = getHttpURLConnection(url);
+    URL gameUrl = new URL(urlBuilder.toString());
+    System.out.println(gameUrl);
+    HttpURLConnection conn = getHttpURLConnection(gameUrl);
 
     int responseCode = conn.getResponseCode();
     boolean isSuccess = 200 <= responseCode && responseCode <= 300;
@@ -105,34 +88,35 @@ public class SteamRestController{
     System.out.println("response : " + response);
 
     if (isSuccess) {
-      System.out.println("게임 불러오기 성공이다!");
+
       JSONParser parser = new JSONParser();
       JSONObject totalInfoJson = (JSONObject) ((JSONObject) parser.parse(response)).get("response");
       System.out.println("totalinfo : " + totalInfoJson.toString());
       JSONArray gamesInfoJsons = (JSONArray) totalInfoJson.get("games");
-      System.out.println(gamesInfoJsons);
+      System.out.println("gameInfo : " + gamesInfoJsons);
 
       if (gamesInfoJsons.size() == 0) {
         throw new NullPointerException("게임정보 없어");
       }
-      Long[] game_time = new Long[gamesInfoJsons.size()];
-      Long[] game_2weeks = new Long[gamesInfoJsons.size()];
 
       for(int i=0; i<gamesInfoJsons.size(); i++){
         JSONObject gameIdInfoJson = (JSONObject) gamesInfoJsons.get(i);
-        long game_total_time = (Long) gameIdInfoJson.get("playtime_forever"); //각 게임의 총 플레이 시간
-        long game_2weeks_time = (Long) gameIdInfoJson.get("playtime_2weeks"); //각 게임의 2주간 플레이 시간
-        long gameId = (Long) gameIdInfoJson.get("appid");
-        System.out.println("gameId : " + gameId);
-        game_time[i] = game_total_time;
-        game_2weeks[i] = game_2weeks_time;
-      }
-      return game_2weeks;
-    } else {
-//      throw new CustomException("[Error] api connection url : " + urlBuilder, ErrorStatus.API_NOT_CONNECTION);
-      return null;
-    }
+        long game_total_time = (Long) gameIdInfoJson.get("playtime_forever"); // 각 게임의 총 플레이 시간
+        long game_2weeks_time = (Long) gameIdInfoJson.get("playtime_2weeks"); // 각 게임의 2주간 플레이 시간
+        long gameId = (Long) gameIdInfoJson.get("appid");                     // 게임의 고유 id
 
+        gameService.insertGameHistory((int) game_total_time, (int) game_2weeks_time, gameId, token);
+      }
+    }
+  }
+
+  @GetMapping(value = "/auth/user/play-record")
+  private ResponseEntity<List<GameHistoryResponseDto>> getRecentlyPlayedGames(@RequestHeader(value = "access-token") String token, Authentication authentication)
+      throws NotFoundException {
+    User user = (User) authentication.getPrincipal();
+
+    List<GameHistoryResponseDto> results = gameService.getGameHistory(token);
+    return new ResponseEntity<>(results, HttpStatus.OK);
   }
 
   private static String getResponse(HttpURLConnection conn, boolean isSuccess) throws IOException {

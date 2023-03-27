@@ -14,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.util.Map;
+import javax.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -36,6 +37,7 @@ import java.security.Principal;
 
 @RestController
 @Api(value = "Steam Controller")
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class SteamController {
 
@@ -56,7 +58,7 @@ public class SteamController {
     }
 
     @GetMapping("/api/login/steam/callback")
-    public ResponseEntity<?> steamLoginCallBack(HttpServletRequest request, SignUpRequestDto signUpRequestDto, UserRequestDto userRequestDto) throws Exception {
+    public ResponseEntity<?> steamLoginCallBack(HttpServletRequest request, HttpServletResponse response, SignUpRequestDto signUpRequestDto, UserRequestDto userRequestDto) throws Exception {
 
         ParameterList res = new ParameterList(request.getParameterMap());
         System.out.println("여기도 되나?");
@@ -74,7 +76,12 @@ public class SteamController {
             jwtTokenProvider.validateToken(access_token);
             System.out.println(access_token);
             headers.setLocation(URI.create("http://localhost:3000/login"));
-            headers.set("access-token", access_token);
+//            headers.set("access-token", access_token);
+            Cookie cookie = new Cookie("access-token", access_token);
+            cookie.setPath("/");
+            cookie.setMaxAge(60*60*24);
+
+            response.addCookie(cookie);
             return new ResponseEntity<Object>(headers, HttpStatus.MOVED_PERMANENTLY);
         } else {
             //회원가입
