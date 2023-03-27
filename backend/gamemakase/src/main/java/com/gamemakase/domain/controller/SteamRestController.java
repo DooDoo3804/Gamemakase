@@ -122,6 +122,8 @@ public class SteamRestController{
         JSONObject gameIdInfoJson = (JSONObject) gamesInfoJsons.get(i);
         long game_total_time = (Long) gameIdInfoJson.get("playtime_forever"); //각 게임의 총 플레이 시간
         long game_2weeks_time = (Long) gameIdInfoJson.get("playtime_2weeks"); //각 게임의 2주간 플레이 시간
+        long gameId = (Long) gameIdInfoJson.get("appid");
+        System.out.println("gameId : " + gameId);
         game_time[i] = game_total_time;
         game_2weeks[i] = game_2weeks_time;
       }
