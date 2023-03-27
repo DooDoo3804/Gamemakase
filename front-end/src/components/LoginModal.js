@@ -1,14 +1,12 @@
 import styled from "@emotion/styled";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRef } from "react";
-import { useCookies } from "react-cookie";
 // import useBodyScrollLock from "./ScrollLock";
 import { Common } from "../styles/Common";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import gamemakase_logo from "../assets/gamemakase_logo.svg";
 import { faSteam } from "@fortawesome/free-brands-svg-icons";
-import axios from "axios";
 import { BACKEND_URL } from "../config";
 
 const LoginModalWrapper = styled(motion.div)`
@@ -125,7 +123,6 @@ const LoginModalBody = styled(motion.div)`
 
 const LoginModal = ({ loginView, setLoginView }) => {
   const outSection = useRef();
-  const [cookies, setCookies] = useCookies(["token"]);
 
   // const { openScroll } = useBodyScrollLock();
 
@@ -136,22 +133,6 @@ const LoginModal = ({ loginView, setLoginView }) => {
 
   const handleLogin = () => {
     window.location.assign(`${BACKEND_URL}api/login/steam`);
-    // axios
-    //   .get(`${BACKEND_URL}api/login/steam`, {
-    //     headers: { "Content-Type": "application/json" },
-    //   })
-    //   .then(function (response) {
-    //     console.log(response.data);
-    //     // axios 요청해서 쿠키에 저장
-    //     // setCookies('token', response.data.token)
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //     // if (error.response.status === 500) {
-    //     //   window.location.replace("/500");
-    //     // } else {
-    //     // }
-    //   });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
