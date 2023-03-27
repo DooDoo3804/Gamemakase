@@ -85,6 +85,10 @@ dependencies {
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+    // youtube
+    implementation 'com.google.apis:google-api-services-youtube:v3-rev20210915-1.32.1'
+    implementation 'com.google.http-client:google-http-client-jackson2:1.43.1'
+
 }
 
 // querydsl 사용할 경로 지정합니다. 현재 지정한 부분은 .gitignore에 포함되므로 git에 올라가지 않습니다.
