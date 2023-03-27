@@ -93,12 +93,22 @@ public class SearchRestController {
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "검색 히스토리를 삭제합니다.", notes = "검색 단어에 대한 기록을 삭제합니다.")
-	@DeleteMapping("/history")
-	public ResponseEntity<String> deleteSearchHistory(
+	@ApiOperation(value = "검색 히스토리를 전부 삭제합니다.", notes = "검색 단어에 대한 전체 기록을 삭제합니다.")
+	@DeleteMapping("/history/all")
+	public ResponseEntity<String> deleteAllSearchHistory(
 			@RequestParam long userId
 	) {
-		searchServcie.deleteearchHistory(userId);
+		searchServcie.deleteAllSearchHistory(userId);
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "특정 검색 히스토리를 삭제합니다.", notes = "특정 검색 단어에 대한 기록을 삭제합니다.")
+	@DeleteMapping("/history")
+	public ResponseEntity<String> deleteSearchHistory(
+			@RequestParam long userId,
+			@RequestParam String content
+	) {
+		searchServcie.deleteSearchHistory(userId, content);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 }

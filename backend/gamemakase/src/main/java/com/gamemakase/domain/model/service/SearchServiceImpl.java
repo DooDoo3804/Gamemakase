@@ -165,7 +165,7 @@ public class SearchServiceImpl implements SearchService {
             Collections.sort(entry, new Comparator<String>() {
                         @Override
                         public int compare(String o1, String o2) {
-                            return historyEntity.get().getContent().get(o1).compareTo(historyEntity.get().getContent().get(o2));
+                            return historyEntity.get().getContent().get(o2).compareTo(historyEntity.get().getContent().get(o1));
                         }
                     }
             );
@@ -174,10 +174,20 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public void deleteearchHistory(long userId) {
+    public void deleteAllSearchHistory(long userId) {
         Optional<SearchHistory> historyEntity = searchHistoryRedisRepository.findById(String.valueOf(userId));
         if (historyEntity.isPresent()) {
             searchHistoryRedisRepository.delete(historyEntity.get());
+        }
+    }
+
+    @Override
+    public void deleteSearchHistory(long userId, String content) {
+        Optional<SearchHistory> historyEntity = searchHistoryRedisRepository.findById(String.valueOf(userId));
+        if (historyEntity.isPresent()) {
+            Map<String, LocalDateTime> historyMap = historyEntity.get().getContent();
+            historyMap.remove(content);
+            searchHistoryRedisRepository.save(historyEntity.get());
         }
     }
 }
