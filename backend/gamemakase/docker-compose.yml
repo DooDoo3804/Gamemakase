@@ -1,6 +1,10 @@
 version: "3.7"
 
 services:
+  redis:
+    image: redis
+    port:
+      - 6379:6379
   springboot:
     container_name: springboot
     build:
@@ -14,3 +18,5 @@ services:
       AWS_SECRET_KEY: "${AWS_SECRET_KEY}"
       JWT_SECRET_KEY: "${JWT_SECRET_KEY}"
       STEAM_API_KEY: "${STEAM_API_KEY}"
+    depends_on:
+      -redis
