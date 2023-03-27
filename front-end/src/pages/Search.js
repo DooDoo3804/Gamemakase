@@ -321,22 +321,6 @@ const Search = () => {
 
   /////////////////////////////////////
   // etc func
-
-  const tagAllDelete = () => {
-    axios
-      .delete(`${BACKEND_URL}api/search/history/all`, {
-        params: {
-          userId: userId,
-        },
-      })
-      .then((response) => {
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   const tagDelete = (value) => {
     axios
       .delete(`${BACKEND_URL}api/search/history`, {
@@ -346,11 +330,7 @@ const Search = () => {
         },
       })
       .then((response) => {
-        // let history = searchHistory;
-        // const idx = history.indexOf(value);
-        // history.splice(idx, 1);
-        // setSearchHistory(history);
-        window.location.reload();
+        setSearchHistory(searchHistory.filter(searchHistory => searchHistory !== value));
       })
       .catch((error) => {
         console.log(error);
@@ -390,13 +370,6 @@ const Search = () => {
     result.push(
       <div key="searchHistory" className="tag-header">
         최근 {userName} 님의 검색
-        {searchHistory && searchHistory.length > 0 ? (
-          <div onClick={() => {tagAllDelete()}} className="all-delete-btn">
-            전체삭제
-          </div>
-        ) : (
-          ""
-        )}
       </div>
     );
     const tagsRend = () => {
