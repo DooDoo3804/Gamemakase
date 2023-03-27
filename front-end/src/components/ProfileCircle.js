@@ -74,7 +74,7 @@ const ProfileCircle = (props) => {
             </div>
             <div className="explain">
                 <div className="online">
-                    <div className="online-str">스팀 온라인</div>
+                    <div className="online-str">스팀 {props.online ? "온라인" : "오프라인"}</div>
                     {props.online ? (
                         <div className="online-mark"></div>
                     ) : (

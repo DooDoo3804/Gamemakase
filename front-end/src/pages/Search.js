@@ -2,8 +2,10 @@ import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "react-router";
+import { useInView } from "react-intersection-observer";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
+import tinyLoading from "../assets/tinyLoading.gif";
 //Components
 import Tag from "../components/Tag";
 import CheckBox from "../components/CheckBox";
@@ -30,6 +32,7 @@ const Search = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const niddle = params.get('query');
+  const [width, setWidth] = useState(window.innerWidth);
 
   const [isLoading, setIsLoading] = useState(true);
   const [userName, setUserName] = useState(String);
@@ -37,18 +40,19 @@ const Search = () => {
   const [searchGameResults, setSearchGameResults] = useState([]);
   const [searchUserResults, setSearchUserResults] = useState([]);
 
+  // use ref
   const gameResultWrapper = useRef();
 
-  // condition
+  // filter condition
   const [priceStr, setPriceStr] = useState("Any Price");
   const [priceLimit, setPriceLimit] = useState(99999);
   const [genreList, setGenreList] = useState([]);
   const [isKoreanSupport, setIsKoreanSupport] = useState(false);
-
-  const [width, setWidth] = useState(window.innerWidth);
   // paging
   const [curGamePageNo, setCurGamePageNo] = useState(0);
   const [curUserPageNo, setCurUserPageNo] = useState(0);
+  const [ref, inView] = useInView();
+  const [hasNextPage, setHasNextPage] = useState(true);
 
   // static info
   const genreNameList = [
@@ -117,6 +121,11 @@ const Search = () => {
       .catch((error) => { });
   }, []);
 
+  const priceInput = useRef();
+
+  //////////////////////////////
+  // use effect
+
   useEffect(() => {
     dataSetting(niddle);
   }, [dataSetting, niddle]);
@@ -124,6 +133,7 @@ const Search = () => {
   const handleResize = () => {
     setWidth(window.innerWidth);
   };
+
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => {
@@ -131,7 +141,40 @@ const Search = () => {
     }
   }, []);
 
-  const priceInput = useRef();
+  const getMoreGames = useCallback(async () => {
+    let genreParamString = "";
+    for (let i = 0; i < genreList.length; i++) {
+      genreParamString += genreList[i];
+      if (i !== genreList.length - 1) {
+        genreParamString += ",";
+      }
+    }
+    axios
+      .get(`${BACKEND_URL}api/search/game`, {
+        params: {
+          niddle: niddle,
+          price: priceLimit,
+          useIsKorean: isKoreanSupport ? true : false,
+          isKorean: isKoreanSupport,
+          genreList: genreParamString,
+          gamePageNo: (curGamePageNo + 12),
+        },
+      })
+      .then((response) => {
+        setCurGamePageNo(curGamePageNo + 12);
+        setSearchGameResults((searchGameResults) => [...searchGameResults, ...response.data]);
+        setHasNextPage(response.data.length < 12 ? false : true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [niddle, curGamePageNo, genreList, isKoreanSupport, priceLimit]);
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      getMoreGames();
+    }
+  }, [getMoreGames, inView, hasNextPage]);
 
   //////////////////////////////////
   // filter func
@@ -229,12 +272,16 @@ const Search = () => {
       .catch((error) => { });
   };
 
+
+  /////////////////////////////////////
+  // etc func
+
   const tagDelete = (value) => {
     console.log(value + "delete");
   };
 
   const tagClick = (value) => {
-    console.log(value + "search");
+    window.location.assign("/search?query=" + value);
   };
 
   ///////////////////////////////////////
@@ -460,6 +507,7 @@ const Search = () => {
             </FilterWrapper>
             <div key="gameResults" className="results-wrapper" ref={gameResultWrapper}>
               {gameResultsRend()}
+              <div ref={ref} className="scroll-handler" />
             </div>
             <UserSearchResultsWrapper>
               {userSearchResultsRend()}
@@ -483,6 +531,7 @@ const Search = () => {
                 </FilterWrapper>
                 <GameSearchResult className="results-wrapper" ref={gameResultWrapper}>
                   {gameResultsRend()}
+                  <div ref={ref} className="scroll-handler" />
                 </GameSearchResult>
               </MobileGameResult>
             </GameSearchResultsWrapper>
