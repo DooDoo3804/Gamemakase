@@ -24,5 +24,6 @@ public interface SearchService {
 	List<Game> searchGameByCondition(SearchCondition condition);
 	void insertSearchHistory(SearchHistoryRequestDto searchHistory);
 	List<String> getSearchHistory(long userId);
-	void deleteearchHistory(long userId);
+	void deleteAllSearchHistory(long userId);
+	void deleteSearchHistory(long userId, String content);
 }
