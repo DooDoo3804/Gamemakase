@@ -1,12 +1,11 @@
 package com.gamemakase.domain.model.service;
 
+import com.gamemakase.domain.model.dto.SearchHistoryRequestDto;
 import com.gamemakase.domain.model.dto.SearchResponseDto;
 import com.gamemakase.domain.model.entity.Game;
+import com.gamemakase.domain.model.entity.SearchHistory;
 import com.gamemakase.domain.model.entity.User;
-import com.gamemakase.domain.model.repository.GameRepository;
-import com.gamemakase.domain.model.repository.GenreRepository;
-import com.gamemakase.domain.model.repository.ImageRepository;
-import com.gamemakase.domain.model.repository.UserRepository;
+import com.gamemakase.domain.model.repository.*;
 import com.gamemakase.domain.model.vo.GameInfoVo;
 import com.gamemakase.domain.model.vo.SearchCondition;
 import com.gamemakase.domain.model.vo.UserInfoVo;
@@ -36,6 +35,7 @@ public class SearchServiceImpl implements SearchService {
     private final ImageRepository imageRepository;
     private final GenreRepository genreRepository;
     private final RealTimeUserInfoService realTimeUserInfoService;
+    private final SearchHistoryRedisRepository searchHistoryRedisRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -124,4 +124,10 @@ public class SearchServiceImpl implements SearchService {
         return query.getResultList();
     }
 
+    public void insertSearchHistory(SearchHistoryRequestDto searchHistory) {
+        searchHistoryRedisRepository.save(SearchHistory.builder()
+                        .userId(String.valueOf(searchHistory.getUserId()))
+                        .content(searchHistory.getContent())
+                .build());
+    }
 }

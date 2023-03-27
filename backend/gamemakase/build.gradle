@@ -58,7 +58,6 @@ dependencies {
     implementation 'io.springfox:springfox-swagger-ui:3.0.0'
     implementation group: 'io.springfox', name: 'springfox-oas', version: '3.0.0'
 
-
     // Jwt Token을 위한 dependency
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
@@ -67,7 +66,7 @@ dependencies {
     //openid
     implementation group: 'org.springframework.security', name: 'spring-security-openid', version:'5.7.2'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-//    implementation group: 'org.openid4java', name: 'openid4java', version: '0.9.8'
+//  implementation group: 'org.openid4java', name: 'openid4java', version: '0.9.8'
     implementation group: 'org.openid4java', name: 'openid4java-consumer', version: '0.9.6', ext: 'pom'
 
     //json parser
@@ -82,28 +81,27 @@ dependencies {
     // querydsl
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 }
 
 // querydsl 사용할 경로 지정합니다. 현재 지정한 부분은 .gitignore에 포함되므로 git에 올라가지 않습니다.
 def querydslDir = "$buildDir/generated/'querydsl'"
-
 // JPA 사용여부 및 사용 경로 설정
 querydsl {
     jpa = true
     querydslSourcesDir = querydslDir
 }
-
 // build시 사용할 sourceSet 추가 설정
 sourceSets {
     main.java.srcDir querydslDir
 }
-
-
 // querydsl 컴파일 시 사용할 옵션 설정
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
-
 // querydsl이 compileClassPath를 상속하도록 설정
 configurations {
     compileOnly {
@@ -111,15 +109,6 @@ configurations {
     }
     querydsl.extendsFrom compileClasspath
 }
-
-compileQuerydsl{
-    options.annotationProcessorPath = configurations.querydsl
-}
-
-configurations {
-    querydsl.extendsFrom compileClasspath
-}
-
 tasks.named('test') {
     useJUnitPlatform()
 }
