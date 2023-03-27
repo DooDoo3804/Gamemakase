@@ -19,7 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Api(value = "검색 관련 컨트롤러")
 @RestController
@@ -74,11 +77,11 @@ public class SearchRestController {
 
 	@ApiOperation(value = "검색 히스토리 결과를 반환합니다.", notes = "최근 검색 히스토리 n개를 반환합니다.")
 	@GetMapping("/history")
-	public ResponseEntity<List<String>> getSearchHistory(
+	public ResponseEntity<Map<String, LocalDateTime>> getSearchHistory(
 			@RequestParam long userId
 	) {
-		List<String> contents = searchServcie.getSearchHistory(userId);
-		return new ResponseEntity<List<String>>(contents, HttpStatus.OK);
+		Map<String, LocalDateTime> contents = searchServcie.getSearchHistory(userId);
+		return new ResponseEntity<Map<String, LocalDateTime>>(contents, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "검색 히스토리를 기록합니다.", notes = "검색 단어를 기록합니다.")
