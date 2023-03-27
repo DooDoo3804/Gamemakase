@@ -5,7 +5,6 @@ import { useLocation } from "react-router";
 import { useInView } from "react-intersection-observer";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
-import tinyLoading from "../assets/tinyLoading.gif";
 //Components
 import Tag from "../components/Tag";
 import CheckBox from "../components/CheckBox";
@@ -34,8 +33,12 @@ const Search = () => {
   const niddle = params.get('query');
   const [width, setWidth] = useState(window.innerWidth);
 
+  // 임시
+  const [userId, setUserId] = useState(1);
+  const [userName, setUserName] = useState("");
+  
+  // ajax data
   const [isLoading, setIsLoading] = useState(true);
-  const [userName, setUserName] = useState(String);
   const [searchHistory, setSearchHistory] = useState([]);
   const [searchGameResults, setSearchGameResults] = useState([]);
   const [searchUserResults, setSearchUserResults] = useState([]);
@@ -113,12 +116,39 @@ const Search = () => {
       .then((response) => {
         setSearchGameResults(response.data.games);
         setSearchUserResults(response.data.users);
-        setUserName("김아무개");
-        const getSeachHistory = ["star", "universe"];
-        setSearchHistory(getSeachHistory);
+
+        // login시
+        if (userId) {
+          setUserName("김아무개");
+          
+          if (niddle && niddle.length > 0) {
+            axios.post(`${BACKEND_URL}api/search/history`, {
+              userId: userId,
+              content : niddle
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+            ;
+          }
+          axios.get(`${BACKEND_URL}api/search/history`, {
+            params: {
+              userId: userId
+            },
+          })
+          .then((response) => {
+            setSearchHistory(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+          ;
+        }
         setIsLoading(false);
       })
-      .catch((error) => { });
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   const priceInput = useRef();
@@ -206,7 +236,9 @@ const Search = () => {
         setSearchGameResults(response.data);
         gameResultWrapper.current.className = "results-wrapper";
       })
-      .catch((error) => { });
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const changeGenreFilter = (name, state) => {
@@ -241,7 +273,9 @@ const Search = () => {
         setSearchGameResults(response.data);
         gameResultWrapper.current.className = "results-wrapper";
       })
-      .catch((error) => { });
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const changeKoreanFilter = () => {
@@ -298,13 +332,15 @@ const Search = () => {
     const tagsRend = () => {
       const result = [];
       let idx = 0;
-      searchHistory.forEach((e) => {
-        result.push(
-          <Tag key={idx} value={e} delete={tagDelete} click={tagClick}></Tag>
-        );
-        idx++;
-      });
-      if (searchHistory.length <= 0) {
+      if (searchHistory && searchHistory.length > 0) {
+        searchHistory.forEach((e) => {
+          result.push(
+            <Tag key={idx} value={e} delete={tagDelete} click={tagClick}></Tag>
+          );
+          idx++;
+        });
+      }
+      else {
         result.push(
           <div className="no-history-msg" key={idx}>
             아직 검색 내역이 없어요.
@@ -499,7 +535,7 @@ const Search = () => {
     if (width > 1160) {
       return (
         <SearchWrapper>
-          <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
+          {userId? <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper> : ""}
           <div className="game-search-results-header">게임 검색 결과</div>
           <SearchResultsWrapper className="search-result-wrapper" key="gameResult">
             <FilterWrapper className="filter-wrapper">
@@ -518,7 +554,7 @@ const Search = () => {
     } else {
       return (
         <SearchWrapper>
-          <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
+          {userId? <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper> : ""}
           <div className="search-result-wrapper">
             <UserSearchResultsWrapper>
               {userSearchResultsRend()}
