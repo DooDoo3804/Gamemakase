@@ -17,22 +17,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.gamemakase.domain.model.entity.*;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.gamemakase.domain.model.dto.GameDetailResponseDto;
-import com.gamemakase.domain.model.entity.Game;
-import com.gamemakase.domain.model.entity.Genre;
-import com.gamemakase.domain.model.entity.Image;
-import com.gamemakase.domain.model.entity.Recommendation;
 import com.gamemakase.domain.model.repository.GameHistoryRepository;
 import com.gamemakase.domain.model.repository.GameRepository;
 import com.gamemakase.domain.model.repository.GenreRepository;
 import com.gamemakase.domain.model.repository.ImageRepository;
 import com.gamemakase.domain.model.repository.LikeGameRepository;
-import com.gamemakase.domain.model.repository.RecommendationRepository;
 import com.gamemakase.domain.model.repository.ReviewRepository;
 import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.global.Exception.NotFoundException;
@@ -54,7 +50,6 @@ public class GameServiceImpl implements GameService{
 
     private final UserRepository userRepository;
     private final LikeGameRepository likeGameRepository;
-    private final RecommendationRepository recommendationRepository;
     private final ReviewService reviewService;
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -89,7 +84,9 @@ public class GameServiceImpl implements GameService{
 //        System.out.println("genreList = " + genreList.toString());
         List<Image> imageList = imageRepository.findAllByTypeAndTypeId("GAME_SCREENSHOTS", gameId);
 //        System.out.println("imageList = " + imageList.toString());
-        List<Recommendation> recommendationList = recommendationRepository.findAllByGameGameIdOrderByRatingDesc(gameId);
+        List<GameHistory> recommendationList = gameHistoryRepository.findAllByGameGameIdOrderByTotalPlayGameDesc(gameId);
+
+//        List<Recommendation> recommendationList = recommendationRepository.findAllByGameGameIdOrderByRatingDesc(gameId);
 //        System.out.println("recommendationList = " + recommendationList.toString());
 
         return GameDetailResponseDto.builder()

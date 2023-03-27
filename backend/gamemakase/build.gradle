@@ -1,7 +1,15 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.7'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    // querydsl 플러그인 추가
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.example'
@@ -20,7 +28,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
@@ -50,7 +58,6 @@ dependencies {
     implementation 'io.springfox:springfox-swagger-ui:3.0.0'
     implementation group: 'io.springfox', name: 'springfox-oas', version: '3.0.0'
 
-
     // Jwt Token을 위한 dependency
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
@@ -59,7 +66,7 @@ dependencies {
     //openid
     implementation group: 'org.springframework.security', name: 'spring-security-openid', version:'5.7.2'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-//    implementation group: 'org.openid4java', name: 'openid4java', version: '0.9.8'
+//  implementation group: 'org.openid4java', name: 'openid4java', version: '0.9.8'
     implementation group: 'org.openid4java', name: 'openid4java-consumer', version: '0.9.6', ext: 'pom'
 
     //json parser
@@ -71,8 +78,41 @@ dependencies {
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
     implementation 'javax.servlet:jstl'
 
+    // querydsl
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // youtube
+    implementation 'com.google.apis:google-api-services-youtube:v3-rev20210915-1.32.1'
+    implementation 'com.google.http-client:google-http-client-jackson2:1.43.1'
+
 }
 
+// querydsl 사용할 경로 지정합니다. 현재 지정한 부분은 .gitignore에 포함되므로 git에 올라가지 않습니다.
+def querydslDir = "$buildDir/generated/'querydsl'"
+// JPA 사용여부 및 사용 경로 설정
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+// build시 사용할 sourceSet 추가 설정
+sourceSets {
+    main.java.srcDir querydslDir
+}
+// querydsl 컴파일 시 사용할 옵션 설정
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+// querydsl이 compileClassPath를 상속하도록 설정
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
 tasks.named('test') {
     useJUnitPlatform()
 }
