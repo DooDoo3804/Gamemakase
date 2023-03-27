@@ -22,9 +22,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -127,18 +126,30 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    // max 저장 갯수는 20개로 설정합니다.
     public void insertSearchHistory(SearchHistoryRequestDto searchHistory) {
         Optional<SearchHistory> historyEntity = searchHistoryRedisRepository.findById(String.valueOf(searchHistory.getUserId()));
         if (historyEntity.isPresent()) {
-            List<String> historyContents = historyEntity.get().getContent();
-            historyContents.add(searchHistory.getContent());
+            Map<String, LocalDateTime> historyContents = historyEntity.get().getContent();
+            if (historyContents.size() > 20) {
+                List<String> entry = new ArrayList<>(historyContents.keySet());
+                Collections.sort(entry, new Comparator<String>() { //value를 기준으로 내림차순
+                            @Override
+                            public int compare(String o1, String o2) {
+                                return historyContents.get(o2).compareTo(historyContents.get(o1));
+                            }
+                        }
+                );
+                historyContents.remove(entry.get(0)); // 20개가 넘었으면 하나 삭제
+            }
+            historyContents.put(searchHistory.getContent(), LocalDateTime.now());
             searchHistoryRedisRepository.save(SearchHistory.builder()
                     .idx(String.valueOf(searchHistory.getUserId()))
                     .content(historyContents)
                     .build());
         } else {
-            List<String> newContens = new ArrayList<>();
-            newContens.add(searchHistory.getContent());
+            Map<String, LocalDateTime> newContens = new HashMap<>();
+            newContens.put(searchHistory.getContent(), LocalDateTime.now());
             searchHistoryRedisRepository.save(SearchHistory.builder()
                     .idx(String.valueOf(searchHistory.getUserId()))
                     .content(newContens)
@@ -147,7 +158,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<String> getSearchHistory(long userId) {
+    public Map<String, LocalDateTime> getSearchHistory(long userId) {
         Optional<SearchHistory> historyEntity = searchHistoryRedisRepository.findById(String.valueOf(userId));
         if (historyEntity.isPresent()) {
             return historyEntity.get().getContent();
