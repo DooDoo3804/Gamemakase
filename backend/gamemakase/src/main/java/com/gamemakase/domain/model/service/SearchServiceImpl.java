@@ -161,7 +161,15 @@ public class SearchServiceImpl implements SearchService {
     public List<String> getSearchHistory(long userId) {
         Optional<SearchHistory> historyEntity = searchHistoryRedisRepository.findById(String.valueOf(userId));
         if (historyEntity.isPresent()) {
-            return new ArrayList<>(historyEntity.get().getContent().keySet());
+            List<String> entry = new ArrayList<>(historyEntity.get().getContent().keySet());
+            Collections.sort(entry, new Comparator<String>() {
+                        @Override
+                        public int compare(String o1, String o2) {
+                            return historyEntity.get().getContent().get(o1).compareTo(historyEntity.get().getContent().get(o2));
+                        }
+                    }
+            );
+            return entry;
         } else return null;
     }
 
