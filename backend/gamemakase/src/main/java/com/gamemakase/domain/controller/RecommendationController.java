@@ -64,6 +64,12 @@ public class RecommendationController {
         return ResponseEntity.status(HttpStatus.OK).body(recommendationService.getGamesInRandomOrder(pageSize));
     }
 
+    @ApiOperation(value = "오늘의 추천 게임 5개", notes = "매일 00시에 db 스케줄링을 통해 갱신됩니다.")
+    @GetMapping("/api/recommend/daily")
+    public ResponseEntity<List<GameResponseDto>> getDaily(){
+        return ResponseEntity.status(HttpStatus.OK).body(recommendationService.getDailyRecommendations());
+    }
+
 
 
 
