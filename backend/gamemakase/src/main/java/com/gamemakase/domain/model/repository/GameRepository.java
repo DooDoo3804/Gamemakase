@@ -22,4 +22,5 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     List<Game> findTop100ByOrderByPeakCcuDesc();
 
 
+
 }
