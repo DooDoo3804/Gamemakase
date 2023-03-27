@@ -3,6 +3,7 @@ package com.gamemakase.domain.model.service;
 import java.io.IOException;
 import java.util.List;
 
+import com.gamemakase.domain.model.dto.SearchHistoryRequestDto;
 import com.gamemakase.domain.model.entity.Game;
 import com.gamemakase.domain.model.vo.SearchCondition;
 import org.json.simple.parser.ParseException;
@@ -18,4 +19,5 @@ public interface SearchService {
 	List<UserInfoVo> getSearchUserResult(String niddle, int userPageNo) throws IOException, ParseException, NotFoundException;
 	List<GameInfoVo> getSearchResultByCondition(SearchCondition condition);
 	List<Game> searchGameByCondition(SearchCondition condition);
+	void insertSearchHistory(SearchHistoryRequestDto searchHistory);
 }

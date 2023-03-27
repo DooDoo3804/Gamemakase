@@ -1,5 +1,6 @@
 package com.gamemakase.domain.controller;
 
+import com.gamemakase.domain.model.dto.SearchHistoryRequestDto;
 import com.gamemakase.domain.model.dto.SearchResponseDto;
 import com.gamemakase.domain.model.service.SearchService;
 import com.gamemakase.domain.model.vo.GameInfoVo;
@@ -15,10 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -72,5 +70,13 @@ public class SearchRestController {
 			) throws IOException, ParseException, NotFoundException {
 		List<UserInfoVo> result = searchServcie.getSearchUserResult(niddle, userPageNo);
 		return new ResponseEntity<List<UserInfoVo>>(result, HttpStatus.OK);
+	}
+
+	@PostMapping("/history")
+	public ResponseEntity<?> insertSearchHistory(
+			@RequestBody SearchHistoryRequestDto searchHistory
+	) {
+		searchServcie.insertSearchHistory(searchHistory);
+		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 }
