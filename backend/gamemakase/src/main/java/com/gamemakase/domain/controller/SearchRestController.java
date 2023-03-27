@@ -77,11 +77,11 @@ public class SearchRestController {
 
 	@ApiOperation(value = "검색 히스토리 결과를 반환합니다.", notes = "최근 검색 히스토리 n개를 반환합니다.")
 	@GetMapping("/history")
-	public ResponseEntity<Map<String, LocalDateTime>> getSearchHistory(
+	public ResponseEntity<List<String>> getSearchHistory(
 			@RequestParam long userId
 	) {
-		Map<String, LocalDateTime> contents = searchServcie.getSearchHistory(userId);
-		return new ResponseEntity<Map<String, LocalDateTime>>(contents, HttpStatus.OK);
+		List<String> contents = searchServcie.getSearchHistory(userId);
+		return new ResponseEntity<List<String>>(contents, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "검색 히스토리를 기록합니다.", notes = "검색 단어를 기록합니다.")
