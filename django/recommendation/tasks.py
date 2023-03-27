@@ -7,6 +7,7 @@ from .models import GameHistory, Game, Image, Recommendation, User
 from sklearn.metrics.pairwise import cosine_similarity
 from .serializers import *
 import logging
+from django.db import connection
 
 
 def B(df, users):
@@ -18,7 +19,7 @@ def B(df, users):
         print(user_game)
         # 순회를 돌면서 모든 게임
         dtypes = {'steam_id': int, 'game_id': int,
-                    'playtime': int}
+                  'playtime': int}
         for game in user_game:
             exists_game = Game.objects.filter(game_id=game.game.game_id)
             print(exists_game)
@@ -32,17 +33,17 @@ def B(df, users):
                 game_df_sorted = game_df.sort_values('playtime_diff')
                 closest_rating = game_df_sorted[game_df_sorted['steam_id']
                                                 != steamid].iloc[0]['rating']
-                
+
                 # 기존 테이블에 추가
                 new_row = {'steam_id': steamid, 'game_id': gameid,
-                        'playtime': playtime, 'rating': closest_rating}
-                
+                           'playtime': playtime, 'rating': closest_rating}
+
                 df = df.astype(dtypes).append(new_row, ignore_index=True)
             else:
                 print(f"None : {exists_game}")
 
     df = df.astype({'steam_id': int, 'game_id': int,
-        'playtime': int})
+                    'playtime': int})
     return df
 
 
@@ -80,7 +81,7 @@ def get_recommended_games(users):
         password="banapresso77",
         db="gamemakase",
         charset="utf8",
-        cursorclass=pymysql.cursors.DictCursor        
+        cursorclass=pymysql.cursors.DictCursor
     )
     cursor = conn.cursor()
     sql = "select * from gamemakase.rating"
@@ -97,7 +98,7 @@ def get_recommended_games(users):
     print("--------------------------------------------------------------------------------------------------------------------------------")
 
     pivot_table = pd.pivot_table(df, values='rating', index=[
-                                'steam_id'], columns=['game_id'])
+        'steam_id'], columns=['game_id'])
     print(f"pivot_table:{pivot_table}")
     cos_sim_matrix = cosine_similarity(pivot_table.fillna(0))
     print(f"cos_sim_matrix:{cos_sim_matrix}")
@@ -111,7 +112,8 @@ def get_recommended_games(users):
             knn = cos_sim_df[steam_id].sort_values(ascending=False)[:30]
             knn = list(knn.index)
             json_data_2 = df
-            json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
+            json_data_2.sort_values(
+                by=['steam_id', 'game_id'], ignore_index=True)
             print(json_data_2)
             recommend = get_recommend(steam_id, knn, json_data_2)
             print(recommend[:5])
@@ -121,14 +123,19 @@ def get_recommended_games(users):
             for game_id, rating in recommend[:100]:
                 try:
                     game = Game.objects.get(game_id=game_id)
-                    images = Image.objects.filter(type_id = game_id)
-                    recommendation = Recommendation(steam_id = steam_id, game_id = game.game_id, rating = rating)
+                    images = Image.objects.filter(type_id=game_id)
+                    recommendation = Recommendation(
+                        steam_id=steam_id, game_id=game.game_id, rating=rating)
                     recommendation.save()
                 except Exception as e:
                     print(game_id, e)
         except Exception as e:
             print(e, steam_id)
             continue
+
+    # DB 연결 해제
+    connection.close()
+
     return HttpResponse(status=HTTP_201_CREATED)
 
 

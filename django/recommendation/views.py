@@ -10,6 +10,7 @@ import logging
 from .tasks import update_recommed
 from apscheduler.schedulers.background import BackgroundScheduler
 import time
+from django.db import connection
 # user_id : 유저 모델 의 아이디 값 > user_steam_id 로 대체
 # user_steam_id : 유저 스팀 아이디
 # steam_id : 스팀 아이디
@@ -22,7 +23,7 @@ def A(df, userid, steamid):
     print(user_game)
     # 순회를 돌면서 모든 게임
     dtypes = {'steam_id': int, 'game_id': int,
-                'playtime': int}
+              'playtime': int}
     for game in user_game:
         exists_game = GameSmall.objects.filter(game_id=game.game.game_id)
         print(exists_game)
@@ -36,17 +37,17 @@ def A(df, userid, steamid):
             game_df_sorted = game_df.sort_values('playtime_diff')
             closest_rating = game_df_sorted[game_df_sorted['steam_id']
                                             != steamid].iloc[0]['rating']
-            
+
             # 기존 테이블에 추가
             new_row = {'steam_id': steamid, 'game_id': gameid,
-                    'playtime': playtime, 'rating': closest_rating}
-            
+                       'playtime': playtime, 'rating': closest_rating}
+
             df = df.astype(dtypes).append(new_row, ignore_index=True)
         else:
             print(f"None : {exists_game}")
 
     df = df.astype({'steam_id': int, 'game_id': int,
-        'playtime': int})
+                    'playtime': int})
     return df
 
 
@@ -88,7 +89,7 @@ def get_recommended_games_small(request, user_id):
         password="banapresso77",
         db="gamemakase",
         charset="utf8",
-        cursorclass=pymysql.cursors.DictCursor        
+        cursorclass=pymysql.cursors.DictCursor
     )
     cursor = conn.cursor()
     sql = "select * from gamemakase.rating_small"
@@ -120,16 +121,21 @@ def get_recommended_games_small(request, user_id):
     json_data_2.sort_values(by=['steam_id', 'game_id'], ignore_index=True)
     recommend = get_recommend(user_steamid, knn, json_data_2)
     print(recommend)
-    
+
     Recommendation.objects.filter(steam_id=user_steamid).delete()
     for game_id, rating in recommend[:100]:
         try:
             game = Game.objects.get(game_id=game_id)
-            images = Image.objects.filter(type_id = game_id)
-            recommendation = Recommendation(steam_id = user_steamid, game_id = game.game_id, rating = rating)
+            images = Image.objects.filter(type_id=game_id)
+            recommendation = Recommendation(
+                steam_id=user_steamid, game_id=game.game_id, rating=rating)
             recommendation.save()
         except Exception as e:
             print(game_id, e)
+
+    # DB 연결 해제
+    connection.close()
+
     return HttpResponse(status=HTTP_201_CREATED)
 
 
@@ -154,5 +160,6 @@ def schedule_api():
         sched.start()
     except Exception as e:
         logging.exception(f"Error in background job: {str(e)}")
+
 
 schedule_api()
