@@ -133,10 +133,10 @@ public class SearchServiceImpl implements SearchService {
             Map<String, LocalDateTime> historyContents = historyEntity.get().getContent();
             if (historyContents.size() > 20) {
                 List<String> entry = new ArrayList<>(historyContents.keySet());
-                Collections.sort(entry, new Comparator<String>() { //value를 기준으로 내림차순
+                Collections.sort(entry, new Comparator<String>() {
                             @Override
                             public int compare(String o1, String o2) {
-                                return historyContents.get(o2).compareTo(historyContents.get(o1));
+                                return historyContents.get(o1).compareTo(historyContents.get(o2));
                             }
                         }
                 );
@@ -161,7 +161,15 @@ public class SearchServiceImpl implements SearchService {
     public List<String> getSearchHistory(long userId) {
         Optional<SearchHistory> historyEntity = searchHistoryRedisRepository.findById(String.valueOf(userId));
         if (historyEntity.isPresent()) {
-            return new ArrayList<>(historyEntity.get().getContent().keySet());
+            List<String> entry = new ArrayList<>(historyEntity.get().getContent().keySet());
+            Collections.sort(entry, new Comparator<String>() {
+                        @Override
+                        public int compare(String o1, String o2) {
+                            return historyEntity.get().getContent().get(o1).compareTo(historyEntity.get().getContent().get(o2));
+                        }
+                    }
+            );
+            return entry;
         } else return null;
     }
 
