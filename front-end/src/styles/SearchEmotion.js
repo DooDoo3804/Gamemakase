@@ -107,6 +107,7 @@ export const SearchHistoryWrapper = styled.div`
   }
   .tags-wrapper {
     display: flex;
+    flex-wrap: wrap;
   }
   .tags-line {
     margin-top: 15px;
