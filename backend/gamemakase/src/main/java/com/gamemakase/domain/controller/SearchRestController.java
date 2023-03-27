@@ -30,7 +30,7 @@ public class SearchRestController {
 	private final SearchService searchServcie;
 	private final Logger logger = LoggerFactory.getLogger(SearchRestController.class);
 	
-	@ApiOperation(value = "게임, 유저 검색 결과를 반환합니다", notes = "검색 단어에 대한 게임(최대 12), 유저(최대 5)의 결과를 응답합니다.")
+	@ApiOperation(value = "게임, 유저 검색 결과와 검색 히스토리를 반환합니다", notes = "검색 단어에 대한 게임(최대 12), 유저(최대 5)의 결과를 응답합니다.")
 	@GetMapping
 	public ResponseEntity<SearchResponseDto> getSearchResult(
 			@RequestParam(required = false) @ApiParam(required = false) String niddle
@@ -72,11 +72,30 @@ public class SearchRestController {
 		return new ResponseEntity<List<UserInfoVo>>(result, HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "검색 히스토리 결과를 반환합니다.", notes = "최근 검색 히스토리 n개를 반환합니다.")
+	@GetMapping("/history")
+	public ResponseEntity<List<String>> getSearchHistory(
+			@RequestParam long userId
+	) {
+		List<String> contents = searchServcie.getSearchHistory(userId);
+		return new ResponseEntity<List<String>>(contents, HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "검색 히스토리를 기록합니다.", notes = "검색 단어를 기록합니다.")
 	@PostMapping("/history")
-	public ResponseEntity<?> insertSearchHistory(
+	public ResponseEntity<String> insertSearchHistory(
 			@RequestBody SearchHistoryRequestDto searchHistory
 	) {
 		searchServcie.insertSearchHistory(searchHistory);
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "검색 히스토리를 삭제합니다.", notes = "검색 단어에 대한 기록을 삭제합니다.")
+	@DeleteMapping("/history")
+	public ResponseEntity<String> deleteSearchHistory(
+			@RequestParam long userId
+	) {
+		searchServcie.deleteearchHistory(userId);
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 }

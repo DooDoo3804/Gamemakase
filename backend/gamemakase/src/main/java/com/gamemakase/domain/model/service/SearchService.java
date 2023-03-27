@@ -20,4 +20,6 @@ public interface SearchService {
 	List<GameInfoVo> getSearchResultByCondition(SearchCondition condition);
 	List<Game> searchGameByCondition(SearchCondition condition);
 	void insertSearchHistory(SearchHistoryRequestDto searchHistory);
+	List<String> getSearchHistory(long userId);
+	void deleteearchHistory(long userId);
 }
