@@ -3,6 +3,7 @@ package com.gamemakase.domain.model.service;
 import com.gamemakase.domain.model.dto.GameResponseDto;
 import com.gamemakase.domain.model.dto.RecommendationResponseDto;
 import com.gamemakase.domain.model.entity.User;
+import com.gamemakase.domain.model.repository.DailyRecommendationRepository;
 import com.gamemakase.domain.model.repository.GameRepository;
 import com.gamemakase.domain.model.repository.RecommendationRepository;
 import com.gamemakase.domain.model.repository.UserRepository;
@@ -31,6 +32,7 @@ public class RecommendationServiceImpl implements RecommendationService {
     private final RecommendationRepository recommendationRepository;
     private final Logger logger = LoggerFactory.getLogger(RecommendationServiceImpl.class);
     private final GameRepository gameRepository;
+    private final DailyRecommendationRepository dailyRecommendationRepository;
 
 
 
@@ -103,7 +105,9 @@ public class RecommendationServiceImpl implements RecommendationService {
         return  randomGames.subList(0, Math.min(pageSize, randomGames.size()));
     }
 
-
-
+    @Override
+    public List<GameResponseDto> getDailyRecommendations() {
+        return dailyRecommendationRepository.findAllAsDto();
+    }
 }
 

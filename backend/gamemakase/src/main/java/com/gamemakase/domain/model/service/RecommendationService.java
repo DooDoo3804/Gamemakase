@@ -16,4 +16,6 @@ public interface RecommendationService {
     List<GameResponseDto> getTopGamesInRandomOrder(Integer pageSize);
 
     List<GameResponseDto> getGamesInRandomOrder(Integer pageSize);
+
+    List<GameResponseDto> getDailyRecommendations();
 }
