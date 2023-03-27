@@ -1,7 +1,10 @@
 package com.gamemakase.domain.model.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.gamemakase.domain.model.dto.SearchHistoryRequestDto;
 import com.gamemakase.domain.model.entity.Game;
@@ -20,6 +23,6 @@ public interface SearchService {
 	List<GameInfoVo> getSearchResultByCondition(SearchCondition condition);
 	List<Game> searchGameByCondition(SearchCondition condition);
 	void insertSearchHistory(SearchHistoryRequestDto searchHistory);
-	List<String> getSearchHistory(long userId);
+	Map<String, LocalDateTime> getSearchHistory(long userId);
 	void deleteearchHistory(long userId);
 }
