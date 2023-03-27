@@ -109,6 +109,7 @@ const Search = () => {
   const dataSetting = useCallback(
     (niddle) => {
       // login시
+      const history = [];
       if (userId) {
         setUserName("김아무개");
         // 현재 검색기록을 post
@@ -117,6 +118,9 @@ const Search = () => {
             .post(`${BACKEND_URL}api/search/history`, {
               userId: userId,
               content: niddle,
+            })
+            .then(() =>{
+              history.push(niddle);
             })
             .catch((error) => {
               console.log(error);
@@ -130,15 +134,16 @@ const Search = () => {
             },
           })
           .then((response) => {
-            const history = response.data;
-            if (history.indexOf(niddle) < 0 && niddle && niddle.length > 0) {
-              history.push(niddle);
-            }
-            setSearchHistory(history);
+            response.data.forEach((e) => {
+              if (e !== niddle) {
+                history.push(e);
+              }
+            });
           })
           .catch((error) => {
             console.log(error);
           });
+          setSearchHistory(history);
       }
       // 검색 결과 가져오기
       axios
@@ -378,7 +383,7 @@ const Search = () => {
       if (searchHistory && searchHistory.length > 0) {
         searchHistory.forEach((e) => {
           result.push(
-            <Tag key={idx} value={e} delete={() => {tagDelete(e)}} click={() => {tagClick()}}></Tag>
+            <Tag key={idx} value={e} delete={() => {tagDelete(e)}} click={() => {tagClick(e)}}></Tag>
           );
           idx++;
         });
