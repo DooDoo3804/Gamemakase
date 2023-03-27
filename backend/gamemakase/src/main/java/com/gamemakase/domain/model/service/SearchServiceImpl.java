@@ -131,7 +131,7 @@ public class SearchServiceImpl implements SearchService {
         Optional<SearchHistory> historyEntity = searchHistoryRedisRepository.findById(String.valueOf(searchHistory.getUserId()));
         if (historyEntity.isPresent()) {
             Map<String, LocalDateTime> historyContents = historyEntity.get().getContent();
-            if (historyContents.size() > 20) {
+            if (historyContents != null && historyContents.size() > 20) {
                 List<String> entry = new ArrayList<>(historyContents.keySet());
                 Collections.sort(entry, new Comparator<String>() {
                             @Override
@@ -160,7 +160,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<String> getSearchHistory(long userId) {
         Optional<SearchHistory> historyEntity = searchHistoryRedisRepository.findById(String.valueOf(userId));
-        if (historyEntity.isPresent()) {
+        if (historyEntity.isPresent() && historyEntity.get().getContent() != null) {
             List<String> entry = new ArrayList<>(historyEntity.get().getContent().keySet());
             Collections.sort(entry, new Comparator<String>() {
                         @Override
