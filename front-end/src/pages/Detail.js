@@ -71,7 +71,7 @@ const Detail = () => {
         headers: { "Content-Type": "application/json", userId: 1 },
       })
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         setGameData(response.data);
         setRecommendedUsers(response.data.recommendedUsers);
         setReviewData(response.data.reviews);
@@ -110,7 +110,7 @@ const Detail = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         if (response.data.length) {
           pageNo.current += 1;
         }
@@ -262,9 +262,18 @@ const Detail = () => {
       }
     } else {
       result.push(
-        <div key={0} className="no-review">
+        <motion.div
+          key={0}
+          className="no-review"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+            transition: { delay: 0.1 },
+          }}
+        >
           <p>리뷰가 존재하지 않습니다.</p>
-        </div>
+        </motion.div>
       );
     }
 
@@ -282,8 +291,34 @@ const Detail = () => {
   };
 
   const handleScrap = () => {
-    // todo : 로그인 안했을 때 로그인 유도, api 연결하기
-    console.log(!isLiked);
+    // todo : 로그인 안했을 때 로그인 유도
+    // Auth 설정
+    if (isLiked) {
+      // 스크랩 취소
+    } else {
+      // 스크랩 하기
+      axios
+        .post(
+          `${BACKEND_URL}auth/user/bookmarks`,
+          {
+            game: gameData,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          setIsLiked(!isLiked);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    // todo : 개발용 코드, 추후 삭제
     setIsLiked(!isLiked);
   };
 
@@ -374,15 +409,15 @@ const Detail = () => {
               }}
             >
               <span className="single-info">
-                <p className="info-title">Preference</p>
+                <p className="info-title">선호도</p>
                 <p className="info-content">{gameData.score + "%"}</p>
               </span>
               <span className="single-info">
-                <p className="info-title">Price</p>
+                <p className="info-title">가격</p>
                 <p className="info-content">{"$" + gameData.gamePrice}</p>
               </span>
               <span className="single-info">
-                <p className="info-title">Genres</p>
+                <p className="info-title">장르</p>
                 <p className="info-content">{renderGenres()}</p>
               </span>
             </motion.div>
