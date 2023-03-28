@@ -70,30 +70,27 @@ public class SteamController {
         long steamIdNum = Long.parseLong(steamId);
         System.out.println("steamid 받았어?");
 
-        if (userService.isUser(steamIdNum)) {
-            //로그인
-            Map<String, Object> token = userService.login(steamIdNum);
-            String accessToken = (String) token.get("accessToken");
-            jwtTokenProvider.validateToken(accessToken);
-            System.out.println(accessToken);
-            headers.setLocation(URI.create("http://gamemakase.com/login"));
-//            headers.set("access-token", access_token);
-            Cookie cookie = new Cookie("accessToken", accessToken);
-            cookie.setPath("/");
-//            cookie.setSecure(true);
-//            cookie.setDomain(".gamemakase.com");
-            cookie.setMaxAge(60*60*24);
-            response.addCookie(cookie);
-
-            return new ResponseEntity<Object>(headers, HttpStatus.MOVED_PERMANENTLY);
-        } else {
+        if (!userService.isUser(steamIdNum)) {
             //회원가입
             String name = userService.getUserName(steamId);
             userService.signUp(signUpRequestDto, steamIdNum, name);
-            System.out.println("회원가입도 왔지?");
-            headers.setLocation(URI.create("https://localhost:3000/login"));
-            return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
         }
+
+        //로그인
+        Map<String, Object> token = userService.login(steamIdNum);
+        String accessToken = (String) token.get("accessToken");
+        jwtTokenProvider.validateToken(accessToken);
+        System.out.println("로그인 accessToken : " + accessToken);
+
+        Cookie cookie = new Cookie("accessToken", accessToken);
+        cookie.setPath("/");
+        cookie.setMaxAge(60*60*24);
+        response.addCookie(cookie);
+
+        headers.setLocation(URI.create("http://gamemakase.com/signUp"));
+
+        return new ResponseEntity<Object>(headers, HttpStatus.MOVED_PERMANENTLY);
+
     }
 
 
