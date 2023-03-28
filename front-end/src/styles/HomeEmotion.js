@@ -326,6 +326,25 @@ export const RecommendWrapper = styled.div`
       object-fit: contain;
     }
   }
+
+  .no-game {
+    color: ${Common.colors.white01};
+    margin: 2rem 0rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Noto Sans KR", serif;
+
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+    p {
+      margin-bottom: 2rem;
+    }
+  }
 `;
 
 export const MoreGamesWrapper = styled.div`
