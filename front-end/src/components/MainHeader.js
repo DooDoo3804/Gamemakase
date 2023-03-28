@@ -52,6 +52,7 @@ const MainHeader = () => {
     setUser(null);
     removeCookie("accessToken");
     console.log("로그아웃이 정상적으로 처리되었습니다.");
+    window.location.replace("/");
   };
 
   return (
