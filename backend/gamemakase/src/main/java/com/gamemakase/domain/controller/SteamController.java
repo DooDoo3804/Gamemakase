@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
+import org.springframework.web.util.CookieGenerator;
 
 @RestController
 @Api(value = "Steam Controller")
@@ -75,13 +76,15 @@ public class SteamController {
             String accessToken = (String) token.get("accessToken");
             jwtTokenProvider.validateToken(accessToken);
             System.out.println(accessToken);
-            headers.setLocation(URI.create("http://localhost:3000/login"));
+            headers.setLocation(URI.create("http://gamemakase.com/login"));
 //            headers.set("access-token", access_token);
-            Cookie cookie = new Cookie("access-token", accessToken);
+            Cookie cookie = new Cookie("accessToken", accessToken);
             cookie.setPath("/");
+//            cookie.setSecure(true);
+//            cookie.setDomain(".gamemakase.com");
             cookie.setMaxAge(60*60*24);
-
             response.addCookie(cookie);
+
             return new ResponseEntity<Object>(headers, HttpStatus.MOVED_PERMANENTLY);
         } else {
             //회원가입
