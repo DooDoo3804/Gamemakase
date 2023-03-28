@@ -8,11 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +20,7 @@ import org.springframework.security.core.GrantedAuthority;
 @AllArgsConstructor
 @Builder
 @Table(name = "user")
+@ToString
 public class User implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
