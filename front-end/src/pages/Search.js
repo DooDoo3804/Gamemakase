@@ -5,7 +5,6 @@ import { useLocation } from "react-router";
 import { useInView } from "react-intersection-observer";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
-import tinyLoading from "../assets/tinyLoading.gif";
 //Components
 import Tag from "../components/Tag";
 import CheckBox from "../components/CheckBox";
@@ -27,21 +26,27 @@ import {
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import search from "../assets/fontAwesomeSvg/search.svg";
 
 const Search = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const niddle = params.get('query');
+  const niddle = params.get("query");
   const [width, setWidth] = useState(window.innerWidth);
 
+  // 임시
+  const [userId, setUserId] = useState(1);
+  const [userName, setUserName] = useState("");
+
+  // ajax data
   const [isLoading, setIsLoading] = useState(true);
-  const [userName, setUserName] = useState(String);
   const [searchHistory, setSearchHistory] = useState([]);
   const [searchGameResults, setSearchGameResults] = useState([]);
   const [searchUserResults, setSearchUserResults] = useState([]);
 
   // use ref
   const gameResultWrapper = useRef();
+  const keyword = useRef();
 
   // filter condition
   const [priceStr, setPriceStr] = useState("Any Price");
@@ -101,25 +106,65 @@ const Search = () => {
     0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 99999999,
   ];
 
-  const dataSetting = useCallback((niddle) => {
-    axios
-      .get(`${BACKEND_URL}api/search`, {
-        params: {
-          niddle: niddle,
-          gamePageNo: 0,
-          userPageNo: 0,
-        },
-      })
-      .then((response) => {
-        setSearchGameResults(response.data.games);
-        setSearchUserResults(response.data.users);
+  const dataSetting = useCallback(
+    (niddle) => {
+      // login시
+      const history = [];
+      if (userId) {
         setUserName("김아무개");
-        const getSeachHistory = ["star", "universe"];
-        setSearchHistory(getSeachHistory);
-        setIsLoading(false);
-      })
-      .catch((error) => { });
-  }, []);
+        // 현재 검색기록을 post
+        if (niddle && niddle.length > 0) {
+          axios
+            .post(`${BACKEND_URL}api/search/history`, {
+              userId: userId,
+              content: niddle,
+            })
+            .then(() =>{
+              history.push(niddle);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+        // 검색기록 가져오기
+        axios
+          .get(`${BACKEND_URL}api/search/history`, {
+            params: {
+              userId: userId,
+            },
+          })
+          .then((response) => {
+            response.data.forEach((e) => {
+              if (e !== niddle) {
+                history.push(e);
+              }
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          setSearchHistory(history);
+      }
+      // 검색 결과 가져오기
+      axios
+        .get(`${BACKEND_URL}api/search`, {
+          params: {
+            niddle: niddle,
+            gamePageNo: 0,
+            userPageNo: 0,
+          },
+        })
+        .then((response) => {
+          setSearchGameResults(response.data.games);
+          setSearchUserResults(response.data.users);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    [userId]
+  );
 
   const priceInput = useRef();
 
@@ -138,7 +183,7 @@ const Search = () => {
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
-    }
+    };
   }, []);
 
   const getMoreGames = useCallback(async () => {
@@ -157,12 +202,15 @@ const Search = () => {
           useIsKorean: isKoreanSupport ? true : false,
           isKorean: isKoreanSupport,
           genreList: genreParamString,
-          gamePageNo: (curGamePageNo + 12),
+          gamePageNo: curGamePageNo + 12,
         },
       })
       .then((response) => {
         setCurGamePageNo(curGamePageNo + 12);
-        setSearchGameResults((searchGameResults) => [...searchGameResults, ...response.data]);
+        setSearchGameResults((searchGameResults) => [
+          ...searchGameResults,
+          ...response.data,
+        ]);
         setHasNextPage(response.data.length < 12 ? false : true);
       })
       .catch((error) => {
@@ -206,7 +254,9 @@ const Search = () => {
         setSearchGameResults(response.data);
         gameResultWrapper.current.className = "results-wrapper";
       })
-      .catch((error) => { });
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const changeGenreFilter = (name, state) => {
@@ -241,7 +291,9 @@ const Search = () => {
         setSearchGameResults(response.data);
         gameResultWrapper.current.className = "results-wrapper";
       })
-      .catch((error) => { });
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const changeKoreanFilter = () => {
@@ -272,16 +324,46 @@ const Search = () => {
       .catch((error) => { });
   };
 
-
   /////////////////////////////////////
   // etc func
-
   const tagDelete = (value) => {
-    console.log(value + "delete");
+    axios
+      .delete(`${BACKEND_URL}api/search/history`, {
+        params: {
+          userId: userId,
+          content: value,
+        },
+      })
+      .then((response) => {
+        setSearchHistory(searchHistory.filter(searchHistory => searchHistory !== value));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const tagClick = (value) => {
     window.location.assign("/search?query=" + value);
+  };
+
+  const enterSearchHandler = (e) => {
+    if (e.key === "Enter") {
+      if (keyword.current && keyword.current.value) {
+        window.location.assign("/search?query=" + keyword.current.value);
+        keyword.current.value = "";
+      } else {
+        window.location.assign("/search?query=");
+      }
+    }
+  };
+
+  const clickSearchHandler = () => {
+    if (keyword.current && keyword.current.value) {
+      window.location.assign("/search?query=" + keyword.current.value);
+      keyword.current.value = "";
+    } else {
+      window.location.assign("/search?query=");
+    }
   };
 
   ///////////////////////////////////////
@@ -298,13 +380,14 @@ const Search = () => {
     const tagsRend = () => {
       const result = [];
       let idx = 0;
-      searchHistory.forEach((e) => {
-        result.push(
-          <Tag key={idx} value={e} delete={tagDelete} click={tagClick}></Tag>
-        );
-        idx++;
-      });
-      if (searchHistory.length <= 0) {
+      if (searchHistory && searchHistory.length > 0) {
+        searchHistory.forEach((e) => {
+          result.push(
+            <Tag key={idx} value={e} delete={() => {tagDelete(e)}} click={() => {tagClick(e)}}></Tag>
+          );
+          idx++;
+        });
+      } else {
         result.push(
           <div className="no-history-msg" key={idx}>
             아직 검색 내역이 없어요.
@@ -359,7 +442,7 @@ const Search = () => {
             ></CheckBox>
           </div>
         );
-      };
+      }
       return result;
     };
     result.push(
@@ -390,10 +473,7 @@ const Search = () => {
 
   const gameResultsRend = () => {
     const result = [];
-    if (
-      searchGameResults &&
-      searchGameResults.length > 0
-    ) {
+    if (searchGameResults && searchGameResults.length > 0) {
       searchGameResults.forEach((e) => {
         result.push(
           <GameClip
@@ -420,10 +500,7 @@ const Search = () => {
 
   const userResultsRend = () => {
     const result = [];
-    if (
-      searchUserResults &&
-      searchUserResults.length > 0
-    ) {
+    if (searchUserResults && searchUserResults.length > 0) {
       if (width <= 1160) {
         searchUserResults.forEach((e) => {
           result.push(
@@ -467,22 +544,20 @@ const Search = () => {
         유저 검색 결과
       </div>
     );
-    if (
-      searchUserResults &&
-      searchUserResults.length > 0
-      && width <= 1160) {
+    if (searchUserResults && searchUserResults.length > 0 && width <= 1160) {
       result.push(
         <div key="userResults" className="user-results">
           <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={0}
-            slidesPerView='auto'
+            slidesPerView="auto"
             navigation
             pagination={{ clickable: true }}
           >
             {userResultsRend()}
           </Swiper>
-        </div>);
+        </div>
+      );
     } else {
       result.push(
         <div key="userResults" className="user-results">
@@ -499,13 +574,24 @@ const Search = () => {
     if (width > 1160) {
       return (
         <SearchWrapper>
-          <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
+          {userId ? (
+            <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
+          ) : (
+            ""
+          )}
           <div className="game-search-results-header">게임 검색 결과</div>
-          <SearchResultsWrapper className="search-result-wrapper" key="gameResult">
+          <SearchResultsWrapper
+            className="search-result-wrapper"
+            key="gameResult"
+          >
             <FilterWrapper className="filter-wrapper">
               {gameFilterRend()}
             </FilterWrapper>
-            <div key="gameResults" className="results-wrapper" ref={gameResultWrapper}>
+            <div
+              key="gameResults"
+              className="results-wrapper"
+              ref={gameResultWrapper}
+            >
               {gameResultsRend()}
               <div ref={ref} className="scroll-handler" />
             </div>
@@ -518,25 +604,54 @@ const Search = () => {
     } else {
       return (
         <SearchWrapper>
-          <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
+          {width < 562 ? (
+            <div className="search-section">
+              <input
+                type="text"
+                className="search-bar"
+                placeholder="search here..."
+                ref={keyword}
+                onKeyDown={(e) => enterSearchHandler(e)}
+              ></input>
+              <img
+                src={search}
+                alt="search-icon"
+                onClick={() => clickSearchHandler()}
+                className="search-icon"
+              />
+            </div>
+          ) : (
+            ""
+          )}
+          {userId ? (
+            <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
+          ) : (
+            ""
+          )}
           <div className="search-result-wrapper">
             <UserSearchResultsWrapper>
               {userSearchResultsRend()}
             </UserSearchResultsWrapper>
             <GameSearchResultsWrapper>
-              <div className="game-search-results-header-mobile">게임 검색 결과</div>
+              <div className="game-search-results-header-mobile">
+                게임 검색 결과
+              </div>
               <MobileGameResult>
                 <FilterWrapper className="filter-wrapper">
                   {gameFilterRend()}
                 </FilterWrapper>
-                <GameSearchResult className="results-wrapper" ref={gameResultWrapper}>
+                <GameSearchResult
+                  className="results-wrapper"
+                  ref={gameResultWrapper}
+                >
                   {gameResultsRend()}
                   <div ref={ref} className="scroll-handler" />
                 </GameSearchResult>
               </MobileGameResult>
             </GameSearchResultsWrapper>
           </div>
-        </SearchWrapper >);
+        </SearchWrapper>
+      );
     }
   }
 };

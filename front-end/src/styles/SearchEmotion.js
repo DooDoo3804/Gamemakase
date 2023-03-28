@@ -4,9 +4,14 @@ import { motion } from "framer-motion";
 //import { motion } from "framer-motion";
 
 export const SearchWrapper = styled.div`
+
+  .loading {
+    position: relative;
+    opacity: 0.3;
+  }
+
   .swiper {
     margin-left: 0px;
-
   }
   .swiper-container {
     width: 100%;
@@ -91,6 +96,29 @@ export const SearchWrapper = styled.div`
     align-items: center;
     justify-content: center;
   }
+
+  .search-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .search-bar {
+      width: 70%;
+      height: 40px;
+      background-color: ${Common.colors.mainColor01};
+      border: 1.5px solid ${Common.colors.lightGray01};
+      border-radius: 2rem;
+      padding: 0rem 1rem;
+      color: ${Common.colors.lightGray01};
+      font-family: "Sarpanch", sans-serif;
+      margin-right: 0.8rem;
+      transition: all 0.5s ease-in-out;
+    }
+    .search-icon {
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+    }
+  }
 `;
 
 // 검색내역
@@ -105,8 +133,18 @@ export const SearchHistoryWrapper = styled.div`
     font-size: 24px;
     margin-bottom: 10px;
   }
+  .all-delete-btn {
+    border-radius: 15px;
+    font-size: 13px;
+    display: inline-block;
+    font-family: "Noto Sans KR";
+    margin-left: 10px;
+    padding: 3px 7px 3px 7px;
+    background-color: rgba(217, 217, 217, 0.19);
+  }
   .tags-wrapper {
     display: flex;
+    flex-wrap: wrap;
   }
   .tags-line {
     margin-top: 15px;
@@ -140,10 +178,6 @@ export const SearchResultsWrapper = styled(motion.div)`
   justify-content: space-between;
   align-items: flex-start;
 
-  .loading {
-    position: relative;
-    opacity: 0.3;
-  }
 `;
 
 export const FilterWrapper = styled.div`
