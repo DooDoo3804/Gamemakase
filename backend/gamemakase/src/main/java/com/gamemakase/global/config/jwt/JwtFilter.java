@@ -16,7 +16,8 @@ public class JwtFilter extends GenericFilter {
     private static final String ACCESS_TOKEN = "accessToken";
 
     private JwtTokenProvider jwtTokenProvider;
-    public JwtFilter (JwtTokenProvider jwtTokenProvider) {
+
+    public JwtFilter(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -27,7 +28,7 @@ public class JwtFilter extends GenericFilter {
         String jwt = makeToken(httpServletRequest);
         logger.info("jwt : {}", jwt);
         String requestURI = httpServletRequest.getRequestURI();
-        if(StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
+        if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(jwt);    // authentication 객체 반환
             SecurityContextHolder.getContext().setAuthentication(authentication);   // SecurityContext에 저장
             logger.info("{}의 인증정보를 저장했습니다. URI : {}", authentication.getName(), requestURI);
@@ -41,9 +42,13 @@ public class JwtFilter extends GenericFilter {
     private String makeToken(HttpServletRequest httpServletRequest) {
         String bearerToken = httpServletRequest.getHeader(ACCESS_TOKEN);
         logger.info("makeToken : bearerToken : {} ", bearerToken);
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            logger.info("Bearer auth success");
-            return bearerToken.substring(7);
+        if (StringUtils.hasText(bearerToken)) {
+            if (bearerToken.startsWith("Bearer ")) {
+                logger.info("Bearer auth success");
+                return bearerToken.substring(7);
+            } else {
+                logger.info("Bearer not started with Bearer");
+            }
         } else {
             logger.info("Bearer auth failed");
             return null;
