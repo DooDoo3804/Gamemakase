@@ -1,7 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { useCookies } from "react-cookie";
 import Lottie from "react-lottie";
+import axios from "axios";
 
 import { useRecoilState } from "recoil";
 import { userState } from "../recoil/user";
@@ -13,6 +14,7 @@ import { LoadingWrapper } from "../components/LoadingPage";
 import calc_loading from "../assets/lottie/calc-loading.json";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [cookies, setCookies] = useCookies(["accessToken"]);
   const [user, setUser] = useRecoilState(userState);
@@ -50,8 +52,14 @@ const SignUp = () => {
           },
         }
       );
-      console.log(calcResponse.data);
+      console.log(calcResponse.status);
       setLoading(false);
+      if (calcResponse.status === 200 || calcResponse.status === 201) {
+        console.log("계산을 완료했습니다.");
+        navigate("/");
+      } else {
+        console.log("계산에 실패했습니다.");
+      }
     } catch (error) {
       console.log(error);
     }
