@@ -102,8 +102,14 @@ public class ProfileServiceImpl implements ProfileService {
 		List<LikeGame> totalList = likeGameRepository.findAllByUser(user);
 		Page<LikeGame> likeList = likeGameRepository.findAllByUserOrderByLikeIdDesc(user, pageable);
 		List<GameInfoVo> scrapList = likeList.stream()
-				.map(l -> GameInfoVo.of(l.getGame(),
-						imageRepository.findByTypeAndTypeId("GAME_HEADER", l.getGame().getGameId()).orElseThrow(/* here! */).getImagePath()))
+				.map(l ->
+						GameInfoVo.of(
+								l.getGame(),
+								imageRepository.findByTypeAndTypeId("GAME_HEADER", l.getGame().getGameId()).orElseThrow(/* here! */).getImagePath(),
+								true,
+								l.getLikeId()
+									)
+					)
 				.collect(Collectors.toList());
 		
 		List<User> userList = new ArrayList<User>();
@@ -139,8 +145,13 @@ public class ProfileServiceImpl implements ProfileService {
 		List<LikeGame> totalList = likeGameRepository.findAllByUser(user);
 		Page<LikeGame> likeList = likeGameRepository.findAllByUserOrderByLikeIdDesc(user, pageable);
 		return likeList.stream()
-				.map(l -> GameInfoVo.of(l.getGame(),
-						imageRepository.findByTypeAndTypeId("GAME_HEADER", l.getGame().getGameId()).orElseThrow(/* here! */).getImagePath()))
+				.map(l -> GameInfoVo.of(
+						l.getGame(),
+						imageRepository.findByTypeAndTypeId("GAME_HEADER", l.getGame().getGameId()).orElseThrow(/* here! */).getImagePath(),
+						true,
+						l.getLikeId()
+						)
+					)
 				.collect(Collectors.toList());
 	}
 
