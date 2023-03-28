@@ -13,7 +13,7 @@ import java.io.IOException;
 public class JwtFilter extends GenericFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
-    private static final String ACCESS_TOKEN = "Authorization";
+    private static final String ACCESS_TOKEN = "accessToken";
 
     private JwtTokenProvider jwtTokenProvider;
     public JwtFilter (JwtTokenProvider jwtTokenProvider) {
@@ -23,9 +23,9 @@ public class JwtFilter extends GenericFilter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        System.out.println("JWT 토큰 조회 시작");
+        logger.debug("doFilter in");
         String jwt = makeToken(httpServletRequest);
-        System.out.println("jwt : "+jwt);
+        logger.debug("jwt : {}", jwt);
 
         String requestURI = httpServletRequest.getRequestURI();
         if(StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
