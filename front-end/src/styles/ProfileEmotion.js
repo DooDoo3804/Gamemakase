@@ -27,6 +27,25 @@ export const ProfileBackgroundWrapper = styled.div`
       border-radius: 30px 30px 0px 0px;
     }
   }
+  .main-header {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: relative;
+    margin-top: 30px;
+    margin-bottom: 40px;
+    margin-right: 0;
+    max-width: 200px;
+    font-family: "Noto Sans KR";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    @media (max-width: 450px) {
+      font-size: 26px;
+    }
+    line-height: 52px;
+    color: ${Common.colors.white01};
+  }
 `;
 
 export const ProfileImgWrapper = styled.div`
@@ -242,26 +261,6 @@ export const ProfileScrapBook = styled(motion.div)`
   margin-left: 10%;
   margin-right: 10%;
   padding-bottom: 40px;
-
-  .scrap-header {
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    position: relative;
-    margin-top: 30px;
-    margin-bottom: 40px;
-    margin-right: 0;
-    max-width: 200px;
-    font-family: "Noto Sans KR";
-    font-style: normal;
-    font-weight: 700;
-    font-size: 30px;
-    @media (max-width: 450px) {
-      font-size: 26px;
-    }
-    line-height: 52px;
-    color: ${Common.colors.white01};
-  }
 
   .box {
     display: flex;
