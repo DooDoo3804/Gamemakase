@@ -262,9 +262,18 @@ const Detail = () => {
       }
     } else {
       result.push(
-        <div key={0} className="no-review">
+        <motion.div
+          key={0}
+          className="no-review"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+            transition: { delay: 0.1 },
+          }}
+        >
           <p>리뷰가 존재하지 않습니다.</p>
-        </div>
+        </motion.div>
       );
     }
 
@@ -400,15 +409,15 @@ const Detail = () => {
               }}
             >
               <span className="single-info">
-                <p className="info-title">Preference</p>
+                <p className="info-title">선호도</p>
                 <p className="info-content">{gameData.score + "%"}</p>
               </span>
               <span className="single-info">
-                <p className="info-title">Price</p>
+                <p className="info-title">가격</p>
                 <p className="info-content">{"$" + gameData.gamePrice}</p>
               </span>
               <span className="single-info">
-                <p className="info-title">Genres</p>
+                <p className="info-title">장르</p>
                 <p className="info-content">{renderGenres()}</p>
               </span>
             </motion.div>
