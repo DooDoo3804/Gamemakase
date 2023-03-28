@@ -1,13 +1,13 @@
 import styled from "@emotion/styled";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRef } from "react";
-import { useCookies } from "react-cookie";
 // import useBodyScrollLock from "./ScrollLock";
 import { Common } from "../styles/Common";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import gamemakase_logo from "../assets/gamemakase_logo.svg";
 import { faSteam } from "@fortawesome/free-brands-svg-icons";
+import { BACKEND_URL } from "../config";
 
 const LoginModalWrapper = styled(motion.div)`
   z-index: 999;
@@ -123,7 +123,6 @@ const LoginModalBody = styled(motion.div)`
 
 const LoginModal = ({ loginView, setLoginView }) => {
   const outSection = useRef();
-  const [cookies, setCookies] = useCookies(["token"]);
 
   // const { openScroll } = useBodyScrollLock();
 
@@ -133,8 +132,8 @@ const LoginModal = ({ loginView, setLoginView }) => {
   };
 
   const handleLogin = () => {
-    // axios 요청해서 쿠키에 저장
-    // setCookie('token', response.data.token)
+    window.location.assign(`${BACKEND_URL}api/login/steam`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
   return (
