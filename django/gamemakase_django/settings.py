@@ -135,5 +135,5 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS 관련 추가
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'http://gamemakase.com']
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'https://gamemakase.com']
 CORS_ALLOW_CREDENTIALS = True
