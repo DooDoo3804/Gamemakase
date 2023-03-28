@@ -92,8 +92,8 @@ public class UserServiceImpl implements UserService {
         return new HashMap<String, Object>(){{
             put("userId", user.getUserId());
             put("steamId", user.getUserSteamId());
-            put("access-token", accessToken);
-            put("refresh-token", refreshToken);
+            put("accessToken", accessToken);
+            put("refreshToken", refreshToken);
             put("name", user.getUserName());
             put("role", user.getAuthority());
         }};
