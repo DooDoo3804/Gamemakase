@@ -4,6 +4,12 @@ import { motion } from "framer-motion";
 //import { motion } from "framer-motion";
 
 export const SearchWrapper = styled.div`
+
+  .loading {
+    position: relative;
+    opacity: 0.3;
+  }
+
   .swiper {
     margin-left: 0px;
   }
@@ -172,10 +178,6 @@ export const SearchResultsWrapper = styled(motion.div)`
   justify-content: space-between;
   align-items: flex-start;
 
-  .loading {
-    position: relative;
-    opacity: 0.3;
-  }
 `;
 
 export const FilterWrapper = styled.div`

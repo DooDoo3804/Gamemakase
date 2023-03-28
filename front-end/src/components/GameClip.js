@@ -7,6 +7,7 @@ import windowSvg from "../assets/fontAwesomeSvg/windows.svg";
 import linuxSvg from "../assets/fontAwesomeSvg/linux.svg";
 
 export const StyleGameClip = styled(motion.div)`
+width: 100%;
   cursor: pointer;
   background: rgba(217, 217, 217, 0.08);
   border-radius: 15px;
@@ -144,7 +145,7 @@ const GameClip = (props) => {
         </div>
       </div>
       <div className="price">
-        {props.price ? (props.price === 0 ? "Free" : `$${props.price}`) : ""}
+        {props.price != null ? (props.price === 0 ? "Free" : `$${props.price}`) : ""}
       </div>
     </StyleGameClip>
   );
