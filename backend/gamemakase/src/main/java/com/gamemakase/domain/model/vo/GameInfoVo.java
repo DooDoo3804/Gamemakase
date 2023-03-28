@@ -21,6 +21,7 @@ public class GameInfoVo {
 	private int price;
 	private boolean isKorean;
 	private boolean isLiked;
+	private long likeId;
 	private List<String> GenreList;
 	
 	public static GameInfoVo of(Game game, String imagePath) {
@@ -50,7 +51,7 @@ public class GameInfoVo {
 				.build();
 	}
 	
-	public static GameInfoVo of(Game game, String imagePath, boolean isLiked) {
+	public static GameInfoVo of(Game game, String imagePath, boolean isLiked, long likeId) {
 		return GameInfoVo.builder()
 				.gameId(game.getGameId())
 				.gameName(game.getGameName())
@@ -61,6 +62,7 @@ public class GameInfoVo {
 				.price(game.getGamePrice())
 				.isKorean(game.isKorean())
 				.isLiked(isLiked)
+				.likeId(likeId)
 				.build();
 	}
 }
