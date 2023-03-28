@@ -106,16 +106,16 @@ export const GameSummaryClip = styled(motion.div)`
       }
     }
     .brand-logo {
+      border-radius: 0;
       position: relative;
-      width: 100%;
       max-width: 20px;
-      height: 100%;
       max-height: 20px;
-      margin-right: 5px;
+      margin-right: 10px;
     }
   }
   .etc {
     margin-left: auto;
+    margin-right: 3%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -126,7 +126,6 @@ export const GameSummaryClip = styled(motion.div)`
       align-items: center;
       position: relative;
       top: -25px;
-      margin-right: 15px;
     }
   }
   .scrap-wrapper:hover {
@@ -134,15 +133,21 @@ export const GameSummaryClip = styled(motion.div)`
   }
   .scrap-wrapper {
     display: flex;
-    padding-bottom: 2rem;
     justify-content: center;
     align-items: center;
+
     background-image: url(${scrap});
     background-size: contain;
     background-repeat: no-repeat;
     transition: all 0.5s ease-in-out;
+    
+    padding-bottom: 2rem;
     margin-right: 20px;
+
+    position: relative;
+    
     @media (min-width: 1300px) {
+      left: 20px;
       width: 2rem;
       height: 2rem;
       .scrap {
@@ -153,6 +158,7 @@ export const GameSummaryClip = styled(motion.div)`
       }
     }
     @media (max-width: 1300px) {
+      left: 25px;
       width: 2.3rem;
       height: 2.3rem;
       .scrap {
@@ -163,6 +169,7 @@ export const GameSummaryClip = styled(motion.div)`
       }
     }
     @media (max-width: 700px) {
+      left: 20px;
       width: 30px;
       min-height: 30px;
       max-height: 30px;
@@ -174,9 +181,8 @@ export const GameSummaryClip = styled(motion.div)`
       }
     }
     @media (max-width: 600px) {
-      position: relative;
       top: -134px;
-      right: -50px;
+      left: 55px;
       width: 35px;
       min-height: 35px;
       max-height: 35px;
@@ -189,6 +195,8 @@ export const GameSummaryClip = styled(motion.div)`
     }
   }
   .price {
+    min-width: 40px;
+    text-align: right;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
