@@ -111,8 +111,15 @@ export const MainHeaderWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     @media (max-width: 560px) {
       display: none;
+    }
+
+    .user-profile-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 `;
