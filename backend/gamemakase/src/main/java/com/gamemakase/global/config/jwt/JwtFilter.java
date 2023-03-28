@@ -48,6 +48,7 @@ public class JwtFilter extends GenericFilter {
                 return bearerToken.substring(7);
             } else {
                 logger.info("Bearer not started with Bearer");
+                return null;
             }
         } else {
             logger.info("Bearer auth failed");
