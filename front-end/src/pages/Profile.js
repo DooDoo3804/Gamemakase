@@ -40,6 +40,7 @@ const Profile = () => {
   const [isKo, setIsKo] = useState(true);
   const [userName, setUserName] = useState("");
   const [userImage, setUserImage] = useState(defaultUserImg);
+  const [scrapId, setScrapId] = useState();
 
   const [statisticsData, setStatisticsData] = useState([]);
   const [statisticsSum, setStatisticsSum] = useState(0);
@@ -129,6 +130,7 @@ const Profile = () => {
         }
       })
       .catch((error) => {
+        console.log(error);
       });
   }, [userId]);
 
@@ -145,7 +147,9 @@ const Profile = () => {
         setReviewsData(response.data.reviews);
         setReviewDataSize(response.data.page.size);
       })
-      .catch((error) => { });
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const reviewEdit = () => {
@@ -156,9 +160,14 @@ const Profile = () => {
     console.log("리뷰 삭제!");
   };
 
-  const scrapDelete = () => {
-    console.log("스크랩 삭제");
+  const scrapDeleteClick = (scrapId) => {
+    setScrapId(scrapId);
+    setScrapDeleteAlertView(true);
   };
+  
+  const scrapDelete = () => {
+    console.log("스크랩 삭제" + scrapId);
+  }
 
   useEffect(() => { setMainTapData() }, [setMainTapData]);
 
@@ -280,7 +289,7 @@ const Profile = () => {
             transition: { delay: 0.1 },
           }}
         >
-          <div className="scrap-header">스크랩 북</div>
+          <div className="main-header">스크랩 북</div>
           {scrapGamesRend()}
         </ProfileScrapBook>
       </div>
@@ -302,8 +311,9 @@ const Profile = () => {
             apple={e.apple}
             linux={e.linux}
             price={e.price}
+            scrapId={e.likeId}
             gameId={e.gameId}
-            setAlertView={setScrapDeleteAlertView}
+            clickFunc={scrapDeleteClick}
           ></GameSummary>
         );
         idx++;
@@ -324,6 +334,7 @@ const Profile = () => {
         setScrapGames(response.data);
       })
       .catch((error) => {
+        console.log(error);
       });
     };
     const result = [];

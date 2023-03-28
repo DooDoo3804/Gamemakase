@@ -175,6 +175,7 @@ export const SearchResultsWrapper = styled(motion.div)`
 
   display: flex;
   position: relative;
+  width: 100%;
   justify-content: space-between;
   align-items: flex-start;
 
@@ -184,9 +185,9 @@ export const FilterWrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  min-width: 245px;
-  max-width: 245px;
-  margin-right: 4%;
+  min-width: 235px;
+  max-width: 235px;
+  margin-right: 30px;
   @media (min-width: 1560px) {
   }
   @media (max-width: 1000px) {
@@ -323,7 +324,7 @@ export const UserSearchResultsWrapper = styled.div`
   filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
   color: ${Common.colors.white01};
   @media (min-width: 1160px) {
-    margin-left: 4%;
+    margin-left: 30px;
   }
   @media (max-width: 1160px) {
     width: 100%;
