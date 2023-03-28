@@ -1,23 +1,15 @@
 package com.gamemakase.domain.model.service;
 
-import static java.net.URLEncoder.encode;
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import com.gamemakase.domain.model.dto.SignUpRequestDto;
+import com.gamemakase.domain.model.dto.UserResponseDto;
 import com.gamemakase.domain.model.entity.Authority;
 import com.gamemakase.domain.model.entity.Authority.AuthorityName;
 import com.gamemakase.domain.model.entity.User;
 import com.gamemakase.domain.model.repository.UserRepository;
+import com.gamemakase.domain.model.vo.UserInfoVo;
 import com.gamemakase.global.Exception.DuplicatedException;
+import com.gamemakase.global.Exception.NotFoundException;
 import com.gamemakase.global.config.jwt.JwtTokenProvider;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -28,18 +20,29 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static java.net.URLEncoder.encode;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private  final RealTimeUserInfoService realTimeUserInfoService;
     private final String ACCESS_HEADER = "accessToken";
     private final String REFRESH_HEADER = "refreshToken";
     static final String PLAYER_SUMMARIES_BASE_URL = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/";
@@ -100,11 +103,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserProfile(String accessToken) {
-        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-        String userId = authentication.getName();
-        User user = userRepository.findByUserId(Long.parseLong(userId));
-        return user;
+    public UserResponseDto getUserProfile(String accessToken) throws IOException, ParseException, NotFoundException {
+        String userIdstr = jwtTokenProvider.getUserId(accessToken);
+        long userId = Long.parseLong(userIdstr);
+        User user = userRepository.findByUserId(userId);
+        List<User> userList = new ArrayList<>();
+        userList.add(user);
+        List<UserInfoVo> realUserList = realTimeUserInfoService.getUserInfoResponseVo(userList);
+        return UserResponseDto.of(user, realUserList.get(0).getUserImagePath());
     }
 
     @Override

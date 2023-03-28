@@ -103,7 +103,6 @@ public class RealTimeUserInfoService {
 	}
 
 	private static String getResponse(HttpURLConnection conn, boolean isSuccess) throws IOException {
-
 		BufferedReader br;
 		if (isSuccess) {
 			br = new BufferedReader(new InputStreamReader(conn.getInputStream()));

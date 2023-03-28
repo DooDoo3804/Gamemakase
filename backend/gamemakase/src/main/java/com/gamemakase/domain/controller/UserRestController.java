@@ -1,5 +1,6 @@
 package com.gamemakase.domain.controller;
 
+import com.gamemakase.domain.model.dto.UserResponseDto;
 import com.gamemakase.domain.model.entity.User;
 import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.domain.model.service.UserService;
@@ -21,19 +22,12 @@ import javax.servlet.http.HttpServletRequest;
 public class UserRestController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    private final JwtTokenProvider jwtTokenProvider;
 
     // Acees Token을 통하여 회원 정보 조회
     @GetMapping("/auth/user")
-    public ResponseEntity<?> getUserProfile(@RequestHeader(value = "accessToken") String token) {
-        String userIdstr = jwtTokenProvider.getUserId(token);
-        long userId = Long.parseLong(userIdstr);
-        User user = userRepository.findByUserId(userId);
-
-        return ResponseEntity.status(200).body(user);
+    public ResponseEntity<UserResponseDto> getUserProfile(@RequestHeader(value = "accessToken") String token) {
+        UserResponseDto userInfo = userService.getUserProfile(token);
+        return ResponseEntity.status(200).body(userInfo);
     }
 
     // Refresh Token을 통하여 Access Token 재발급
