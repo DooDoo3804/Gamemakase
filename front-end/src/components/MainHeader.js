@@ -1,5 +1,8 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil/user";
+
 import { MainHeaderWrapper, SearchWrapper } from "../styles/MainHeaderEmotion";
 import Logo from "../assets/gamemakase_logo.svg";
 import FontLogo from "../assets/font_logo.svg";
@@ -7,18 +10,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
 // import useBodyScrollLock from "./ScrollLock";
 import LoginModal from "./LoginModal";
+import { useCookies } from "react-cookie";
 
 const MainHeader = () => {
   const navigate = useNavigate();
   const [hover, setHover] = useState();
   const [loginView, setLoginView] = useState(false);
+  const [user, setUser] = useRecoilState(userState);
+  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
   // const [scrollPosition, setScrollPosition] = useState(0);
 
   // const { lockScroll } = useBodyScrollLock();
   const keyword = useRef();
 
   const enterSearchHandler = (e) => {
-    if(e.key === "Enter") {
+    if (e.key === "Enter") {
       if (keyword.current && keyword.current.value) {
         window.location.assign("/search?query=" + keyword.current.value);
         keyword.current.value = "";
@@ -40,6 +46,12 @@ const MainHeader = () => {
   const handleLoginOpen = () => {
     // setScrollPosition(lockScroll());
     setLoginView(true);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    removeCookie("accessToken");
+    console.log("로그아웃이 정상적으로 처리되었습니다.");
   };
 
   return (
@@ -83,17 +95,28 @@ const MainHeader = () => {
           {/* search 페이지에서 useLocation().state.keyword 로 받아서 사용 */}
         </SearchWrapper>
         <div className="menu-wrapper">
-          <div className="profile-img" onClick={() => navigate(`/profile/1`)}>
-            <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
-          </div>
           {/* 아래 코드는 로그인 기능 생기고 수정 필요함 */}
-          <p className="single-menu" onClick={() => navigate(`/profile/1`)}>
-            USERNAME
-          </p>
-          <p className="single-menu"> </p>
-          <p className="single-menu" onClick={() => handleLoginOpen()}>
-            LOGOUT
-          </p>
+          {user ? (
+            <>
+              <div
+                className="profile-img"
+                onClick={() => navigate(`/profile/1`)}
+              >
+                <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+              </div>
+              <p className="single-menu" onClick={() => navigate(`/profile/1`)}>
+                USERNAME
+              </p>
+              <p className="single-menu"> </p>
+              <p className="single-menu" onClick={() => handleLogout()}>
+                LOGOUT
+              </p>
+            </>
+          ) : (
+            <p className="single-menu" onClick={() => handleLoginOpen()}>
+              LOGIN
+            </p>
+          )}
         </div>
       </MainHeaderWrapper>
     </>
