@@ -46,6 +46,9 @@ APSCHEDULER_RUN_NOW_TIMEOUT = 300
 SCHEDULER_DEFAULT = True
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # <- 가능한 높게 위치시켜야 한다.
+    'django.middleware.common.CommonMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -53,7 +56,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'gamemakase_django.urls'
@@ -135,5 +137,6 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS 관련 추가
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'https://gamemakase.com']
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'https://gamemakase.com',
+                         'http://gamemakase.com', 'https://gamemakase.com:3000', 'www.gamemakase.com']
 CORS_ALLOW_CREDENTIALS = True
