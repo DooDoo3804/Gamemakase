@@ -52,6 +52,7 @@ const Login = () => {
           accessToken: cookies["accessToken"],
         },
       });
+      // console.log(loginResponse.data);
       setUser(loginResponse.data);
     } catch (error) {
       console.log(error);
@@ -59,10 +60,9 @@ const Login = () => {
 
     // todo : 가입시에만 하도록 처리
     try {
-      console.log("계산 요청을 시작합니다.");
       setLoading(true);
       const calcResponse = await axios.get(
-        `${BACKEND_URL}auth/recommend/users/small/${userId}`,
+        `${BACKEND_URL}auth/recommend/users/small/${user.userId}`,
         {
           headers: {
             "Content-Type": "application/json",
