@@ -36,7 +36,7 @@ const GameSummary = (props) => {
       </div>
       <div className="etc">
         <div className="scrap-wrapper" onClick={(e) => {
-          props.setAlertView(true);
+          props.clickFunc(props.scrapId);
           e.stopPropagation();
         }}>
             <img className="scrap" src={star} alt="scrapStar"></img>

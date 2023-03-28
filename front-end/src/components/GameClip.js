@@ -7,7 +7,8 @@ import windowSvg from "../assets/fontAwesomeSvg/windows.svg";
 import linuxSvg from "../assets/fontAwesomeSvg/linux.svg";
 
 export const StyleGameClip = styled(motion.div)`
-width: 100%;
+position: relative;
+  width: 100%;
   cursor: pointer;
   background: rgba(217, 217, 217, 0.08);
   border-radius: 15px;
@@ -18,22 +19,26 @@ width: 100%;
   justify-content: flex-start;
   flex-direction: row;
   height: 120px;
-  min-width: 500px;
-
+  
   @media (min-width: 1560px) {
-    width: 100%;
     height: 155px;
+    min-width: 850px;
   }
-
-  @media (min-width: 1160px) {
-    width: 100%;
+  @media (max-width: 1560px) {
+    min-width: 700px;
   }
-
+  @media (max-width: 1460px) {
+    min-width: 600px;
+  }
+  @media (max-width: 1300px) {
+    min-width: 450px;
+  }
   @media (max-width: 550px) {
+    min-width: 0;
     min-height: 210px;
-    min-width: 100%;
     flex-direction: column;
   }
+
   .img-wrapper {
     display: flex;
     justify-content: center;
@@ -74,12 +79,18 @@ width: 100%;
         -webkit-line-clamp: 1; /* 라인수 */
         -webkit-box-orient: vertical;
       }
+      @media (min-width: 550px) {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* 라인수 */
+        -webkit-box-orient: vertical;
+      }
       font-family: "Noto Sans KR";
       font-style: normal;
       font-size: 18px;
       line-height: 30px;
 
-      position: relative;
       color: ${Common.colors.white01};
     }
     .logo-box {
