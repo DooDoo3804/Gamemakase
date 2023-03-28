@@ -16,6 +16,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [cookies, setCookies] = useCookies(["accessToken"]);
   const [user, setUser] = useRecoilState(userState);
+  let userId = -1;
 
   useEffect(() => {
     handleLogin();
@@ -30,6 +31,7 @@ const SignUp = () => {
           accessToken: cookies["accessToken"],
         },
       });
+      userId = loginResponse.data.userId;
       console.log(loginResponse.data);
       setUser(loginResponse.data);
     } catch (error) {
@@ -40,7 +42,7 @@ const SignUp = () => {
     try {
       setLoading(true);
       const calcResponse = await axios.get(
-        `${BACKEND_URL}auth/recommend/users/small/${user.userId}`,
+        `${BACKEND_URL}recommend/games/small/${userId}`,
         {
           headers: {
             "Content-Type": "application/json",
