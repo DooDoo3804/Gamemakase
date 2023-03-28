@@ -72,12 +72,12 @@ public class SteamController {
         if (userService.isUser(steamIdNum)) {
             //로그인
             Map<String, Object> token = userService.login(steamIdNum);
-            String access_token = (String) token.get("access-token");
-            jwtTokenProvider.validateToken(access_token);
-            System.out.println(access_token);
+            String accessToken = (String) token.get("accessToken");
+            jwtTokenProvider.validateToken(accessToken);
+            System.out.println(accessToken);
             headers.setLocation(URI.create("http://localhost:3000/login"));
 //            headers.set("access-token", access_token);
-            Cookie cookie = new Cookie("access-token", access_token);
+            Cookie cookie = new Cookie("access-token", accessToken);
             cookie.setPath("/");
             cookie.setMaxAge(60*60*24);
 
