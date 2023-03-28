@@ -225,9 +225,13 @@ export const ProfileMainStatistics = styled(motion.div)`
   }
 
   .no-data-msg {
+    text-align: center;
     color: ${Common.colors.white01};
     font-size: 24px;
     font-family: "Noto Sans KR";
+    @media (max-width: 450px) {
+      font-size: 20px;
+    }
   }
 `;
 
@@ -270,6 +274,9 @@ export const ProfileScrapBook = styled(motion.div)`
     color: ${Common.colors.white01};
     font-size: 24px;
     font-family: "Noto Sans KR";
+    @media (max-width: 450px) {
+      font-size: 20px;
+    }
   }
 `;
 
@@ -494,6 +501,7 @@ export const NoReivew = styled(motion.div)`
   .no-review-wrapper {
     width: 100%;
     height: 100%;
+    text-align: center;
 
     display: flex;
     justify-content: center;
@@ -502,5 +510,8 @@ export const NoReivew = styled(motion.div)`
     font-size: 24px;
     font-family: "Noto Sans KR";
     color: ${Common.colors.white01};
+    @media (max-width: 450px) {
+      font-size: 20px;
+    }
   }
 `;
