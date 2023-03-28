@@ -43,15 +43,12 @@ public class JwtFilter extends GenericFilter {
         String bearerToken = httpServletRequest.getHeader(ACCESS_TOKEN);
         logger.info("makeToken : bearerToken : {} ", bearerToken);
         if (StringUtils.hasText(bearerToken)) {
-            if (bearerToken.startsWith("Bearer ")) {
-                logger.info("Bearer auth success");
-                return bearerToken.substring(7);
-            } else {
-                logger.info("Bearer not started with Bearer");
-                return null;
-            }
+            //if (bearerToken.startsWith("Bearer ")) {
+//            logger.info("Bearer auth success");
+            //return bearerToken.substring(7);
+            return bearerToken;
         } else {
-            logger.info("Bearer auth failed");
+            logger.info("bearerToken is null");
             return null;
         }
     }
