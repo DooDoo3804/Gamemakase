@@ -61,7 +61,7 @@ public class SteamRestController{
 
   // User의 각 게임 별 플레이 시간 등록
   @PostMapping(value = "/auth/user/play-record")
-  private void newRecentlyPlayedGames(@RequestHeader(value = "access-token", required = true) String token, Authentication authentication)
+  private void newRecentlyPlayedGames(@RequestHeader(value = "accessToken", required = true) String token, Authentication authentication)
       throws NullPointerException, IOException, ParseException, NotFoundException, TokenValidFailedException {
 
     User user = (User) authentication.getPrincipal();
@@ -111,7 +111,7 @@ public class SteamRestController{
   }
 
   @GetMapping(value = "/auth/user/play-record")
-  private ResponseEntity<List<GameHistoryResponseDto>> getRecentlyPlayedGames(@RequestHeader(value = "access-token") String token, Authentication authentication)
+  private ResponseEntity<List<GameHistoryResponseDto>> getRecentlyPlayedGames(@RequestHeader(value = "accessToken") String token, Authentication authentication)
       throws NotFoundException {
     User user = (User) authentication.getPrincipal();
 

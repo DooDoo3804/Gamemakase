@@ -3,6 +3,7 @@ package com.gamemakase.domain.controller;
 import com.gamemakase.domain.model.entity.User;
 import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.domain.model.service.UserService;
+import com.gamemakase.global.config.jwt.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,14 +24,15 @@ public class UserRestController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private final JwtTokenProvider jwtTokenProvider;
+
     // Acees Token을 통하여 회원 정보 조회
     @GetMapping("/auth/user")
-    public ResponseEntity<?> getUserProfile(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-//        String accessToken = httpServletRequest.getHeader("accessToken").substring(7);
-//        System.out.println("Request : " + httpServletRequest.getHeader("access-token").substring(7));
-//        System.out.println("user token : " + accessToken);
-//        User user = userService.getUserProfile(accessToken);
+    public ResponseEntity<?> getUserProfile(@RequestHeader(value = "accessToken") String token) {
+        String userIdstr = jwtTokenProvider.getUserId(token);
+        long userId = Long.parseLong(userIdstr);
+        User user = userRepository.findByUserId(userId);
+
         return ResponseEntity.status(200).body(user);
     }
 
