@@ -93,21 +93,28 @@ const MainHeader = () => {
             onClick={() => clickSearchHandler()}
             className="search-icon"
           />
-          {/* search 페이지에서 useLocation().state.keyword 로 받아서 사용 */}
         </SearchWrapper>
         <div className="menu-wrapper">
-          {/* 아래 코드는 로그인 기능 생기고 수정 필요함 */}
           {user ? (
             <>
               <div
                 className="profile-img"
-                onClick={() => navigate(`/profile/1`)}
+                onClick={() => navigate(`/profile/${user.userId}`)}
               >
-                <FontAwesomeIcon
-                  icon={user.imagePath ? user.imagePath : faUser}
-                ></FontAwesomeIcon>
+                {user.imagePath ? (
+                  <img
+                    src={user.imagePath}
+                    alt="profile_img"
+                    className="user-profile-img"
+                  />
+                ) : (
+                  <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+                )}
               </div>
-              <p className="single-menu" onClick={() => navigate(`/profile/1`)}>
+              <p
+                className="single-menu"
+                onClick={() => navigate(`/profile/${user.userId}`)}
+              >
                 {user.userName}
               </p>
               <p className="single-menu"> </p>
