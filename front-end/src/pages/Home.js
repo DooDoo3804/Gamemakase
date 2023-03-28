@@ -1,10 +1,15 @@
 import { useNavigate } from "react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil/user";
+
 import { useInView } from "react-intersection-observer";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y, Autoplay } from "swiper";
 import Lottie from "react-lottie";
-import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 
 import {
@@ -46,8 +51,10 @@ const Home = () => {
   const recommendNo = useRef(0);
   const [ref, inView] = useInView();
 
+  const [user, setUser] = useRecoilState(userState);
+  const [cookies, setCookie] = useCookies(["accessToken"]);
+
   const size = 20;
-  const userId = 1;
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -60,8 +67,6 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    // todo : 로그인했을 때만 실행하도록 수정
-    // todo : 로그인 기능 만들어지면 api 변경
     axios
       .get(`${BACKEND_URL}api/recommend/daily`, {
         headers: { "Content-Type": "application/json" },
@@ -73,25 +78,31 @@ const Home = () => {
       .catch(function (error) {
         console.log(error);
       });
-    axios
-      .get(
-        `${BACKEND_URL}api/recommend/games/${userId}?page=${recommendNo.current}&size=${size}`,
-        {
-          headers: { "Content-Type": "application/json", userId: 1 },
-        }
-      )
-      .then(function (response) {
-        // console.log(response.data);
-        setRecommendGames(response.data);
-        setRecommendLoading(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-        if (error.response.status === 500) {
-          window.location.replace("/500");
-        } else {
-        }
-      });
+
+    if (user) {
+      axios
+        .get(
+          `${BACKEND_URL}api/recommend/games/${user.userId}?page=${recommendNo.current}&size=${size}`,
+          {
+            headers: { "Content-Type": "application/json", userId: 1 },
+          }
+        )
+        .then(function (response) {
+          // console.log(response.data);
+          setRecommendGames(response.data);
+          setRecommendLoading(false);
+        })
+        .catch(function (error) {
+          console.log(error);
+          if (error.response.status === 500) {
+            window.location.replace("/500");
+          } else {
+          }
+        });
+    } else {
+      setRecommendLoading(false);
+    }
+
     axios
       .get(`${BACKEND_URL}api/recommend/popular?size=${size}`, {
         headers: { "Content-Type": "application/json" },
@@ -174,6 +185,14 @@ const Home = () => {
           />
           <p className="game-title">{games[i].gameName}</p>
         </SwiperSlide>
+      );
+    }
+
+    if (!games.length) {
+      result.push(
+        <div className="no-game" key={0}>
+          로그인하고 추천 게임을 확인해보세요.
+        </div>
       );
     }
 
