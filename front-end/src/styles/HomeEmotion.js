@@ -276,13 +276,17 @@ export const RecommendWrapper = styled.div`
     }
   }
 
+  .swiper-wrapper {
+    align-items: center;
+  }
+
   .swiper-slide {
-    margin: 2rem 0rem;
+    margin: 1rem 0rem;
   }
 
   .swiper-slide img {
     width: 100%;
-    border-radius: 10%;
+    border-radius: 1.5rem;
     object-fit: contain;
     cursor: pointer;
     z-index: 8;
