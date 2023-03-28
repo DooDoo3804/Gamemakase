@@ -23,10 +23,9 @@ public class JwtFilter extends GenericFilter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        logger.debug("doFilter in");
+        logger.info("doFilter in");
         String jwt = makeToken(httpServletRequest);
-        logger.debug("jwt : {}", jwt);
-
+        logger.info("jwt : {}", jwt);
         String requestURI = httpServletRequest.getRequestURI();
         if(StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(jwt);    // authentication 객체 반환
@@ -41,10 +40,13 @@ public class JwtFilter extends GenericFilter {
     // Header에서 Authorization의 값을 찾아서 Bearer를 떼주는 메서드
     private String makeToken(HttpServletRequest httpServletRequest) {
         String bearerToken = httpServletRequest.getHeader(ACCESS_TOKEN);
-        System.out.println(bearerToken);
+        logger.info("makeToken : bearerToken : {} ", bearerToken);
         if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            logger.info("Bearer auth success");
             return bearerToken.substring(7);
+        } else {
+            logger.info("Bearer auth failed");
+            return null;
         }
-        return null;
     }
 }
