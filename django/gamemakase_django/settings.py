@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "recommendation",
     'django_apscheduler',
     'background_task',
+    'corsheaders',
 
 ]
 
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'gamemakase_django.urls'
@@ -131,3 +133,7 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CORS 관련 추가
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'http://gamemakase.com']
+CORS_ALLOW_CREDENTIALS = True

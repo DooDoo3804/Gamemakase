@@ -4,6 +4,7 @@ Django==3.2.13
 django-apscheduler==0.6.2
 django-background-tasks==1.2.5
 django-compat==1.0.15
+django-cors-headers==3.14.0
 django-filter==22.1
 djangorestframework==3.14.0
 importlib-metadata==6.0.0
