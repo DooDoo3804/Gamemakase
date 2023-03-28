@@ -4,9 +4,14 @@ import { motion } from "framer-motion";
 //import { motion } from "framer-motion";
 
 export const SearchWrapper = styled.div`
+
+  .loading {
+    position: relative;
+    opacity: 0.3;
+  }
+
   .swiper {
     margin-left: 0px;
-
   }
   .swiper-container {
     width: 100%;
@@ -91,6 +96,29 @@ export const SearchWrapper = styled.div`
     align-items: center;
     justify-content: center;
   }
+
+  .search-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .search-bar {
+      width: 70%;
+      height: 40px;
+      background-color: ${Common.colors.mainColor01};
+      border: 1.5px solid ${Common.colors.lightGray01};
+      border-radius: 2rem;
+      padding: 0rem 1rem;
+      color: ${Common.colors.lightGray01};
+      font-family: "Sarpanch", sans-serif;
+      margin-right: 0.8rem;
+      transition: all 0.5s ease-in-out;
+    }
+    .search-icon {
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+    }
+  }
 `;
 
 // 검색내역
@@ -105,8 +133,18 @@ export const SearchHistoryWrapper = styled.div`
     font-size: 24px;
     margin-bottom: 10px;
   }
+  .all-delete-btn {
+    border-radius: 15px;
+    font-size: 13px;
+    display: inline-block;
+    font-family: "Noto Sans KR";
+    margin-left: 10px;
+    padding: 3px 7px 3px 7px;
+    background-color: rgba(217, 217, 217, 0.19);
+  }
   .tags-wrapper {
     display: flex;
+    flex-wrap: wrap;
   }
   .tags-line {
     margin-top: 15px;
@@ -140,28 +178,18 @@ export const SearchResultsWrapper = styled(motion.div)`
   justify-content: space-between;
   align-items: flex-start;
 
-  .loading {
-    position: relative;
-    opacity: 0.3;
-  }
 `;
 
 export const FilterWrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-right: 3%;
-  min-width: 20%;
-  max-width: 20%;
+  min-width: 245px;
+  max-width: 245px;
+  margin-right: 4%;
   @media (min-width: 1560px) {
-    min-width: 17%;
-    max-width: 17%;
-    margin-right: 4%;
   }
   @media (max-width: 1000px) {
-    min-width: 25%;
-    max-width: 25%;
-    margin-right: 4%;
   }
   @media (max-width: 870px) {
     display: none;
@@ -286,7 +314,6 @@ export const UserSearchResultsWrapper = styled.div`
   flex-direction: column;
   border-radius: 30px;
   padding: 20px;
-  margin-left: 30px;
   background: linear-gradient(
     180deg,
     rgba(184, 162, 207, 0.36) 0%,
@@ -295,11 +322,10 @@ export const UserSearchResultsWrapper = styled.div`
   );
   filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
   color: ${Common.colors.white01};
-  @media (min-width: 1560px) {
-    margin-left: 60px;
+  @media (min-width: 1160px) {
+    margin-left: 4%;
   }
   @media (max-width: 1160px) {
-    margin-left: 0px;
     width: 100%;
     padding: 0;
     background: transparent;

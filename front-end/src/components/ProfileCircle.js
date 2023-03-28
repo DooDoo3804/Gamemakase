@@ -6,6 +6,9 @@ const StyleProfileCirlce = styled(motion.div)`
   display: flex;
   margin : 15px;
   cursor: pointer;
+  @media (max-width: 1160px) {
+    min-width: 240px;
+  }
   .profile-img-wrapper {
     margin: 0;
     width: 80px;
@@ -74,7 +77,7 @@ const ProfileCircle = (props) => {
             </div>
             <div className="explain">
                 <div className="online">
-                    <div className="online-str">스팀 온라인</div>
+                    <div className="online-str">스팀 {props.online ? "온라인" : "오프라인"}</div>
                     {props.online ? (
                         <div className="online-mark"></div>
                     ) : (
