@@ -103,10 +103,12 @@ const MainHeader = () => {
                 className="profile-img"
                 onClick={() => navigate(`/profile/1`)}
               >
-                <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+                <FontAwesomeIcon
+                  icon={user.imagePath ? user.imagePath : faUser}
+                ></FontAwesomeIcon>
               </div>
               <p className="single-menu" onClick={() => navigate(`/profile/1`)}>
-                USERNAME
+                {user.userName}
               </p>
               <p className="single-menu"> </p>
               <p className="single-menu" onClick={() => handleLogout()}>
