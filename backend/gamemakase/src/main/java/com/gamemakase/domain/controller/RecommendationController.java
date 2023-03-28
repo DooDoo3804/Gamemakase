@@ -70,10 +70,4 @@ public class RecommendationController {
         return ResponseEntity.status(HttpStatus.OK).body(recommendationService.getDailyRecommendations());
     }
 
-
-
-
-
-
-
 }
