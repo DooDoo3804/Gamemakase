@@ -65,7 +65,7 @@ public class SearchRestController {
 		return new ResponseEntity<List<GameInfoVo>>(result, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "게임 검색 결과를 반환합니다.", notes = "검색 단어에 대한 게임(최대 12)결과를 응답합니다.")
+	@ApiOperation(value = "유저 검색 결과를 반환합니다.", notes = "검색 단어에 대한 유저결과를 응답합니다.")
 	@GetMapping("/user")
 	public ResponseEntity<List<UserInfoVo>> getSearchUserResult(
 			@RequestParam(required = false) @ApiParam(required = false) String niddle,
