@@ -427,7 +427,16 @@ const Detail = () => {
                     </div>
                   </div>
                   <p className="discription">{gameData.gameDescription}</p>
-                  <div className="steam-btn" onClick={() => window.open(`https://store.steampowered.com/app/${gameData.gameId}`)}>스팀에서 보기</div>
+                  <div
+                    className="steam-btn"
+                    onClick={() =>
+                      window.open(
+                        `https://store.steampowered.com/app/${gameData.gameId}`
+                      )
+                    }
+                  >
+                    스팀에서 보기
+                  </div>
                 </motion.div>
               </div>
               <div className="scrap-wrapper" onClick={() => handleScrap()}>
@@ -481,9 +490,19 @@ const Detail = () => {
                       "https://www.youtube.com/embed/" +
                       gameData.youtube[0].youtubeId.videoId
                     }
-                    title={gameData.youtube[0].youtubeId.videoName}
+                    title={gameData.youtube[0].youtubeName}
+                    className="single-video"
+                    allow="fullscreen"
                   ></iframe>
-                  <iframe></iframe>
+                  <iframe
+                    src={
+                      "https://www.youtube.com/embed/" +
+                      gameData.youtube[1].youtubeId.videoId
+                    }
+                    title={gameData.youtube[1].youtubeName}
+                    className="single-video"
+                    allow="fullscreen"
+                  ></iframe>
                 </div>
               </div>
             ) : null}

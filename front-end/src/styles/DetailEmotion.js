@@ -321,6 +321,13 @@ export const DetailWrapper = styled.div`
     user-select: none;
   }
 
+  .single-video {
+    width: 45%;
+    height: calc((100vw - 8rem / 2) * 0.25);
+    border: none;
+    margin: 1rem 0rem;
+  }
+
   .swiper-pagination {
     position: relative;
   }
