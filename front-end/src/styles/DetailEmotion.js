@@ -57,7 +57,7 @@ export const DetailWrapper = styled.div`
     width: 90%;
     display: flex;
     align-items: flex-end;
-    margin-bottom: 5rem;
+    margin-bottom: 3rem;
   }
 
   .title-wrapper {
@@ -108,6 +108,36 @@ export const DetailWrapper = styled.div`
       font-size: 12px;
     }
     @media (max-width: 500px) {
+      font-size: 10px;
+    }
+  }
+
+  .steam-btn {
+    background: ${Common.colors.mainColor04};
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 2rem;
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      width: 9rem;
+      margin: 1.5rem 0rem;
+      padding: 1rem;
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) {
+      width: 6rem;
+      margin: 1.5rem 0rem;
+      padding: 0.7rem;
+      font-size: 0.7rem;
+    }
+    @media (max-width: 500px) {
+      width: 5rem;
+      margin: 1rem 0rem;
+      padding: 0.7rem;
       font-size: 10px;
     }
   }
