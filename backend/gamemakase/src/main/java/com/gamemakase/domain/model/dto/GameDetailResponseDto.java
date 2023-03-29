@@ -1,10 +1,12 @@
 package com.gamemakase.domain.model.dto;
 
+import com.google.api.services.youtube.model.ResourceId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.naming.directory.SearchResult;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class GameDetailResponseDto {
     private List<ImageDTO> images;
     private List<GameReviewResponseDto> reviews;
     private List<RecommendedUserDTO> recommendedUsers;
+    private List<YoutubeDTO> youtube;
 
     @Data
     @Builder
@@ -81,5 +84,14 @@ public class GameDetailResponseDto {
         private Long userId;
         private String userName;
         private String userImagePath;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class YoutubeDTO {
+        private ResourceId youtubeId;
+        private String youtubeName;
     }
 }
