@@ -80,7 +80,7 @@ const MainHeader = () => {
   const handleLogout = () => {
     setUser(null);
     removeCookie("accessToken");
-    window.location.replace("/");
+    window.location.replace(window.location.href);
   };
 
   return (

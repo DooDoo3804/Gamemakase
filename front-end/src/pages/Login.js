@@ -9,10 +9,11 @@ import { BACKEND_URL } from "../config";
 import LoadingPage from "../components/LoadingPage";
 
 const Login = () => {
-  const [cookies, setCookies] = useCookies(["accessToken"]);
+  const [cookies, setCookies, removeCookie] = useCookies(["accessToken"]);
   const [user, setUser] = useRecoilState(userState);
 
   useEffect(() => {
+    console.log(cookies["redirect-url"]);
     handleLogin();
   }, []);
 
@@ -27,9 +28,26 @@ const Login = () => {
       });
       // console.log(loginResponse.data);
       setUser(loginResponse.data);
+      if (cookies["redirect-url"]) {
+        window.location.replace(cookies["redirect-url"]);
+      } else {
+        window.location.replace("/");
+      }
     } catch (error) {
       console.log(error);
+      alert("로그인 도중 오류가 발생했습니다.");
+      handleLogout();
+      if (cookies["redirect-url"]) {
+        window.location.replace(cookies["redirect-url"]);
+      } else {
+        window.location.replace("/");
+      }
     }
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    removeCookie("accessToken");
   };
 
   return (
