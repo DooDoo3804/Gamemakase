@@ -189,11 +189,19 @@ const Home = () => {
     }
 
     if (!games.length) {
-      result.push(
-        <div className="no-game" key={0}>
-          로그인하고 추천 게임을 확인해보세요.
-        </div>
-      );
+      if (!user) {
+        result.push(
+          <div className="no-game" key={0}>
+            로그인하고 추천 게임을 확인해보세요.
+          </div>
+        );
+      } else {
+        result.push(
+          <div className="no-game" key={0}>
+            추천 게임이 존재하지 않습니다.
+          </div>
+        );
+      }
     }
 
     return result;
