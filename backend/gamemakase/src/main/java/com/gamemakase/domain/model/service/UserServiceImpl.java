@@ -4,11 +4,16 @@ import com.gamemakase.domain.model.dto.SignUpRequestDto;
 import com.gamemakase.domain.model.dto.UserResponseDto;
 import com.gamemakase.domain.model.entity.Authority;
 import com.gamemakase.domain.model.entity.Authority.AuthorityName;
+import com.gamemakase.domain.model.entity.GameHistory;
+import com.gamemakase.domain.model.entity.Recommendation;
 import com.gamemakase.domain.model.entity.User;
+import com.gamemakase.domain.model.repository.GameHistoryRepository;
+import com.gamemakase.domain.model.repository.RecommendationRepository;
 import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.domain.model.vo.UserInfoVo;
 import com.gamemakase.global.Exception.DuplicatedException;
 import com.gamemakase.global.Exception.NotFoundException;
+import com.gamemakase.global.Exception.TokenValidFailedException;
 import com.gamemakase.global.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
@@ -41,8 +46,11 @@ public class UserServiceImpl implements UserService {
 
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
+    private final RecommendationRepository recommendationRepository;
+    private final GameHistoryRepository gameHistoryRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private  final RealTimeUserInfoService realTimeUserInfoService;
+    private final RealTimeGameHistoryService realTimeGameHistoryService;
     private final String ACCESS_HEADER = "accessToken";
     private final String REFRESH_HEADER = "refreshToken";
     static final String PLAYER_SUMMARIES_BASE_URL = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/";
@@ -103,14 +111,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto getUserProfile(String accessToken) throws IOException, ParseException, NotFoundException {
+    public UserResponseDto getUserProfile(String accessToken) throws IOException, ParseException, NotFoundException, TokenValidFailedException {
         String userIdstr = jwtTokenProvider.getUserId(accessToken);
         long userId = Long.parseLong(userIdstr);
         User user = userRepository.findByUserId(userId);
         List<User> userList = new ArrayList<>();
         userList.add(user);
         List<UserInfoVo> realUserList = realTimeUserInfoService.getUserInfoResponseVo(userList);
-        return UserResponseDto.of(user, realUserList.get(0).getUserImagePath());
+        realTimeGameHistoryService.insertUserGameHistory(accessToken);
+
+        // gameHistory가 있는데 recommendation이 없으면 django요청이 필요하다는 respoinse를 추가 응답합니다.
+        boolean djangoRequest = false;
+        List<GameHistory> gameHistory = gameHistoryRepository.findAllByUser(user);
+        if (gameHistory.size() > 0) {
+            List<Recommendation> recommendations = recommendationRepository.findAllByUser(user);
+            if (recommendations.size() > 0) {
+                djangoRequest = true;
+            }
+        }
+        return UserResponseDto.of(user, realUserList.get(0).getUserImagePath(), djangoRequest);
     }
 
     @Override

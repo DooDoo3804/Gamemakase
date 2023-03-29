@@ -44,7 +44,7 @@ public class SteamRestController {
     @PostMapping(value = "/auth/user/play-record")
     private void newRecentlyPlayedGames(@RequestHeader(value = "accessToken", required = true) String token, Authentication authentication)
             throws NullPointerException, IOException, ParseException, NotFoundException, TokenValidFailedException {
-        realTimeGameHistoryService.insertUserGameHistory(token, authentication);
+        realTimeGameHistoryService.insertUserGameHistory(token);
     }
 
     @GetMapping(value = "/auth/user/play-record")

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.gamemakase.global.Exception.NotFoundException;
+import com.gamemakase.global.Exception.TokenValidFailedException;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpHeaders;
 
@@ -17,7 +18,7 @@ public interface UserService {
     boolean isUser(long steamId);
     Map<String, Object> login(long steamId);
 
-    UserResponseDto getUserProfile(String accessToken) throws IOException, ParseException, NotFoundException;
+    UserResponseDto getUserProfile(String accessToken) throws IOException, ParseException, NotFoundException, TokenValidFailedException;
 
     HttpHeaders getAccessTokenByRefreshToken(String refreshToken);
 
