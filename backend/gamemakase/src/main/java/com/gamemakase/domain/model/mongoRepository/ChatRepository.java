@@ -1,4 +1,4 @@
-package com.gamemakase.domain.model.repository;
+package com.gamemakase.domain.model.mongoRepository;
 
 import com.gamemakase.domain.model.entity.MongoChat;
 import java.util.List;

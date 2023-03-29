@@ -2,7 +2,7 @@ package com.gamemakase.domain.model.service;
 
 import com.gamemakase.domain.model.dto.ChatInsertRequestDto;
 import com.gamemakase.domain.model.entity.MongoChat;
-import com.gamemakase.domain.model.repository.ChatRepository;
+import com.gamemakase.domain.model.mongoRepository.ChatRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
