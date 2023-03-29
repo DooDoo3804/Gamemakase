@@ -82,7 +82,7 @@ const Detail = () => {
         headers: { "Content-Type": "application/json", userId: userId },
       })
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         setGameData(response.data);
         setRecommendedUsers(response.data.recommendedUsers);
         setReviewData(response.data.reviews);
@@ -308,22 +308,20 @@ const Detail = () => {
       if (isLiked) {
         // 스크랩 취소
         axios
-          .delete(
-            `${BACKEND_URL}auth/user/bookmarks/${gameData.likeId}`,
-            {},
-            {
-              headers: {
-                "Content-Type": "application/json",
-                accessToken: cookies["accessToken"],
-              },
-            }
-          )
+          .delete(`${BACKEND_URL}auth/user/bookmarks/${gameData.likeId}`, {
+            headers: {
+              "Content-Type": "application/json",
+              accessToken: cookies["accessToken"],
+            },
+          })
           .then((response) => {
-            console.log(response.data);
             setIsLiked(!isLiked);
           })
           .catch((error) => {
             console.log(error);
+            // if (error.response.status === 401) {
+            //   window.location.replace(window.location.href);
+            // }
             alert("스크랩 취소에 실패했습니다.");
           });
       } else {
@@ -342,7 +340,6 @@ const Detail = () => {
             }
           )
           .then((response) => {
-            console.log(response.data);
             setIsLiked(!isLiked);
             let tempGameData = gameData;
             tempGameData.likeId = response.data.likeId;
@@ -350,6 +347,9 @@ const Detail = () => {
           })
           .catch((error) => {
             console.log(error);
+            // if (error.response.status === 401) {
+            //   window.location.replace(window.location.href);
+            // }
             alert("스크랩에 실패했습니다.");
           });
       }
