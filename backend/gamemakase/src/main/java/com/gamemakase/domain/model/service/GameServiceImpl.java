@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.gamemakase.domain.model.entity.*;
+import com.google.api.services.youtube.model.SearchResult;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,7 @@ public class GameServiceImpl implements GameService{
     private final UserRepository userRepository;
     private final LikeGameRepository likeGameRepository;
     private final ReviewService reviewService;
+    private final YoutubeApiService youtubeApiService;
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -85,6 +87,8 @@ public class GameServiceImpl implements GameService{
         List<Image> imageList = imageRepository.findAllByTypeAndTypeId("GAME_SCREENSHOTS", gameId);
 //        System.out.println("imageList = " + imageList.toString());
         List<GameHistory> recommendationList = gameHistoryRepository.findAllByGameGameIdOrderByTotalPlayGameDesc(gameId);
+
+        List<SearchResult> youtubeList = youtubeApiService.getGameYoutubeVideo(gameId);
 
 //        List<Recommendation> recommendationList = recommendationRepository.findAllByGameGameIdOrderByRatingDesc(gameId);
 //        System.out.println("recommendationList = " + recommendationList.toString());
@@ -130,6 +134,11 @@ public class GameServiceImpl implements GameService{
                                         .orElse(""))
                                 .build())
                         .collect(Collectors.toList()))
+                .youtube(youtubeList.stream()
+                        .map(youtube -> GameDetailResponseDto.YoutubeDTO.builder()
+                                .youtubeId(youtube.getId())
+                                .youtubeName(youtube.getSnippet().getTitle())
+                                .build()).collect(Collectors.toList()))
                 .build();
     }
 
