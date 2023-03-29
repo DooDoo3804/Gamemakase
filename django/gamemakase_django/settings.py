@@ -18,12 +18,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-# SECRET_KEY = 'django-insecure-k9ee&0oknp)5b=^ws@95q2k%tpud#ua^0!$=%me$++tf_3=rf)'
 DEBUG = False
 
-# ALLOWED_HOSTS = ['43.201.61.185', 'gamemakase.com', '70.12.245.31',
-#                  'www.gamemakase.com', 'localhost', ]
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['43.201.61.185', 'gamemakase.com', '70.12.245.31',
+                 'www.gamemakase.com', 'localhost', ]
+# ALLOWED_HOSTS = ['*']
 
 
 # Application definition
