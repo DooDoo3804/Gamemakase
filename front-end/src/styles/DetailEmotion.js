@@ -258,7 +258,8 @@ export const DetailWrapper = styled.div`
     }
   }
 
-  .scrennshots-wrapper {
+  .scrennshots-wrapper,
+  .video-wrapper {
     font-family: "Noto Sans KR", serif;
     font-weight: 700;
 
@@ -279,7 +280,8 @@ export const DetailWrapper = styled.div`
     }
   }
 
-  .screenshot-text {
+  .screenshot-text,
+  .video-text {
     margin: 0;
 
     -ms-user-select: none;
@@ -332,6 +334,12 @@ export const DetailWrapper = styled.div`
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+  }
+
+  .videos {
+    margin: 1rem 0rem;
+    display: flex;
+    justify-content: space-around;
   }
 
   .gradient {

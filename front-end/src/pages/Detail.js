@@ -471,6 +471,13 @@ const Detail = () => {
                 {renderScreenshots()}
               </Swiper>
             </div>
+            <div className="video-wrapper">
+              <p className="video-text">관련 영상</p>
+              <div className="videos">
+                <iframe></iframe>
+                <iframe></iframe>
+              </div>
+            </div>
           </div>
           <div className="gradient"></div>
           <RecommendUsers>
