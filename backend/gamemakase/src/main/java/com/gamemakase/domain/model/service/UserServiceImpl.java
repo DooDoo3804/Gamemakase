@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Value("${steam.api.key}") String KEY;
     @Override
-    public void signUp(SignUpRequestDto signUpRequestDto, long steamId, String name) {
+    public Map<String, Object> signUp(SignUpRequestDto signUpRequestDto, long steamId, String name) {
         User user = signUpRequestDto.toEntity(steamId, name);
         System.out.println(user.getUserId());
         System.out.println("이름 : " + user.getUserName());
@@ -64,6 +64,19 @@ public class UserServiceImpl implements UserService {
         else authority = new Authority(AuthorityName.ROLE_USER);
         user.setAuthority(authority);
         userRepository.save(user);
+
+        String accessToken = jwtTokenProvider.createAccessToken(user);
+        String refreshToken = jwtTokenProvider.createRefreshToken(user);
+
+        return new HashMap<>() {{
+            put("userId", user.getUserId());
+            put("steamId", user.getUserSteamId());
+            put("accessToken", accessToken);
+            put("refreshToken", refreshToken);
+            put("name", user.getUserName());
+            put("role", user.getAuthority());
+        }};
+
     }
 
     @Override
@@ -92,7 +105,7 @@ public class UserServiceImpl implements UserService {
         logger.info("user SteamId : {}", user.getUserSteamId());
         logger.info("save refresh token");
 
-        return new HashMap<String, Object>(){{
+        return new HashMap<>() {{
             put("userId", user.getUserId());
             put("steamId", user.getUserSteamId());
             put("accessToken", accessToken);
