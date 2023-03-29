@@ -426,7 +426,9 @@ const Detail = () => {
               </span>
               <span className="single-info">
                 <p className="info-title">가격</p>
-                <p className="info-content">{"$" + gameData.gamePrice}</p>
+                <p className="info-content">
+                  {gameData.gamePrice ? "$" + gameData.gamePrice : "Free"}
+                </p>
               </span>
               <span className="single-info">
                 <p className="info-title">장르</p>
