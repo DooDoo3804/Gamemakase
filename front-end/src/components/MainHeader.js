@@ -79,7 +79,8 @@ const MainHeader = () => {
 
   const handleLogout = () => {
     setUser(null);
-    removeCookie("accessToken");
+    removeCookie(["accessToken"]);
+    removeCookie(["redirect-url"]);
     window.location.replace(window.location.href);
   };
 
