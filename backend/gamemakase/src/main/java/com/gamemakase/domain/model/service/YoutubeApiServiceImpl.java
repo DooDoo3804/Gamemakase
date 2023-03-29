@@ -59,7 +59,7 @@ public class YoutubeApiServiceImpl implements YoutubeApiService{
 
             YouTube.Search.List search = youtube.search().list(Collections.singletonList("id,snippet"));
 
-            search.setKey("AIzaSyDmMcU2QUUUOT1mox_xI4Geg-yNB_pC6fo");
+            search.setKey("AIzaSyD8H8D6hUcFYg8lEvddo3pKF-qEwIwpOiM");
             search.setQ(queryTerm);
             search.setType(Collections.singletonList("video"));
             search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
