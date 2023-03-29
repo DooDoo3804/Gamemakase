@@ -8,7 +8,6 @@ export const DetailWrapper = styled.div`
   .detail-main {
     display: flex;
     width: 100%;
-    height: 56vw;
     background-image: linear-gradient(
         to bottom,
         rgba(50, 50, 50, 0.5),
@@ -20,15 +19,15 @@ export const DetailWrapper = styled.div`
 
     @media (min-width: 768px) {
       margin-top: -4.4rem;
-      height: 40rem;
+      min-height: 40rem;
     }
     @media (max-width: 768px) {
       margin-top: -3.9rem;
-      height: 30rem;
+      min-height: 30rem;
     }
     @media (max-width: 500px) {
       margin-top: -3.4rem;
-      height: 400px;
+      min-height: 400px;
     }
   }
 
@@ -62,6 +61,8 @@ export const DetailWrapper = styled.div`
 
   .title-wrapper {
     transition: all 0.5s ease-in-out;
+
+    margin-top: 7rem;
 
     @media (min-width: 768px) {
       width: 50%;
