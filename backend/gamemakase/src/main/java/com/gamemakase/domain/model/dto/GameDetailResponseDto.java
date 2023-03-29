@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.naming.directory.SearchResult;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,6 +25,7 @@ public class GameDetailResponseDto {
     private String publisher;
     private Boolean isKorean;
     private Boolean isLiked;
+    private Long likeId;
     private Boolean canReview;
     private Boolean windows;
     private Boolean mac;

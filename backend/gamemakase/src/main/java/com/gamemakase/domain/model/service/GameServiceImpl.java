@@ -5,7 +5,6 @@ import com.gamemakase.domain.model.dto.GameHistoryResponseDto;
 import com.gamemakase.domain.model.entity.GameHistory;
 import com.gamemakase.domain.model.entity.User;
 import com.gamemakase.global.Exception.TokenValidFailedException;
-import com.gamemakase.global.Exception.UnAuthorizedException;
 import com.gamemakase.global.config.jwt.JwtTokenProvider;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,8 +60,6 @@ public class GameServiceImpl implements GameService{
     @Override
     public GameDetailResponseDto getByGameId(Long gameId, Long userId) throws NotFoundException, IOException, ParseException {
 
-//        System.out.println("gameId = " + gameId + ", userId = " + userId);
-
 //        예외처리
         Game game = gameRepository.findByGameId(gameId)
                 .orElseThrow(() -> new NotFoundException("wrong game id"));
@@ -72,26 +69,21 @@ public class GameServiceImpl implements GameService{
             throw new NotFoundException("wrong user id");
         }
 
-//        isLiked
-        boolean isLiked = likeGameRepository.existsByGameGameIdAndUserUserId(gameId, userId);
-//        System.out.println("isLiked = " + isLiked);
+//        isLiked, likeId
+        Optional<LikeGame> like = likeGameRepository.findByGameGameIdAndUserUserId(gameId, userId);
+        Long likeId = like.map(LikeGame::getLikeId).orElse(-1L);
+        boolean isLiked = like.isPresent();
 
 //        canReview
         boolean canReview = gameHistoryRepository.existsByGameGameIdAndUserUserId(gameId, userId) && !reviewRepository.existsByGameGameIdAndUserUserId(gameId, userId);
-//        System.out.println("canReview = " + canReview);
 
 
-//        장르, 이미지, 추천
+//        장르, 이미지, 추천, 유튜브
         List<Genre> genreList = genreRepository.findAllByGameGameId(gameId);
-//        System.out.println("genreList = " + genreList.toString());
         List<Image> imageList = imageRepository.findAllByTypeAndTypeId("GAME_SCREENSHOTS", gameId);
-//        System.out.println("imageList = " + imageList.toString());
         List<GameHistory> recommendationList = gameHistoryRepository.findAllByGameGameIdOrderByTotalPlayGameDesc(gameId);
-
         List<SearchResult> youtubeList = youtubeApiService.getGameYoutubeVideo(gameId);
 
-//        List<Recommendation> recommendationList = recommendationRepository.findAllByGameGameIdOrderByRatingDesc(gameId);
-//        System.out.println("recommendationList = " + recommendationList.toString());
 
         return GameDetailResponseDto.builder()
                 .gameId(game.getGameId())
@@ -104,6 +96,7 @@ public class GameServiceImpl implements GameService{
                 .publisher(game.getPublisher())
                 .isKorean(game.isKorean())
                 .isLiked(isLiked)
+                .likeId(likeId)
                 .canReview(canReview)
                 .windows(game.isWindows())
                 .mac(game.isMac())
