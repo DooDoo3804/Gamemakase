@@ -2,6 +2,8 @@ import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil/user";
 import { ResponsivePie } from "@nivo/pie";
 import { Common } from "../styles/Common";
 import { motion } from "framer-motion";
@@ -35,12 +37,17 @@ const Profile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const userId = location.pathname.split("/").reverse()[0];
+  const [width, setWidth] = useState(window.innerWidth);
 
   //state
   const [isKo, setIsKo] = useState(true);
   const [userName, setUserName] = useState("");
   const [userImage, setUserImage] = useState(defaultUserImg);
+  const [user] = useRecoilState(userState);
+
+  // sync
   const [scrapId, setScrapId] = useState();
+  const [reviewId, setReviewId] = useState();
 
   const [statisticsData, setStatisticsData] = useState([]);
   const [statisticsSum, setStatisticsSum] = useState(0);
@@ -65,6 +72,17 @@ const Profile = () => {
     setIsMainTap(false);
     reviewDataRend(1);
   };
+
+  const handleResize = () => {
+    setWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   // 객체 배열의 key값 일괄 변경 func
   const renameKeys = (mapping, objArr) => {
@@ -130,9 +148,11 @@ const Profile = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        if (error.code === "ERR_BAD_REQUEST") {
+          navigate("/404");
+        }
       });
-  }, [userId]);
+  }, [userId, navigate]);
 
   // Review Data
   const reviewDataRend = (e) => {
@@ -156,8 +176,13 @@ const Profile = () => {
     console.log("edit!");
   };
 
+  const reviewDeleteClick = (reviewId) => {
+    setReviewId(reviewId);
+    setReviewDeleteAlertView(true);
+  }
+
   const reviewDelete = () => {
-    console.log("리뷰 삭제!");
+    console.log("리뷰 삭제!" + reviewId);
   };
 
   const scrapDeleteClick = (scrapId) => {
@@ -184,7 +209,7 @@ const Profile = () => {
             <div className="pie-chart">
               <ResponsivePie
                 data={statisticsData}
-                margin={{ top: 30, right: 140, bottom: 30, left: 30 }}
+                margin={{ top: 30, right: width < 500 ? 130 : 200, bottom: 30, left: 30 }}
                 innerRadius={0.6}
                 padAngle={4}
                 cornerRadius={10}
@@ -204,13 +229,13 @@ const Profile = () => {
                 theme={{
                   labels: {
                     text: {
-                      fontSize: 18,
+                      fontSize: width < 500 ? 12 : 18,
                       fill: `${Common.colors.white01}`,
                     },
                   },
                   legends: {
                     text: {
-                      fontSize: 14,
+                      fontSize: width < 500 ? 12 : 14,
                       fill: `${Common.colors.white01}`,
                     },
                   },
@@ -220,11 +245,11 @@ const Profile = () => {
                     anchor: "right",
                     direction: "column",
                     justify: false,
-                    translateX: 130,
+                    translateX: 10,
                     translateY: 0,
                     itemsSpacing: 0,
-                    itemWidth: 100,
-                    itemHeight: 30,
+                    itemWidth: 0,
+                    itemHeight:  width < 500 ? 20 : 30,
                     itemDirection: "left-to-right",
                     itemOpacity: "100%",
                     symbolSize: 20,
@@ -314,6 +339,7 @@ const Profile = () => {
             scrapId={e.likeId}
             gameId={e.gameId}
             clickFunc={scrapDeleteClick}
+            isMine={user ? userId === user.userId : false}
           ></GameSummary>
         );
         idx++;
@@ -429,12 +455,12 @@ const Profile = () => {
                   {isKo ? dateStringKo : dateStringEng}
                 </div>
               </div>
-              <EditModal
+              {user.userId === userId ?  <EditModal
                 editFunction={reviewEdit}
                 deleteFunction={() => {
-                  setReviewDeleteAlertView(true);
+                  reviewDeleteClick(e.reviewId);
                 }}
-              ></EditModal>
+              ></EditModal>: ""}
             </div>
             <p className="review-title">{e.reviewTitle}</p>
             <p className="review-content">{e.reviewContent}</p>
