@@ -79,6 +79,13 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
         })
         .catch((error) => {
           console.log(error);
+          if (error.response.status === 401) {
+            if (cookies["accessToken"]) {
+              alert("작성 권한이 없습니다.");
+            } else {
+              alert("재로그인이 필요합니다.");
+            }
+          }
         });
     }
   };
