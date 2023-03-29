@@ -72,10 +72,13 @@ public class GameServiceImpl implements GameService{
 //        isLiked, likeId
         Optional<LikeGame> like = likeGameRepository.findByGameGameIdAndUserUserId(gameId, userId);
         Long likeId = like.map(LikeGame::getLikeId).orElse(-1L);
-        boolean isLiked = like.isPresent();
+        Boolean isLiked = like.isPresent();
 
-//        canReview
-        boolean canReview = gameHistoryRepository.existsByGameGameIdAndUserUserId(gameId, userId) && !reviewRepository.existsByGameGameIdAndUserUserId(gameId, userId);
+//        isOwned, canReview
+        Boolean isOwned = gameHistoryRepository.existsByGameGameIdAndUserUserId(gameId, userId);
+        Boolean canReview = isOwned && !reviewRepository.existsByGameGameIdAndUserUserId(gameId, userId);
+
+
 
 
 //        장르, 이미지, 추천, 유튜브
@@ -98,6 +101,7 @@ public class GameServiceImpl implements GameService{
                 .isLiked(isLiked)
                 .likeId(likeId)
                 .canReview(canReview)
+                .isOwned(isOwned)
                 .windows(game.isWindows())
                 .mac(game.isMac())
                 .linux(game.isLinux())
