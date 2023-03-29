@@ -34,7 +34,7 @@ public class YoutubeApiServiceImpl implements YoutubeApiService{
     /** Global instance of the JSON factory. */
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
     /** 50 max videos per page */
-    private static final long NUMBER_OF_VIDEOS_RETURNED = 3;
+    private static final long NUMBER_OF_VIDEOS_RETURNED = 1;
     /** Global instance of Youtube object to make all API requests. */
     private static YouTube youtube;
 
