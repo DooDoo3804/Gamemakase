@@ -304,33 +304,58 @@ const Detail = () => {
   const handleScrap = () => {
     // todo : 로그인 안했을 때 로그인 유도
     // Auth 설정
-    if (isLiked) {
-      // 스크랩 취소
-    } else {
-      // 스크랩 하기
-      axios
-        .post(
-          `${BACKEND_URL}auth/user/bookmarks`,
-          {
-            game: gameData,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
+    if (user) {
+      if (isLiked) {
+        // 스크랩 취소
+        axios
+          .delete(
+            `${BACKEND_URL}auth/user/bookmarks/${gameData.likeId}`,
+            {},
+            {
+              headers: {
+                "Content-Type": "application/json",
+                accessToken: cookies["accessToken"],
+              },
+            }
+          )
+          .then((response) => {
+            console.log(response.data);
+            setIsLiked(!isLiked);
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("스크랩 취소에 실패했습니다.");
+          });
+      } else {
+        // 스크랩 하기
+        axios
+          .post(
+            `${BACKEND_URL}auth/user/bookmarks/${gameData.gameId}`,
+            {
+              game: gameData,
             },
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-          setIsLiked(!isLiked);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+            {
+              headers: {
+                "Content-Type": "application/json",
+                accessToken: cookies["accessToken"],
+              },
+            }
+          )
+          .then((response) => {
+            console.log(response.data);
+            setIsLiked(!isLiked);
+            let tempGameData = gameData;
+            tempGameData.likeId = response.data.likeId;
+            setGameData(tempGameData);
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("스크랩에 실패했습니다.");
+          });
+      }
+    } else {
+      alert("로그인 후 스크랩 기능을 사용할 수 있습니다.");
     }
-
-    // todo : 개발용 코드, 추후 삭제
-    setIsLiked(!isLiked);
   };
 
   if (isLoading) {
