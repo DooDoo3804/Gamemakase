@@ -16,12 +16,14 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+# SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = 'django-insecure-k9ee&0oknp)5b=^ws@95q2k%tpud#ua^0!$=%me$++tf_3=rf)'
 DEBUG = False
 
-ALLOWED_HOSTS = ['43.201.61.185', 'gamemakase.com', 'www.gamemakase.com']
-# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['43.201.61.185', 'gamemakase.com',
+                 'www.gamemakase.com', 'localhost', ]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -46,7 +48,7 @@ APSCHEDULER_RUN_NOW_TIMEOUT = 300
 SCHEDULER_DEFAULT = True
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # <- 가능한 높게 위치시켜야 한다.
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
@@ -137,6 +139,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS 관련 추가
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'https://gamemakase.com', 'http://70.12.245.31',
-                         'http://gamemakase.com', 'https://gamemakase.com:3000']
+                         'http://gamemakase.com', 'https://gamemakase.com:3000', 'http://gamemakase.com:3000']
 CORS_ALLOW_CREDENTIALS = True
