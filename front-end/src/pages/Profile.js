@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useCallback, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useLocation, useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
 import { userState } from "../recoil/user";
@@ -38,6 +39,7 @@ const Profile = () => {
   const location = useLocation();
   const userId = location.pathname.split("/").reverse()[0];
   const [width, setWidth] = useState(window.innerWidth);
+  const [cookies] = useCookies(["accessToken"]);
 
   //state
   const [isKo, setIsKo] = useState(true);
@@ -182,7 +184,19 @@ const Profile = () => {
   }
 
   const reviewDelete = () => {
-    console.log("리뷰 삭제!" + reviewId);
+    axios
+      .delete(`${BACKEND_URL}auth/reviews/${reviewId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          accessToken: cookies["accessToken"],
+        },
+      })
+      .then((response) => {
+        setReviewsData(reviewsData.filter(reviewsData => reviewsData.reviewId !== reviewId));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const scrapDeleteClick = (scrapId) => {
@@ -192,6 +206,7 @@ const Profile = () => {
   
   const scrapDelete = () => {
     console.log("스크랩 삭제" + scrapId);
+
   }
 
   useEffect(() => { setMainTapData() }, [setMainTapData]);
@@ -455,7 +470,8 @@ const Profile = () => {
                   {isKo ? dateStringKo : dateStringEng}
                 </div>
               </div>
-              {user.userId === userId ?  <EditModal
+              {
+              Number(user.userId) === Number(userId) ?  <EditModal
                 editFunction={reviewEdit}
                 deleteFunction={() => {
                   reviewDeleteClick(e.reviewId);
