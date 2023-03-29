@@ -6,6 +6,7 @@ import com.gamemakase.domain.model.entity.GameHistory;
 import com.gamemakase.domain.model.entity.User;
 import com.gamemakase.domain.model.repository.GameHistoryRepository;
 import com.gamemakase.domain.model.repository.GameRepository;
+import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.global.Exception.NotFoundException;
 import com.gamemakase.global.Exception.TokenValidFailedException;
 import com.gamemakase.global.config.jwt.JwtTokenProvider;
@@ -41,11 +42,16 @@ public class RealTimeGameHistoryService {
     private static final String GET_OWNED_GAMES_URL = "/IPlayerService/GetOwnedGames/v0001/";
     private final Logger logger = LoggerFactory.getLogger(RealTimeGameHistoryService.class);
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
     private final GameRepository gameRepository;
     private final GameHistoryRepository gameHistoryRepository;
-    public void insertUserGameHistory(String token, Authentication authentication)
+
+    public void insertUserGameHistory(String token)
             throws NullPointerException, IOException, ParseException, NotFoundException, TokenValidFailedException {
-        User user = (User) authentication.getPrincipal();
+        long userId = Long.parseLong(jwtTokenProvider.getUserId(token));
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (!optionalUser.isPresent()) throw new NotFoundException("유저 정보를 찾을 수 없습니다.");
+        User user = optionalUser.get();
         String steamId = String.valueOf(user.getUserSteamId());
         logger.info("게임 기록을 조회할 user info : {}", user);
 

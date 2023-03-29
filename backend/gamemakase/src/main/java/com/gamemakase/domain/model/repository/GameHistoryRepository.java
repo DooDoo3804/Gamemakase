@@ -19,6 +19,4 @@ public interface GameHistoryRepository extends JpaRepository<GameHistory, Long>{
     @Query("SELECT gh FROM GameHistory gh JOIN FETCH gh.user u WHERE gh.game.gameId = :gameId ORDER BY gh.totalPlayGame DESC")
     List<GameHistory> findAllByGameGameIdOrderByTotalPlayGameDesc(@Param("gameId") Long gameId);
 
-
-
 }

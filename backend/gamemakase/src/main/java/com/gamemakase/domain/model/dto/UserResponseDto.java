@@ -12,12 +12,15 @@ public class UserResponseDto {
     String userSteamId;
     String imagePath;
 
-    public static UserResponseDto of(User user, String imagePath) {
+    boolean djangoRequest;
+
+    public static UserResponseDto of(User user, String imagePath, boolean djangoRequest) {
         return UserResponseDto.builder()
                 .userId(user.getUserId())
                 .userName(user.getUserName())
                 .userSteamId(String.valueOf(user.getUserSteamId()))
                 .imagePath(imagePath)
+                .djangoRequest(djangoRequest)
                 .build();
     }
 }
