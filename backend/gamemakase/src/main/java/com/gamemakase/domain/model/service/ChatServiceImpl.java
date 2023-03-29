@@ -40,4 +40,9 @@ public class ChatServiceImpl implements ChatService{
   public List<MongoChat> findByRoomNumOrderByCreatedAtDesc(Long chatRoomId){
     return chatRepository.findBychatRoomIdOrderByCreatedAtDesc(chatRoomId);
   }
+
+  @Override
+  public List<MongoChat> findByGameIdAndChatRoomId(long gameId, long chatRoomId) {
+    return chatRepository.findByGameIdAndChatRoomId(gameId, chatRoomId);
+  }
 }
