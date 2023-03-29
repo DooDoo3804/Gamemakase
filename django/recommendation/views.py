@@ -28,23 +28,26 @@ def A(df, userid, steamid):
         exists_game = GameSmall.objects.filter(game_id=game.game.game_id)
         print(exists_game)
         # 없는 게임에 대한 예외처리
-        if exists_game:
-            gameid = game.game.game_id
-            playtime = game.total_play_game
-            # 가까운 유저 찾기
-            game_df = df[df['game_id'] == gameid]
-            game_df['playtime_diff'] = abs(game_df['playtime'] - playtime)
-            game_df_sorted = game_df.sort_values('playtime_diff')
-            closest_rating = game_df_sorted[game_df_sorted['steam_id']
-                                            != steamid].iloc[0]['rating']
+        try:
+            if exists_game:
+                gameid = game.game.game_id
+                playtime = game.total_play_game
+                # 가까운 유저 찾기
+                game_df = df[df['game_id'] == gameid]
+                game_df['playtime_diff'] = abs(game_df['playtime'] - playtime)
+                game_df_sorted = game_df.sort_values('playtime_diff')
+                closest_rating = game_df_sorted[game_df_sorted['steam_id']
+                                                != steamid].iloc[0]['rating']
 
-            # 기존 테이블에 추가
-            new_row = {'steam_id': steamid, 'game_id': gameid,
-                       'playtime': playtime, 'rating': closest_rating}
+                # 기존 테이블에 추가
+                new_row = {'steam_id': steamid, 'game_id': gameid,
+                        'playtime': playtime, 'rating': closest_rating}
 
-            df = df.astype(dtypes).append(new_row, ignore_index=True)
-        else:
-            print(f"None : {exists_game}")
+                df = df.astype(dtypes).append(new_row, ignore_index=True)
+            else:
+                print(f"None : {exists_game}")
+        except:
+            pass
 
     df = df.astype({'steam_id': int, 'game_id': int,
                     'playtime': int})
