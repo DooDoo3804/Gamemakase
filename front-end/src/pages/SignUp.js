@@ -14,7 +14,6 @@ import { LoadingWrapper } from "../components/LoadingPage";
 import calc_loading from "../assets/lottie/calc-loading.json";
 
 const SignUp = () => {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [cookies, setCookies] = useCookies(["accessToken"]);
   const [user, setUser] = useRecoilState(userState);
@@ -56,12 +55,17 @@ const SignUp = () => {
       setLoading(false);
       if (calcResponse.status === 200 || calcResponse.status === 201) {
         console.log("계산을 완료했습니다.");
-        navigate("/");
       } else {
         console.log("계산에 실패했습니다.");
       }
     } catch (error) {
       console.log(error);
+      alert("회원가입 도중 오류가 발생했습니다.");
+    }
+    if (cookies["redirect-url"]) {
+      window.location.replace(cookies["redirect-url"]);
+    } else {
+      window.location.replace("/");
     }
   };
 
