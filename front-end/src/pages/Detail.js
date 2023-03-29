@@ -82,10 +82,11 @@ const Detail = () => {
         headers: { "Content-Type": "application/json", userId: userId },
       })
       .then(function (response) {
-        // console.log(response.data);
+        console.log(response.data);
         setGameData(response.data);
         setRecommendedUsers(response.data.recommendedUsers);
         setReviewData(response.data.reviews);
+        setIsLiked(response.data.isLiked);
         setIsLoading(false);
       })
       .catch(function (error) {
@@ -425,8 +426,17 @@ const Detail = () => {
                       )}
                     </div>
                   </div>
-
                   <p className="discription">{gameData.gameDescription}</p>
+                  <div
+                    className="steam-btn"
+                    onClick={() =>
+                      window.open(
+                        `https://store.steampowered.com/app/${gameData.gameId}`
+                      )
+                    }
+                  >
+                    스팀에서 보기
+                  </div>
                 </motion.div>
               </div>
               <div className="scrap-wrapper" onClick={() => handleScrap()}>
@@ -471,6 +481,31 @@ const Detail = () => {
                 {renderScreenshots()}
               </Swiper>
             </div>
+            {gameData.youtube.length ? (
+              <div className="video-wrapper">
+                <p className="video-text">관련 영상</p>
+                <div className="videos">
+                  <iframe
+                    src={
+                      "https://www.youtube.com/embed/" +
+                      gameData.youtube[0].youtubeId.videoId
+                    }
+                    title={gameData.youtube[0].youtubeName}
+                    className="single-video"
+                    allow="fullscreen"
+                  ></iframe>
+                  <iframe
+                    src={
+                      "https://www.youtube.com/embed/" +
+                      gameData.youtube[1].youtubeId.videoId
+                    }
+                    title={gameData.youtube[1].youtubeName}
+                    className="single-video"
+                    allow="fullscreen"
+                  ></iframe>
+                </div>
+              </div>
+            ) : null}
           </div>
           <div className="gradient"></div>
           <RecommendUsers>
