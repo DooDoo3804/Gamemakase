@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import axios from "axios";
 import Lottie from "react-lottie";
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil/user";
+
 import { motion } from "framer-motion";
 import ReviewModal from "../components/ReviewModal";
 import {
@@ -60,15 +64,23 @@ const Detail = () => {
   const [ref, inView] = useInView();
   const pageNo = useRef(1);
 
+  const [user, setUser] = useRecoilState(userState);
+  const [cookies, setCookie] = useCookies(["accessToken"]);
+
   const { lockScroll } = useBodyScrollLock();
   const location = useLocation();
   const gameId = location.pathname.split("/").reverse()[0];
 
   useEffect(() => {
+    let userId = -1;
+    if (user) {
+      userId = user.userId;
+    }
+    console.log(userId);
     axios
       .get(`${BACKEND_URL}api/game/${gameId}`, {
         // todo : userId 수정해야함
-        headers: { "Content-Type": "application/json", userId: 1 },
+        headers: { "Content-Type": "application/json", userId: userId },
       })
       .then(function (response) {
         // console.log(response.data);
