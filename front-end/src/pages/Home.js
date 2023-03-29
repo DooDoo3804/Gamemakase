@@ -198,7 +198,7 @@ const Home = () => {
       } else {
         result.push(
           <div className="no-game" key={0}>
-            추천 게임이 존재하지 않습니다.
+            1개 이상의 게임을 플레이하거나, 스팀 프로필을 공개로 설정해주세요.
           </div>
         );
       }

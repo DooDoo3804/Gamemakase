@@ -1,5 +1,8 @@
 import { useRef, useState } from "react";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil/user";
+import { useCookies } from "react-cookie";
 import { AnimatePresence } from "framer-motion";
 
 import TranslucentBtn from "./TranslucentBtn";
@@ -20,6 +23,9 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
   const outSection = useRef();
   const reviewTitle = useRef(null);
   const reviewContent = useRef(null);
+
+  const [user, setUser] = useRecoilState(userState);
+  const [cookies, setCookie] = useCookies(["accessToken"]);
 
   const { openScroll } = useBodyScrollLock();
 
@@ -51,10 +57,10 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
     } else {
       axios
         .post(
-          `${BACKEND_URL}auth/reviews/new`,
+          `${BACKEND_URL}auth/reviews`,
           {
-            gamdId: gameData.gamdId,
-            userId: 1, // todo : 임시 userId 수정하기
+            gameId: gameData.gameId,
+            userId: user.userId,
             reviewTitle: reviewTitle.current,
             reviewContent: reviewContent.current,
             reviewGrade: rating,
@@ -62,15 +68,24 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
           {
             headers: {
               "Content-Type": "application/json",
+              accessToken: cookies["accessToken"],
             },
           }
         )
         .then((response) => {
           console.log(response);
+          window.location.replace(window.location.href);
           handleClose();
         })
         .catch((error) => {
           console.log(error);
+          if (error.response.status === 401) {
+            if (cookies["accessToken"]) {
+              alert("작성 권한이 없습니다.");
+            } else {
+              alert("재로그인이 필요합니다.");
+            }
+          }
         });
     }
   };
