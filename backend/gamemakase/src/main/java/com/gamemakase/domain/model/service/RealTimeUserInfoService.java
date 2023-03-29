@@ -25,16 +25,18 @@ import com.gamemakase.global.Exception.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class RealTimeUserInfoService {
 
 	@Value("${steam.api.key}")
 	private String steamApiKey;
-
 	@Value("${steam.api.url}")
 	private String steamApiUrlPrefix;
-
+	private static final String GET_PLAYER_SUMMARIES_URL = "/ISteamUser/GetPlayerSummaries/v0002/";
 	private final Logger logger = LoggerFactory.getLogger(RealTimeUserInfoService.class);
 	private final UserRepository userRepository;
 
@@ -56,7 +58,7 @@ public class RealTimeUserInfoService {
 		}
 		
 		String requestUriStr = UriComponentsBuilder
-				.fromUriString(steamApiUrlPrefix + "/ISteamUser/GetPlayerSummaries/v0002/")
+				.fromUriString(steamApiUrlPrefix + GET_PLAYER_SUMMARIES_URL)
 				.queryParam("key", steamApiKey)
 				.queryParam("steamids", userSteamIdsQuerys)
 				.build()

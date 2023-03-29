@@ -30,4 +30,12 @@ public class GameHistoryInsertRequestDto {
         .build();
   }
 
+  public static GameHistory toEntity(int totalPlayGame, Game game, User user){
+    return GameHistory.builder()
+            .user(user)
+            .game(game)
+            .totalPlayGame(totalPlayGame)
+            .build();
+  }
+
 }
