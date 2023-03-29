@@ -35,13 +35,14 @@ const GameSummary = (props) => {
         </div>
       </div>
       <div className="etc">
-        <div className="scrap-wrapper" onClick={(e) => {
+        {props.isMine ? <div className="scrap-wrapper" onClick={(e) => {
           props.clickFunc(props.scrapId);
           e.stopPropagation();
         }}>
-            <img className="scrap" src={star} alt="scrapStar"></img>
-        </div>
-        <div className="price">{props.price === 0 ? "Free" : `$${props.price}`}</div>
+          <img className="scrap" src={star} alt="scrapStar"></img>
+        </div> : ""}
+        {props.isMine ? <div className="price">{props.price === 0 ? "Free" : `$${props.price}`}</div> :
+          <div className="not-my price">{props.price === 0 ? "Free" : `$${props.price}`}</div>}
       </div>
     </GameSummaryClip>
   );
