@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
         List<GameHistory> gameHistory = gameHistoryRepository.findAllByUser(user);
         if (gameHistory.size() > 0) {
             List<Recommendation> recommendations = recommendationRepository.findAllByUser(user);
-            if (recommendations.size() > 0) {
+            if (recommendations.size() == 0) {
                 djangoRequest = true;
             }
         }
