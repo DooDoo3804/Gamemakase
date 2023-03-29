@@ -27,6 +27,7 @@ public class GameDetailResponseDto {
     private Boolean isLiked;
     private Long likeId;
     private Boolean canReview;
+    private Boolean isOwned;
     private Boolean windows;
     private Boolean mac;
     private Boolean linux;
