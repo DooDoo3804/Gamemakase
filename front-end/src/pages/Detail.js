@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import axios from "axios";
 import Lottie from "react-lottie";
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil/user";
+
 import { motion } from "framer-motion";
 import ReviewModal from "../components/ReviewModal";
 import {
@@ -60,18 +64,25 @@ const Detail = () => {
   const [ref, inView] = useInView();
   const pageNo = useRef(1);
 
+  const [user, setUser] = useRecoilState(userState);
+  const [cookies, setCookie] = useCookies(["accessToken"]);
+
   const { lockScroll } = useBodyScrollLock();
   const location = useLocation();
   const gameId = location.pathname.split("/").reverse()[0];
 
   useEffect(() => {
+    let userId = -1;
+    if (user) {
+      userId = user.userId;
+    }
+
     axios
       .get(`${BACKEND_URL}api/game/${gameId}`, {
-        // todo : userId 수정해야함
-        headers: { "Content-Type": "application/json", userId: 1 },
+        headers: { "Content-Type": "application/json", userId: userId },
       })
       .then(function (response) {
-        // console.log(response.data);
+        console.log(response.data);
         setGameData(response.data);
         setRecommendedUsers(response.data.recommendedUsers);
         setReviewData(response.data.reviews);
@@ -293,33 +304,58 @@ const Detail = () => {
   const handleScrap = () => {
     // todo : 로그인 안했을 때 로그인 유도
     // Auth 설정
-    if (isLiked) {
-      // 스크랩 취소
-    } else {
-      // 스크랩 하기
-      axios
-        .post(
-          `${BACKEND_URL}auth/user/bookmarks`,
-          {
-            game: gameData,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
+    if (user) {
+      if (isLiked) {
+        // 스크랩 취소
+        axios
+          .delete(
+            `${BACKEND_URL}auth/user/bookmarks/${gameData.likeId}`,
+            {},
+            {
+              headers: {
+                "Content-Type": "application/json",
+                accessToken: cookies["accessToken"],
+              },
+            }
+          )
+          .then((response) => {
+            console.log(response.data);
+            setIsLiked(!isLiked);
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("스크랩 취소에 실패했습니다.");
+          });
+      } else {
+        // 스크랩 하기
+        axios
+          .post(
+            `${BACKEND_URL}auth/user/bookmarks/${gameData.gameId}`,
+            {
+              game: gameData,
             },
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-          setIsLiked(!isLiked);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+            {
+              headers: {
+                "Content-Type": "application/json",
+                accessToken: cookies["accessToken"],
+              },
+            }
+          )
+          .then((response) => {
+            console.log(response.data);
+            setIsLiked(!isLiked);
+            let tempGameData = gameData;
+            tempGameData.likeId = response.data.likeId;
+            setGameData(tempGameData);
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("스크랩에 실패했습니다.");
+          });
+      }
+    } else {
+      alert("로그인 후 스크랩 기능을 사용할 수 있습니다.");
     }
-
-    // todo : 개발용 코드, 추후 삭제
-    setIsLiked(!isLiked);
   };
 
   if (isLoading) {
@@ -414,7 +450,9 @@ const Detail = () => {
               </span>
               <span className="single-info">
                 <p className="info-title">가격</p>
-                <p className="info-content">{"$" + gameData.gamePrice}</p>
+                <p className="info-content">
+                  {gameData.gamePrice ? "$" + gameData.gamePrice : "Free"}
+                </p>
               </span>
               <span className="single-info">
                 <p className="info-title">장르</p>
