@@ -1,13 +1,9 @@
 package com.gamemakase.domain.model.service;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.*;
 
 import com.gamemakase.domain.model.entity.Game;
 import com.gamemakase.domain.model.repository.GameRepository;
-import com.gamemakase.domain.model.repository.UserRepository;
 import com.gamemakase.global.Exception.NotFoundException;
 import com.google.api.services.youtube.model.Thumbnail;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +30,7 @@ public class YoutubeApiServiceImpl implements YoutubeApiService{
     /** Global instance of the JSON factory. */
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
     /** 50 max videos per page */
-    private static final long NUMBER_OF_VIDEOS_RETURNED = 3;
+    private static final long NUMBER_OF_VIDEOS_RETURNED = 2;
     /** Global instance of Youtube object to make all API requests. */
     private static YouTube youtube;
 
@@ -44,7 +40,7 @@ public class YoutubeApiServiceImpl implements YoutubeApiService{
     @Override
     public List<SearchResult> getGameYoutubeVideo(long gameId){
         System.out.println(gameId);
-        ArrayList<SearchResult> result = new ArrayList<SearchResult>();
+        ArrayList<SearchResult> result = new ArrayList<>();
         try {
             youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, new HttpRequestInitializer() {
                 public void initialize(HttpRequest request)

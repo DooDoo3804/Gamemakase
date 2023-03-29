@@ -13,7 +13,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpHeaders;
 
 public interface UserService {
-    void signUp(SignUpRequestDto signUpRequestDto, long steamId, String name);
+    Map<String, Object> signUp(SignUpRequestDto signUpRequestDto, long steamId, String name);
 
     boolean isUser(long steamId);
     Map<String, Object> login(long steamId);

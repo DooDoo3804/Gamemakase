@@ -11,4 +11,5 @@ public interface ChatService {
   String insertChat(ChatInsertRequestDto requestDto);
   List<MongoChat> findByRoomNumOrderByCreatedAtDesc(Long roomNum);
 
+  List<MongoChat> findByGameIdAndChatRoomId(long gameId, long chatRoomId);
 }
