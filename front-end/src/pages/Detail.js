@@ -303,8 +303,6 @@ const Detail = () => {
   };
 
   const handleScrap = () => {
-    // todo : 로그인 안했을 때 로그인 유도
-    // Auth 설정
     if (user) {
       if (isLiked) {
         // 스크랩 취소
@@ -398,32 +396,39 @@ const Detail = () => {
                 >
                   <div className="title-logo">
                     <p className="title">{gameData.gameName}</p>
-                    <div className="logo-box">
-                      {gameData.windows ? (
-                        <img
-                          src={windowSvg}
-                          className="brand-logo"
-                          alt="windowSvg"
-                        />
+                    <div>
+                      <div className="logo-box">
+                        {gameData.windows ? (
+                          <img
+                            src={windowSvg}
+                            className="brand-logo"
+                            alt="windowSvg"
+                          />
+                        ) : null}
+                        {gameData.mac ? (
+                          <img
+                            src={appleSvg}
+                            className="brand-logo"
+                            alt="appleSvg"
+                          />
+                        ) : (
+                          ""
+                        )}
+                        {gameData.linux ? (
+                          <img
+                            src={linuxSvg}
+                            className="brand-logo"
+                            alt="linuxSvg"
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                      {gameData.isOwned ? (
+                        <div className="own-game">
+                          <div className="own-btn">보유중</div>
+                        </div>
                       ) : null}
-                      {gameData.mac ? (
-                        <img
-                          src={appleSvg}
-                          className="brand-logo"
-                          alt="appleSvg"
-                        />
-                      ) : (
-                        ""
-                      )}
-                      {gameData.linux ? (
-                        <img
-                          src={linuxSvg}
-                          className="brand-logo"
-                          alt="linuxSvg"
-                        />
-                      ) : (
-                        ""
-                      )}
                     </div>
                   </div>
                   <p className="discription">{gameData.gameDescription}</p>

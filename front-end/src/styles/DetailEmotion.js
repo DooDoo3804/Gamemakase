@@ -176,6 +176,32 @@ export const DetailWrapper = styled.div`
       margin: 0rem 0.3rem;
     }
   }
+  .own-game {
+    display: flex;
+    justify-content: end;
+  }
+
+  .own-btn {
+    /* background: rgba(255, 255, 255, 0.4); */
+    background: ${Common.colors.mainColor03};
+    border-radius: 1rem;
+
+    @media (min-width: 768px) {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.9rem;
+      margin: 0.6rem 0rem;
+    }
+    @media (max-width: 768px) {
+      padding: 0.3rem 0.5rem;
+      font-size: 0.6rem;
+      margin: 0.3rem 0rem;
+    }
+    @media (max-width: 500px) {
+      padding: 0.2rem 0.4rem;
+      font-size: 6px;
+      margin: 0.3rem 0rem;
+    }
+  }
 
   .scrap-wrapper {
     display: flex;
