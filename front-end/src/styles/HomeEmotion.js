@@ -334,6 +334,8 @@ export const RecommendWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     font-family: "Noto Sans KR", serif;
+    white-space: pre-wrap;
+    text-align: center;
 
     -ms-user-select: none;
     -moz-user-select: -moz-none;
