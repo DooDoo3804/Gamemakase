@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil/user";
+import { useCookies } from "react-cookie";
 import * as StompJs from "@stomp/stompjs";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -101,6 +104,9 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
   const outSection = useRef();
   const client = useRef({});
   const chatRef = useRef();
+
+  const [user, setUser] = useRecoilState(userState);
+  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
 
   const { openScroll } = useBodyScrollLock();
 
@@ -205,7 +211,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
         content: message,
         chatRoomId: chatRoomId,
         gameId: gameData.gameId,
-        writerId: userId,
+        writerId: user.userId,
       }),
     });
 
@@ -242,7 +248,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
     if (chatLogs) {
       for (let i = 0; i < chatLogs.length; i++) {
         if (chatLogs[i]) {
-          if (chatLogs[i].writerId === userId) {
+          if (chatLogs[i].writerId === user.userId) {
             result.push(
               <div className="my-msg-wrapper" key={i}>
                 <motion.div
@@ -326,19 +332,30 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
                 <div className="chat-logs" ref={chatRef}>
                   {renderChatLogs(chatList)}
                 </div>
-                {/* todo : 메시지바는 로그인했을 때만 노출 */}
-                <div className="messagebar-wrapper">
-                  <input
-                    type="text"
-                    placeholder="Type your message..."
-                    onChange={(e) => setMessage(e.target.value)}
-                    onKeyDown={(e) => activeEnter(e)}
-                    value={message}
-                  />
-                  <div className="send-btn" onClick={() => handleSubmit()}>
-                    <FontAwesomeIcon icon={faPaperPlane} />
+                {user ? (
+                  <div className="messagebar-wrapper">
+                    <input
+                      type="text"
+                      placeholder="메시지를 입력하세요."
+                      onChange={(e) => setMessage(e.target.value)}
+                      onKeyDown={(e) => activeEnter(e)}
+                      value={message}
+                    />
+                    <div className="send-btn" onClick={() => handleSubmit()}>
+                      <FontAwesomeIcon icon={faPaperPlane} />
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="messagebar-wrapper">
+                    <input
+                      type="text"
+                      value="로그인한 후에 채팅을 시작할 수 있습니다."
+                    />
+                    <div className="send-btn">
+                      <FontAwesomeIcon icon={faPaperPlane} />
+                    </div>
+                  </div>
+                )}
               </ChatRoomBody>
             </ChatModalBody>
           </ChatModalWrapper>
