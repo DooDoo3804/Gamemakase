@@ -46,11 +46,16 @@ public class LikeGameServiceImpl implements LikeGameService {
             throw new TokenValidFailedException("유효하지 않은 토큰값입니다.");
         }
 
-        return likeGameRepository.save(LikeGame.builder()
-                .game(game)
-                .user(user)
-                .type("game")
-                .build()).getLikeId();
+
+
+
+        return likeGameRepository.findByGameGameIdAndUserUserId(gameId, userId)
+                .orElse(likeGameRepository.save(
+                                LikeGame.builder()
+                                        .game(game)
+                                        .user(user)
+                                        .type("game")
+                                        .build())).getLikeId();
     }
 
     @Override
