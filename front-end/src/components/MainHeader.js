@@ -1,5 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 import { useRecoilState } from "recoil";
 import { userState } from "../recoil/user";
 
@@ -10,7 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
 // import useBodyScrollLock from "./ScrollLock";
 import LoginModal from "./LoginModal";
-import { useCookies } from "react-cookie";
+
+import { BACKEND_URL } from "../config";
 
 const MainHeader = () => {
   const navigate = useNavigate();
@@ -43,6 +46,32 @@ const MainHeader = () => {
     }
   };
 
+  useEffect(() => {
+    if (cookies["accessToken"]) {
+      handleLogin();
+    }
+  }, []);
+
+  const handleLogin = async () => {
+    try {
+      // console.log(cookies["accessToken"]);
+      const loginResponse = await axios.get(`${BACKEND_URL}auth/user`, {
+        headers: {
+          "Content-Type": "application/json",
+          accessToken: cookies["accessToken"],
+        },
+      });
+      // console.log(loginResponse.data);
+      setUser(loginResponse.data);
+    } catch (error) {
+      console.log(error);
+      if (error.response.status === 401) {
+        alert("유효 시간 경과로 자동 로그아웃 처리되었습니다.");
+        handleLogout();
+      }
+    }
+  };
+
   const handleLoginOpen = () => {
     // setScrollPosition(lockScroll());
     setLoginView(true);
@@ -51,7 +80,6 @@ const MainHeader = () => {
   const handleLogout = () => {
     setUser(null);
     removeCookie("accessToken");
-    console.log("로그아웃이 정상적으로 처리되었습니다.");
     window.location.replace("/");
   };
 
