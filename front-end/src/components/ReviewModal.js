@@ -74,6 +74,7 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
         )
         .then((response) => {
           console.log(response);
+          window.location.replace(window.location.href);
           handleClose();
         })
         .catch((error) => {
