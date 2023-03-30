@@ -55,7 +55,7 @@ const Search = () => {
   const [isKoreanSupport, setIsKoreanSupport] = useState(false);
   // paging
   const [curGamePageNo, setCurGamePageNo] = useState(0);
-  const [curUserPageNo, setCurUserPageNo] = useState(0);
+  //const [curUserPageNo, setCurUserPageNo] = useState(0);
   const [ref, inView] = useInView();
   const [hasNextPage, setHasNextPage] = useState(true);
 
