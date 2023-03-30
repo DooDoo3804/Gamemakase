@@ -48,7 +48,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public SearchResponseDto getSearchResult(String niddle, int gamePageNo, int userPageNo) throws IOException, ParseException, NotFoundException {
         Pageable GamePageable = PageRequest.of(gamePageNo, 12);
-        Page<Game> gameList = gameRepository.findAllByGameNameLikeOrderByGameName("%" + niddle + "%", GamePageable);
+        Page<Game> gameList = gameRepository.findAllByGameNameLikeOrderByGameName(niddle, GamePageable);
         List<GameInfoVo> gameResults = gameList.stream()
                 .map(g -> GameInfoVo.of(
                                 g,
@@ -74,7 +74,7 @@ public class SearchServiceImpl implements SearchService {
     public List<GameInfoVo> getSearchGameResult(String niddle, int gamePageNo)
             throws IOException, ParseException, NotFoundException {
         Pageable GamePageable = PageRequest.of(gamePageNo, 12);
-        Page<Game> gameList = gameRepository.findAllByGameNameLikeOrderByGameName("%" + niddle + "%", GamePageable);
+        Page<Game> gameList = gameRepository.findAllByGameNameLikeOrderByGameName(niddle, GamePageable);
         return gameList.stream()
                 .map(g -> GameInfoVo.of(g, imageRepository.findByTypeAndTypeId("GAME_HEADER", g.getGameId()).orElse(null).getImagePath()))
                 .collect(Collectors.toList());
@@ -117,7 +117,15 @@ public class SearchServiceImpl implements SearchService {
             String sentance = "and :genre" + i + " in (select gen.genreName from Genre gen where gen.game.gameId = g.gameId) ";
             jpql += sentance;
         }
-        jpql += "order by g.gameName";
+        jpql += ("order by case when g.gameName = :niddle then 0 " +
+                "when upper(g.gameName) = upper(:niddle) then 1 " +
+                "when g.gameName like concat(:niddle, '%') then 2 " +
+                "when upper(g.gameName) like upper(concat(:niddle, '%')) then 3 " +
+                "when g.gameName like concat('%', :niddle, '%') then 4 " +
+                "when upper(g.gameName) like upper(concat('%', :niddle, '%')) then 5 " +
+                "when upper(g.gameName) like upper(concat(:niddle, '%')) then 6 " +
+                "else 7 end");
+        System.out.println(jpql.toString());
         TypedQuery<Game> query = entityManager.createQuery(jpql, Game.class)
                 .setParameter("niddle", "%" + condition.getNiddle().toUpperCase() + "%")
                 .setParameter("price", condition.getPrice());
@@ -126,6 +134,7 @@ public class SearchServiceImpl implements SearchService {
         }
         query.setFirstResult(condition.getOffset());
         query.setMaxResults(condition.getLimit());
+        System.out.println(query.toString());
         return query.getResultList();
     }
 
