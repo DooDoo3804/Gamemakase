@@ -82,7 +82,7 @@ const Detail = () => {
         headers: { "Content-Type": "application/json", userId: userId },
       })
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         setGameData(response.data);
         setRecommendedUsers(response.data.recommendedUsers);
         setReviewData(response.data.reviews);
