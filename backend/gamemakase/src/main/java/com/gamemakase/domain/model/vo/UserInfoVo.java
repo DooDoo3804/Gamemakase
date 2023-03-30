@@ -11,18 +11,17 @@ import lombok.ToString;
 @ToString
 public class UserInfoVo {
 	private long userId;
+	private String userSteamId;
 	private boolean state;
-
-	private long userSteamId;
 	private String userImagePath;
 	private String userName;
-	
+
 	public static UserInfoVo of(User user, String userImgPath) {
 		return UserInfoVo.builder()
-				.userSteamId(user.getUserSteamId())
+				.userId(user.getUserId())
+				.userSteamId(String.valueOf(user.getUserSteamId()))
 				.userImagePath(userImgPath)
 				.userName(user.getUserName())
-				.userId(user.getUserId())
 				.build();
 	}
 }

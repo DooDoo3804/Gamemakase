@@ -91,8 +91,9 @@ public class RealTimeUserInfoService {
                         user.setUserName(realTimeUserName);
                         userRepository.save(user);
                     }
+                    System.out.println(user.getUserSteamId());
                     result.add(UserInfoVo.builder()
-                            .userSteamId(Long.parseLong(steamId))
+                            .userSteamId(steamId)
                             .userId(user.getUserId())
                             .state(playerInfoJson.get("personastate").toString().equals("0") ? false : true)
                             .userImagePath(playerInfoJson.get("avatar").toString())
