@@ -133,11 +133,14 @@ const Search = () => {
             },
           })
           .then((response) => {
-            response.data.forEach((e) => {
-              if (e !== niddle) {
-                history.push(e);
-              }
-            });
+            const datas = response.data;
+            if(datas && datas.length > 0) {
+              response.data.forEach((e) => {
+                if (e !== niddle) {
+                  history.push(e);
+                }
+              });
+            }
           })
           .catch((error) => {
             console.log(error);
