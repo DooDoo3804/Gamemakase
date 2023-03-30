@@ -606,7 +606,7 @@ export const ReviewWrapper = styled.div`
     padding: 0rem 2rem;
   }
 
-  .title-wrapper {
+  .review-title-wrapper {
     width: 100%;
     display: flex;
     justify-content: space-between;
