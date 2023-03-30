@@ -58,7 +58,7 @@ public class SearchServiceImpl implements SearchService {
                 )
                 .collect(Collectors.toList());
 
-        Pageable UserPageable = PageRequest.of(userPageNo, 5);
+        Pageable UserPageable = PageRequest.of(userPageNo, 10);
         Page<User> userPagedList = UserRepository.findAllByUserNameLikeOrderByUserName("%" + niddle + "%", UserPageable);
         List<User> userList = userPagedList.stream()
                 .map(u -> u).collect(Collectors.toList());
