@@ -53,14 +53,10 @@ public class ChatRestController {
   @GetMapping(value = "/api/chatroom/{gameId}/{chatRoomId}")
   public ResponseEntity<List<ChatListResponse>> getChatByChatRoomNum(@PathVariable("gameId") long gameId, @PathVariable("chatRoomId") Long chatRoomId){
     logger.info("채팅 조회 성공");
-
-
     List<MongoChat> chatList = chatService.findByGameIdAndChatRoomId(gameId, chatRoomId);
-
-
-    List<ChatListResponse> chatResList = chatList.stream().map(ChatListResponse::new).collect(
+    List<ChatListResponse> chatResList = chatList.stream().map(c -> ChatListResponse.of(c,
+            userService.getWriterName(c.getWriterId()))).collect(
         Collectors.toList());
-
     return ResponseEntity.status(HttpStatus.OK).body(chatResList);
   }
 
