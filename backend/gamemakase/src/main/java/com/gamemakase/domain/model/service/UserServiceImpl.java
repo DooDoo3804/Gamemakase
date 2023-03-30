@@ -16,6 +16,7 @@ import com.gamemakase.global.Exception.NotFoundException;
 import com.gamemakase.global.Exception.TokenValidFailedException;
 import com.gamemakase.global.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Not;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -195,10 +196,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getWriterName(long userId) {
-        User user = userRepository.findByUserId(userId);
-        String name = user.getUserName();
-        return name;
+    public String getWriterName(long userId) throws NotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user 정보를 조회할 수 없습니다."));
+        return user.getUserName();
     }
 
     @Override

@@ -24,7 +24,7 @@ public interface UserService {
 
     String getUserName(String steamId) throws IOException, ParseException;
 
-    String getWriterName(long userId);
+    String getWriterName(long userId) throws NotFoundException;
 
     void deleteUser(User user);
 }
