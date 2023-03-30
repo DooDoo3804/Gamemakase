@@ -193,6 +193,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
           {
             chatRoomId: json_body.chatRoomId,
             writerId: json_body.writerId,
+            writerName: json_body.writerName,
             gameId: json_body.gameId,
             content: json_body.content,
           },
@@ -281,7 +282,16 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
                 </motion.div>
               </div>
             );
+            prevId = user.userId;
           } else {
+            if (prevId !== chatLogs[i].writerId) {
+              result.push(
+                <div className="user-name" key={i + "user-name"}>
+                  {chatLogs[i].writerName}
+                </div>
+              );
+              prevId = chatLogs[i].writerId;
+            }
             result.push(
               <div className="others-msg-wrapper" key={i}>
                 <motion.div

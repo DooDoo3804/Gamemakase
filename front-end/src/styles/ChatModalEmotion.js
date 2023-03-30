@@ -20,7 +20,7 @@ export const ChatModalBody = styled(motion.div)`
   display: flex;
   align-items: center;
   height: 80%;
-  min-height: 30rem;
+  min-height: 15rem;
   background-color: ${Common.colors.mainColor01};
   border: 2px solid ${Common.colors.white01};
   transition: all 0.5s ease-in-out;
@@ -222,8 +222,6 @@ export const ChatRoomBody = styled.div`
     }
 
     .message {
-      padding: 0.9rem 1.2rem;
-      margin: 0.5rem;
       min-width: 0rem;
       display: flex;
       line-height: 1.8rem;
@@ -231,18 +229,48 @@ export const ChatRoomBody = styled.div`
       @media (min-width: 1024px) {
         max-width: 35rem;
         border-radius: 2rem;
+        padding: 0.9rem 1.2rem;
+        margin: 0.5rem;
       }
       @media (max-width: 1024px) {
         max-width: 30rem;
         border-radius: 2rem;
+        padding: 0.9rem 1.2rem;
+        margin: 0.5rem;
       }
       @media (max-width: 768px) {
         max-width: 20rem;
         border-radius: 2rem;
+        padding: 0.7rem 1.2rem;
+        margin: 0.4rem;
       }
       @media (max-width: 500px) {
         max-width: 15rem;
         border-radius: 2rem;
+        padding: 0.5rem 1rem;
+        margin: 0.3rem;
+        font-size: 0.9rem;
+        line-height: 1.4rem;
+      }
+    }
+    .user-name {
+      font-weight: 700;
+
+      @media (min-width: 1024px) {
+        margin: 0.1rem 0.7rem;
+        font-size: 1.1rem;
+      }
+      @media (max-width: 1024px) {
+        margin: 0.1rem 0.7rem;
+        font-size: 1.1rem;
+      }
+      @media (max-width: 768px) {
+        margin: 0.1rem 0.7rem;
+        font-size: 1.1rem;
+      }
+      @media (max-width: 500px) {
+        margin: 0.1rem 0.6rem;
+        font-size: 1rem;
       }
     }
 
@@ -299,6 +327,7 @@ export const ChatRoomBody = styled.div`
         margin: 0rem 0.5rem;
         margin-left: 0.5rem;
         padding: 0.7rem 1rem;
+        font-size: 0.9rem;
       }
       @media (max-width: 768px) {
         width: 25rem;
