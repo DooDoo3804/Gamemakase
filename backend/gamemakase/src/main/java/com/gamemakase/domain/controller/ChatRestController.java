@@ -4,6 +4,7 @@ import com.gamemakase.domain.model.dto.ChatInsertRequestDto;
 import com.gamemakase.domain.model.dto.ChatListResponse;
 import com.gamemakase.domain.model.entity.MongoChat;
 import com.gamemakase.domain.model.service.ChatService;
+import com.gamemakase.domain.model.service.UserService;
 import com.gamemakase.global.config.jwt.JwtTokenProvider;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +30,7 @@ public class ChatRestController {
   private final ChatService chatService;
   private final SimpMessageSendingOperations sendingOperations;
 
-  private final JwtTokenProvider jwtTokenProvider;
+  private final UserService userService;
 
   private final Logger logger = LoggerFactory.getLogger(ChatRestController.class);
 
@@ -41,19 +42,18 @@ public class ChatRestController {
     System.out.println("gameId : " + requestDto.getGameId());
     System.out.println("chatRoomId : " + requestDto.getChatRoomId());
 
-    chatService.insertChat(requestDto);
+    String writerName = userService.getWriterName(requestDto.getWriterId());
 
-    sendingOperations.convertAndSend("/sub/chat/" + requestDto.getChatRoomId(), requestDto);
+    chatService.insertChat(requestDto, writerName);
+
+    sendingOperations.convertAndSend("/sub/chat/" + requestDto.getGameId() + requestDto.getChatRoomId(), requestDto);
     return ResponseEntity.status(HttpStatus.CREATED).body(requestDto);
   }
 
-  @GetMapping(value = "/auth/chatroom/{gameId}/{chatRoomId}")
-  public ResponseEntity<List<ChatListResponse>> getChatByChatRoomNum(@RequestHeader(value = "accessToken") String token, @PathVariable("gameId") long gameId, @PathVariable("chatRoomId") Long chatRoomId){
+  @GetMapping(value = "/api/chatroom/{gameId}/{chatRoomId}")
+  public ResponseEntity<List<ChatListResponse>> getChatByChatRoomNum(@PathVariable("gameId") long gameId, @PathVariable("chatRoomId") Long chatRoomId){
     logger.info("채팅 조회 성공");
 
-    String userIdStr = jwtTokenProvider.getUserId(token);
-
-    long writerId = Long.parseLong(userIdStr);
 
     List<MongoChat> chatList = chatService.findByGameIdAndChatRoomId(gameId, chatRoomId);
 

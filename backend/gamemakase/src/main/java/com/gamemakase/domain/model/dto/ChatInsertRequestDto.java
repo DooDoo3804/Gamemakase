@@ -17,12 +17,15 @@ public class ChatInsertRequestDto {
   private long gameId;
   private String content;
 
+  private String writerName;
+
   @Builder
-  public MongoChat toEntity() {
+  public MongoChat toEntity(String writerName) {
     return MongoChat.builder()
         .content(content)
         .chatRoomId(chatRoomId)
         .writerId(writerId)
+        .writerName(writerName)
         .gameId(gameId)
         .build();
   }

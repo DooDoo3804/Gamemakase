@@ -24,5 +24,7 @@ public interface UserService {
 
     String getUserName(String steamId) throws IOException, ParseException;
 
+    String getWriterName(long userId);
+
     void deleteUser(User user);
 }
