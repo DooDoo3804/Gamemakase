@@ -105,6 +105,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
 
   const outSection = useRef();
   const client = useRef({});
+  const subscriptionRef = useRef(null);
   const chatRef = useRef();
   const prevId = useRef(-1);
 
@@ -129,6 +130,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
       .then(function (response) {
         // console.log(response.data);
         setChatList(response.data);
+        unsubscribe();
         subscribe();
       })
       .catch(function (error) {
@@ -179,7 +181,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
   const subscribe = () => {
     // 구독한 주소로 메세지 받을 시 이벤트 발생
     // (/sub: 웹소켓 공통 구독 주소), (/chat: 기능별(1:1, 3:3, 친구 추가후) 구독 주소), (/chatRoomSeq: 하위 구독 주소(채팅방))
-    client.current.subscribe(
+    subscriptionRef.current = client.current.subscribe(
       "/sub/chat/" + gameData.gameId + channel,
       (body) => {
         const json_body = JSON.parse(body.body);
@@ -200,6 +202,12 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
         ]);
       }
     );
+  };
+
+  const unsubscribe = () => {
+    if (subscriptionRef.current) {
+      subscriptionRef.current.unsubscribe();
+    }
   };
 
   // publish: 메세지 보내기
