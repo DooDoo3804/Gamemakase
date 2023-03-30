@@ -84,10 +84,18 @@ export const ProfileImgWrapper = styled.div`
     width: 50px;
     height: 50px;
     overflow: hidden;
+    @media (max-width: 450px) {
+      margin-top: 50px;
+      width: 30px;
+    }
     img {
       margin-top: 3px;
       width: 30px;
       height: 30px;
+      @media (max-width: 450px) {
+        width: 20px;
+        height: 20px;
+      }
     }
   }
 
