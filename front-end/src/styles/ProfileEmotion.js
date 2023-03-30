@@ -75,6 +75,22 @@ export const ProfileImgWrapper = styled.div`
     }
   }
 
+  .steam-btn {
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 70px;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    img {
+      margin-top: 3px;
+      width: 30px;
+      height: 30px;
+    }
+  }
+
   .profile-name {
     position: relative;
     width: 180x;
