@@ -106,6 +106,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
   const outSection = useRef();
   const client = useRef({});
   const chatRef = useRef();
+  const prevId = useRef(-1);
 
   const [user, setUser] = useRecoilState(userState);
   const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
@@ -261,12 +262,13 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
 
   const renderChatLogs = (chatLogs) => {
     const result = [];
-    let prevId = -1;
 
     if (chatLogs) {
       for (let i = 0; i < chatLogs.length; i++) {
         if (chatLogs[i]) {
           if (user && chatLogs[i].writerId === user.userId) {
+            prevId.current = user.userId;
+
             result.push(
               <div className="my-msg-wrapper" key={i}>
                 <motion.div
@@ -281,15 +283,15 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
                 </motion.div>
               </div>
             );
-            prevId = user.userId;
           } else {
-            if (prevId !== chatLogs[i].writerId) {
+            if (prevId.current !== chatLogs[i].writerId) {
+              prevId.current = chatLogs[i].writerId;
+
               result.push(
                 <div className="user-name" key={i + "user-name"}>
                   {chatLogs[i].writerName}
                 </div>
               );
-              prevId = chatLogs[i].writerId;
             }
             result.push(
               <div className="others-msg-wrapper" key={i}>
