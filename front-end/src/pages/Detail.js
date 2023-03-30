@@ -195,8 +195,8 @@ const Detail = () => {
             >
               <img
                 src={
-                  recommendedUsers[i].profilePath
-                    ? recommendedUsers[i].profilePath
+                  recommendedUsers[i].userImagePath
+                    ? recommendedUsers[i].userImagePath
                     : defaultUserImg
                 }
                 alt="profile_img"
@@ -262,6 +262,7 @@ const Detail = () => {
               </div>
               <div className="profile-content-wrapper">
                 <p className="user-name">{reviewData[i].userName}</p>
+
                 <div className="star-wrapper">
                   {renderStars(reviewData[i].reviewGrade)}
                 </div>

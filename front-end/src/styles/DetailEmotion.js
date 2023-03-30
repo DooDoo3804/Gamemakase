@@ -762,6 +762,10 @@ export const SingleReview = styled(motion.div)`
     justify-content: space-evenly;
   }
 
+  .edit-icon {
+    margin-left: auto;
+  }
+
   .user-name {
     margin: 0;
     font-weight: 700;
