@@ -174,6 +174,10 @@ const Profile = () => {
       });
   };
 
+  /////////////////////////////////////////////
+  /////             REST API             //////
+  /////////////////////////////////////////////
+
   const reviewEdit = () => {
     console.log("edit!");
   };
@@ -203,10 +207,21 @@ const Profile = () => {
     setScrapId(scrapId);
     setScrapDeleteAlertView(true);
   };
-  
-  const scrapDelete = () => {
-    console.log("스크랩 삭제" + scrapId);
 
+  const scrapDelete = () => {
+    axios
+      .delete(`${BACKEND_URL}auth/user/bookmarks/${scrapId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          accessToken: cookies["accessToken"],
+        },
+      })
+      .then((response) => {
+        setScrapGames(scrapGames.filter(scrapGames => scrapGames.likeId !== scrapId));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   useEffect(() => { setMainTapData() }, [setMainTapData]);
@@ -264,7 +279,7 @@ const Profile = () => {
                     translateY: 0,
                     itemsSpacing: 0,
                     itemWidth: 0,
-                    itemHeight:  width < 500 ? 20 : 30,
+                    itemHeight: width < 500 ? 20 : 30,
                     itemDirection: "left-to-right",
                     itemOpacity: "100%",
                     symbolSize: 20,
@@ -354,7 +369,7 @@ const Profile = () => {
             scrapId={e.likeId}
             gameId={e.gameId}
             clickFunc={scrapDeleteClick}
-            isMine={user ? userId === user.userId : false}
+            isMine={user ? Number(userId) === Number(user.userId) : false}
           ></GameSummary>
         );
         idx++;
@@ -363,20 +378,19 @@ const Profile = () => {
     };
     const setPage = (e) => {
       setGameCurrentpage(e);
-
       axios
-      .get(`${BACKEND_URL}api/profile/scraps`, {
-        params: {
-          userId: userId,
-          pageNo: (e - 1),
-        },
-      })
-      .then((response) => {
-        setScrapGames(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        .get(`${BACKEND_URL}api/profile/scraps`, {
+          params: {
+            userId: userId,
+            pageNo: (e - 1),
+          },
+        })
+        .then((response) => {
+          setScrapGames(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
     const result = [];
     if (scrapGames && scrapGames.length > 0) {
@@ -471,12 +485,12 @@ const Profile = () => {
                 </div>
               </div>
               {
-              Number(user.userId) === Number(userId) ?  <EditModal
-                editFunction={reviewEdit}
-                deleteFunction={() => {
-                  reviewDeleteClick(e.reviewId);
-                }}
-              ></EditModal>: ""}
+                Number(user.userId) === Number(userId) ? <EditModal
+                  editFunction={reviewEdit}
+                  deleteFunction={() => {
+                    reviewDeleteClick(e.reviewId);
+                  }}
+                ></EditModal> : ""}
             </div>
             <p className="review-title">{e.reviewTitle}</p>
             <p className="review-content">{e.reviewContent}</p>

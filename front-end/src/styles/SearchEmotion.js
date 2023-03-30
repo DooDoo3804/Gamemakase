@@ -20,8 +20,8 @@ export const SearchWrapper = styled.div`
   .swiper-slide {
     width: auto;
   }
-  .swiper-pagination-bullet-active {
-    background-color: ${Common.colors.white01};
+  .swiper-pagination {
+    display: none;
   }
 
   .swiper-button-next::after,
