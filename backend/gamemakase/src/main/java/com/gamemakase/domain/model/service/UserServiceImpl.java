@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,26 +51,28 @@ public class UserServiceImpl implements UserService {
     private final RecommendationRepository recommendationRepository;
     private final GameHistoryRepository gameHistoryRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private  final RealTimeUserInfoService realTimeUserInfoService;
+    private final RealTimeUserInfoService realTimeUserInfoService;
     private final RealTimeGameHistoryService realTimeGameHistoryService;
     private final String ACCESS_HEADER = "accessToken";
     private final String REFRESH_HEADER = "refreshToken";
     static final String PLAYER_SUMMARIES_BASE_URL = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/";
     static final String RECENTLY_PLAYED_GAMES_URL = "http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/";
 
-    @Value("${steam.api.key}") String KEY;
+    @Value("${steam.api.key}")
+    String KEY;
+
     @Override
     public Map<String, Object> signUp(SignUpRequestDto signUpRequestDto, long steamId, String name) {
         User user = signUpRequestDto.toEntity(steamId, name);
         System.out.println(user.getUserId());
         System.out.println("이름 : " + user.getUserName());
         System.out.println("아이디 : " + user.getUserSteamId());
-        if(userRepository.findByUserSteamId(user.getUserSteamId()) != null) {
+        if (userRepository.findByUserSteamId(user.getUserSteamId()) != null) {
             throw new DuplicatedException("이미 있는 유저입니다.");
         }
 
         Authority authority;
-        if(user.getUserName().equals("ADMIN")) authority = new Authority(AuthorityName.ROLE_ADMIN);
+        if (user.getUserName().equals("ADMIN")) authority = new Authority(AuthorityName.ROLE_ADMIN);
         else authority = new Authority(AuthorityName.ROLE_USER);
         user.setAuthority(authority);
         userRepository.save(user);
@@ -92,7 +95,7 @@ public class UserServiceImpl implements UserService {
     public boolean isUser(long steamId) {
         User user = userRepository.findByUserSteamId(steamId);
         System.out.println(user);
-        if(user != null) return true;
+        if (user != null) return true;
         else return false;
     }
 
@@ -108,7 +111,7 @@ public class UserServiceImpl implements UserService {
         System.out.println("리프레시 토큰 : " + accessToken);
 
         logger.info("토큰 재발급 ");
-        logger.info("ACCESS : {}",accessToken);
+        logger.info("ACCESS : {}", accessToken);
         logger.info("REFRESH : {}", refreshToken);
         logger.info("user UID : {}", user.getUserId());
         logger.info("user SteamId : {}", user.getUserSteamId());
@@ -152,7 +155,7 @@ public class UserServiceImpl implements UserService {
         String userId = authentication.getName();
         User user = userRepository.findByUserId(Long.parseLong(userId));
         HttpHeaders httpHeaders = new HttpHeaders();
-        if(user != null) {
+        if (user != null) {
             String accessToken = jwtTokenProvider.createAccessToken(user);
             httpHeaders.add(ACCESS_HEADER, "Bearer " + accessToken);
         }
@@ -163,9 +166,9 @@ public class UserServiceImpl implements UserService {
     public String getUserName(String steamId) throws IOException, ParseException {
         StringBuilder urlBuilder = new StringBuilder();
         urlBuilder
-            .append(PLAYER_SUMMARIES_BASE_URL)
-            .append("?").append(encode("key", UTF_8)).append("=").append(KEY)
-            .append("&").append(encode("steamids", UTF_8)).append("=").append(steamId);
+                .append(PLAYER_SUMMARIES_BASE_URL)
+                .append("?").append(encode("key", UTF_8)).append("=").append(KEY)
+                .append("&").append(encode("steamids", UTF_8)).append("=").append(steamId);
 
         URL url = new URL(urlBuilder.toString());
         System.out.println(url);
@@ -176,7 +179,7 @@ public class UserServiceImpl implements UserService {
         String response = getResponse(conn, isSuccess);
         System.out.println(response);
 
-        if(isSuccess) {
+        if (isSuccess) {
             JSONParser parser = new JSONParser();
             JSONObject totalInfoJson = (JSONObject) ((JSONObject) parser.parse(response)).get("response");
             System.out.println(totalInfoJson.toString());
@@ -189,9 +192,8 @@ public class UserServiceImpl implements UserService {
             JSONObject playerInfoJson = (JSONObject) playerInfoJsons.get(0);
 
             return playerInfoJson.get("personaname").toString();
-        }
-       else {
-           return null;
+        } else {
+            return null;
         }
     }
 
@@ -202,8 +204,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(User user) {
-        userRepository.delete(user);
+    public void Withdrawal(User user) {
+        user.setUserName("탈퇴한 유저");
+        user.setUserSteamId(0);
+        user.setUpdatedAt(LocalDateTime.now());
+        user.setAuthority(null);
+        userRepository.save(user);
     }
 
     private static String getResponse(HttpURLConnection conn, boolean isSuccess) throws IOException {
