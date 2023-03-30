@@ -1,12 +1,12 @@
 package com.gamemakase.domain.model.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @Builder
 @Getter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewUpdateRequestDto {
 	private long reviewId;
 	private String reviewTitle;
