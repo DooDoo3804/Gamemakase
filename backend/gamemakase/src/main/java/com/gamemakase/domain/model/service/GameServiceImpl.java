@@ -4,6 +4,7 @@ import com.gamemakase.domain.model.dto.GameHistoryInsertRequestDto;
 import com.gamemakase.domain.model.dto.GameHistoryResponseDto;
 import com.gamemakase.domain.model.entity.GameHistory;
 import com.gamemakase.domain.model.entity.User;
+import com.gamemakase.domain.model.vo.UserInfoVo;
 import com.gamemakase.global.Exception.TokenValidFailedException;
 import com.gamemakase.global.config.jwt.JwtTokenProvider;
 import java.io.BufferedReader;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 import com.gamemakase.domain.model.entity.*;
 import com.google.api.services.youtube.model.SearchResult;
+import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +54,7 @@ public class GameServiceImpl implements GameService{
     private final LikeGameRepository likeGameRepository;
     private final ReviewService reviewService;
     private final YoutubeApiService youtubeApiService;
-
+    private final RealTimeUserInfoService realTimeUserInfoService;
     private final JwtTokenProvider jwtTokenProvider;
 
     static final String RECENTLY_PLAYED_GAMES_URL = "http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/";
@@ -87,6 +89,8 @@ public class GameServiceImpl implements GameService{
         List<GameHistory> recommendationList = gameHistoryRepository.findAllByGameGameIdOrderByTotalPlayGameDesc(gameId);
         List<SearchResult> youtubeList = youtubeApiService.getGameYoutubeVideo(gameId);
 
+        List<User> userList = recommendationList.stream().map(r -> r.getUser()).collect(Collectors.toList());
+        List<UserInfoVo> reviewers = realTimeUserInfoService.getUserInfoResponseVo(userList);
 
         return GameDetailResponseDto.builder()
                 .gameId(game.getGameId())
@@ -122,13 +126,11 @@ public class GameServiceImpl implements GameService{
 //                리뷰
                 .reviews(reviewService.getReviewsByGameId(gameId, 0))
 //                유저 추천
-                .recommendedUsers(recommendationList.stream()
-                        .map(recommendation -> GameDetailResponseDto.RecommendedUserDTO.builder()
-                                .userId(recommendation.getUser().getUserId())
-                                .userName(recommendation.getUser().getUserName())
-                                .userImagePath(imageRepository.findByTypeAndTypeId("User", recommendation.getUser().getUserId())
-                                        .map(Image::getImagePath)
-                                        .orElse(""))
+                .recommendedUsers(reviewers.stream()
+                        .map(r -> GameDetailResponseDto.RecommendedUserDTO.builder()
+                                .userId(r.getUserId())
+                                .userName(r.getUserName())
+                                .userImagePath(r.getUserImagePath())
                                 .build())
                         .collect(Collectors.toList()))
                 .youtube(youtubeList.stream()
