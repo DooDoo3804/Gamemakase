@@ -119,7 +119,6 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // todo : 채널 관련 설정
   useEffect(() => {
     setChatList([]);
     axios
@@ -141,7 +140,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
-  }, [chatList]);
+  }, [chatList, chatView]);
 
   // connect: 웹소켓(stomp) 연결
   const connect = () => {
