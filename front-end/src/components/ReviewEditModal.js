@@ -1,7 +1,5 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useRecoilState } from "recoil";
-import { userState } from "../recoil/user";
 import { useCookies } from "react-cookie";
 import { AnimatePresence } from "framer-motion";
 
@@ -16,22 +14,26 @@ import { BACKEND_URL } from "../config";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import AlertModal from "./AlertModal";
 
-const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
+const ReviewEditModal = ({
+  reviewData,
+  modalView,
+  setModalView,
+  scrollPosition,
+}) => {
   const [contentLength, setContentLength] = useState(0);
-  const [rating, setRating] = useState(1);
+  const [rating, setRating] = useState(null);
   const outSection = useRef();
-  const reviewTitle = useRef(null);
-  const reviewContent = useRef(null);
+  const [reviewTitle, setReviewTitle] = useState("");
+  const [reviewContent, setReviewContent] = useState("");
+  const [reviewDeleteAlertView, setReviewDeleteAlertView] = useState(false);
 
-  const [user, setUser] = useRecoilState(userState);
   const [cookies, setCookie] = useCookies(["accessToken"]);
 
   const { openScroll } = useBodyScrollLock();
 
   const handleClose = () => {
-    reviewContent.current = null;
-    setContentLength(0);
     openScroll(scrollPosition);
     setModalView(false);
   };
@@ -41,28 +43,27 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
   };
 
   const handleContent = (e) => {
-    reviewContent.current = e.target.value;
+    setReviewContent(e.target.value);
     setContentLength(e.target.value.length);
   };
 
   const handleTitle = (e) => {
-    reviewTitle.current = e.target.value;
+    setReviewTitle(e.target.value);
   };
 
   const handleWriting = () => {
-    if (!reviewTitle.current) {
+    if (!reviewTitle) {
       alert("리뷰 제목을 작성해주세요.");
-    } else if (!reviewContent.current) {
+    } else if (!reviewContent) {
       alert("내용을 입력해주세요.");
     } else {
       axios
-        .post(
+        .put(
           `${BACKEND_URL}auth/reviews`,
           {
-            gameId: gameData.gameId,
-            userId: user.userId,
-            reviewTitle: reviewTitle.current,
-            reviewContent: reviewContent.current,
+            reviewId: reviewData.reviewId,
+            reviewTitle: reviewTitle,
+            reviewContent: reviewContent,
             reviewGrade: rating,
           },
           {
@@ -90,10 +91,40 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
     }
   };
 
+  const reviewDelete = () => {
+    axios
+      .delete(`${BACKEND_URL}auth/reviews/${reviewData.reviewId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          accessToken: cookies["accessToken"],
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        window.location.replace(window.location.href);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleDelete = () => {
+    setReviewDeleteAlertView(true);
+  };
+
+  useEffect(() => {
+    if (reviewData) {
+      setReviewTitle(reviewData.reviewTitle);
+      setReviewContent(reviewData.reviewContent);
+      setContentLength(reviewData.reviewContent.length);
+      setRating(reviewData.reviewGrade);
+    }
+  }, [modalView]);
+
   return (
     <>
       <AnimatePresence>
-        {modalView ? (
+        {modalView && reviewData ? (
           <ReviewModalWrapper
             ref={outSection}
             onClick={(e) => {
@@ -114,6 +145,14 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
                 transition: {},
               }}
             >
+              <AlertModal
+                alertView={reviewDeleteAlertView}
+                setAlertView={setReviewDeleteAlertView}
+                msg="해당 리뷰를 삭제하시겠습니까?"
+                confrimMsg="삭제"
+                cancelMsg="취소"
+                goFunction={reviewDelete}
+              ></AlertModal>
               <div className="icon-container">
                 <FontAwesomeIcon
                   icon={faXmark}
@@ -121,10 +160,13 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
                   className="x-mark"
                 />
               </div>
-              <p className="game-title">{gameData.gameName}에 관한 리뷰 쓰기</p>
+              <p className="game-title">리뷰 수정하기</p>
 
               <div className="game-title rating-container">
-                <StarRating handleRating={handleRating} initial={1} />
+                <StarRating
+                  handleRating={handleRating}
+                  initial={reviewData.reviewGrade}
+                />
               </div>
               <div className="review-content-box">
                 <textarea
@@ -132,13 +174,15 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
                   onChange={handleTitle}
                   maxLength={20}
                   placeholder="제목을 입력하세요."
-                />
+                  value={reviewTitle}
+                ></textarea>
                 <textarea
                   className="review-content"
                   onChange={handleContent}
                   maxLength={2000}
                   placeholder="내용을 입력하세요."
-                />
+                  value={reviewContent}
+                ></textarea>
                 <div className="count-wrapper">
                   <div className="character-counter">
                     {contentLength}
@@ -146,10 +190,16 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
                   </div>
                 </div>
               </div>
-              <TranslucentBtn
-                text={"작성하기"}
-                onClick={() => handleWriting()}
-              ></TranslucentBtn>
+              <div className="btns-wrapper">
+                <TranslucentBtn
+                  text={"작성하기"}
+                  onClick={() => handleWriting()}
+                ></TranslucentBtn>
+                <TranslucentBtn
+                  text={"삭제하기"}
+                  onClick={() => handleDelete()}
+                ></TranslucentBtn>
+              </div>
             </ReviewModalBody>
           </ReviewModalWrapper>
         ) : null}
@@ -158,4 +208,4 @@ const ReviewModal = ({ gameData, modalView, setModalView, scrollPosition }) => {
   );
 };
 
-export default ReviewModal;
+export default ReviewEditModal;
