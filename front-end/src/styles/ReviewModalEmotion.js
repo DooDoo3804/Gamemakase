@@ -293,4 +293,10 @@ export const ReviewModalBody = styled(motion.div)`
       }
     }
   }
+
+  .btns-wrapper {
+    display: flex;
+    width: 70%;
+    justify-content: space-evenly;
+  }
 `;

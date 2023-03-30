@@ -30,6 +30,7 @@ import scrap_hover from "../assets/fontAwesomeSvg/scrap_hover.svg";
 import appleSvg from "../assets/fontAwesomeSvg/apple.svg";
 import windowSvg from "../assets/fontAwesomeSvg/windows.svg";
 import linuxSvg from "../assets/fontAwesomeSvg/linux.svg";
+import editIcon from "../assets/fontAwesomeSvg/pen-to-square-solid.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -47,15 +48,18 @@ import ChatModal from "../components/ChatModal";
 import { BACKEND_URL } from "../config";
 import { useInView } from "react-intersection-observer";
 import LoadingPage from "../components/LoadingPage";
+import ReviewEditModal from "../components/ReviewEditModal";
 
 const Detail = () => {
   const navigate = useNavigate();
   const [modalView, setModalView] = useState(false);
+  const [editModalView, setEditModalView] = useState(false);
   const [chatView, setChatView] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [gameData, setGameData] = useState(null);
   const [recommendedUsers, setRecommendedUsers] = useState(null);
   const [reviewData, setReviewData] = useState(null);
+  const [editReviewData, setEditReviewData] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -92,7 +96,7 @@ const Detail = () => {
       .catch(function (error) {
         console.log(error);
         if (error.response.status === 500) {
-          window.location.replace("/500");
+          // window.location.replace("/500");
         } else {
           setIsLoading(false);
         }
@@ -267,6 +271,14 @@ const Detail = () => {
                   {renderStars(reviewData[i].reviewGrade)}
                 </div>
               </div>
+              {user && reviewData[i].userId === user.userId ? (
+                <div
+                  className="edit-icon"
+                  onClick={() => handleEdit(reviewData[i])}
+                >
+                  <img src={editIcon} alt="edit_icon" />
+                </div>
+              ) : null}
             </div>
             <p className="review-title">{reviewData[i].reviewTitle}</p>
             <p className="review-content">{reviewData[i].reviewContent}</p>
@@ -358,6 +370,12 @@ const Detail = () => {
     }
   };
 
+  const handleEdit = (editData) => {
+    setScrollPosition(lockScroll());
+    setEditReviewData(editData);
+    setEditModalView(true);
+  };
+
   if (isLoading) {
     return <LoadingPage></LoadingPage>;
   }
@@ -377,6 +395,12 @@ const Detail = () => {
             setModalView={setModalView}
             scrollPosition={scrollPosition}
           ></ReviewModal>
+          <ReviewEditModal
+            reviewData={editReviewData}
+            modalView={editModalView}
+            setModalView={setEditModalView}
+            scrollPosition={scrollPosition}
+          ></ReviewEditModal>
           <ChatModal
             gameData={gameData}
             chatView={chatView}
