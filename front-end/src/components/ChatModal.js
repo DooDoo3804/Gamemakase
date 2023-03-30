@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { userState } from "../recoil/user";
 import { useCookies } from "react-cookie";
+import axios from "axios";
 import * as StompJs from "@stomp/stompjs";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -20,6 +21,7 @@ import {
   SmallSidebar,
 } from "../styles/ChatModalEmotion";
 import useBodyScrollLock from "./ScrollLock";
+import { BACKEND_URL } from "../config";
 
 const Sidebar = ({ gameData, sideView, setSideView, channel, setChannel }) => {
   return (
@@ -110,10 +112,6 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
 
   const { openScroll } = useBodyScrollLock();
 
-  // 임시로 설정해둔 인자 변수 (나중에 프론트에서 넣어주세요)
-  const chatRoomId = 1;
-  const userId = 1;
-
   useEffect(() => {
     connect();
 
@@ -122,7 +120,21 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
   }, []);
 
   // todo : 채널 관련 설정
-  useEffect(() => {}, [channel]);
+  useEffect(() => {
+    setChatList([]);
+    axios
+      .get(`${BACKEND_URL}api/chatroom/${gameData.gameId}/${channel}`, {
+        headers: { "Content-Type": "application/json" },
+      })
+      .then(function (response) {
+        // console.log(response.data);
+        setChatList(response.data);
+        subscribe();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [channel]);
 
   // 채팅 새로 생기면 아래로 스크롤
   useEffect(() => {
@@ -167,23 +179,27 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
   const subscribe = () => {
     // 구독한 주소로 메세지 받을 시 이벤트 발생
     // (/sub: 웹소켓 공통 구독 주소), (/chat: 기능별(1:1, 3:3, 친구 추가후) 구독 주소), (/chatRoomSeq: 하위 구독 주소(채팅방))
-    client.current.subscribe("/sub/chat/" + chatRoomId, (body) => {
-      const json_body = JSON.parse(body.body);
+    client.current.subscribe(
+      "/sub/chat/" + gameData.gameId + channel,
+      (body) => {
+        const json_body = JSON.parse(body.body);
 
-      // 확인용 출력 (이처럼 메세지 수령 시 특정 이벤트를 발생 시킬 수 있습니다.)
-      // console.log("메세지 받았당");
-      // console.log(body.body);
+        // 확인용 출력 (이처럼 메세지 수령 시 특정 이벤트를 발생 시킬 수 있습니다.)
+        // console.log("메세지 받았당");
+        // console.log(body.body);
 
-      setChatList((_chat_list) => [
-        ..._chat_list,
-        {
-          chatRoomId: json_body.chatRoomId,
-          writerId: json_body.writerId,
-          gameId: json_body.gameId,
-          content: json_body.content,
-        },
-      ]);
-    });
+        setChatList((_chat_list) => [
+          ..._chat_list,
+          {
+            chatRoomId: json_body.chatRoomId,
+            writerId: json_body.writerId,
+            writerName: json_body.writerName,
+            gameId: json_body.gameId,
+            content: json_body.content,
+          },
+        ]);
+      }
+    );
   };
 
   // publish: 메세지 보내기
@@ -209,7 +225,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
       // body: 보낼 메세지
       body: JSON.stringify({
         content: message,
-        chatRoomId: chatRoomId,
+        chatRoomId: channel,
         gameId: gameData.gameId,
         writerId: user.userId,
       }),
@@ -239,16 +255,19 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
 
   // handleSubmit: 보내기 버튼 눌렀을 때 보내기(publish 실행)
   const handleSubmit = () => {
-    publish();
+    if (user) {
+      publish();
+    }
   };
 
   const renderChatLogs = (chatLogs) => {
     const result = [];
+    let prevId = -1;
 
     if (chatLogs) {
       for (let i = 0; i < chatLogs.length; i++) {
         if (chatLogs[i]) {
-          if (chatLogs[i].writerId === user.userId) {
+          if (user && chatLogs[i].writerId === user.userId) {
             result.push(
               <div className="my-msg-wrapper" key={i}>
                 <motion.div
@@ -263,7 +282,16 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
                 </motion.div>
               </div>
             );
+            prevId = user.userId;
           } else {
+            if (prevId !== chatLogs[i].writerId) {
+              result.push(
+                <div className="user-name" key={i + "user-name"}>
+                  {chatLogs[i].writerName}
+                </div>
+              );
+              prevId = chatLogs[i].writerId;
+            }
             result.push(
               <div className="others-msg-wrapper" key={i}>
                 <motion.div
