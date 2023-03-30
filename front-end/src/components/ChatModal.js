@@ -129,6 +129,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
       .then(function (response) {
         // console.log(response.data);
         setChatList(response.data);
+        subscribe();
       })
       .catch(function (error) {
         console.log(error);
@@ -260,6 +261,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
 
   const renderChatLogs = (chatLogs) => {
     const result = [];
+    let prevId = -1;
 
     if (chatLogs) {
       for (let i = 0; i < chatLogs.length; i++) {
