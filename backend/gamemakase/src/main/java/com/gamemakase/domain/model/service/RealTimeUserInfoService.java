@@ -92,7 +92,7 @@ public class RealTimeUserInfoService {
                         userRepository.save(user);
                     }
                     result.add(UserInfoVo.builder()
-                            .userSteamId(user.getUserSteamId())
+                            .userSteamId(Long.parseLong(steamId))
                             .userId(user.getUserId())
                             .state(playerInfoJson.get("personastate").toString().equals("0") ? false : true)
                             .userImagePath(playerInfoJson.get("avatar").toString())
