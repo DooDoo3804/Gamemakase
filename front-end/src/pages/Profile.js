@@ -31,6 +31,7 @@ import noReivew from "../assets/lottie/review.json";
 //Svg
 import starSvgYellow from "../assets/fontAwesomeSvg/star-yellow.svg";
 import starSvgEmpty from "../assets/fontAwesomeSvg/star-empty.svg";
+import steamIcon from "../assets/fontAwesomeSvg/steam.svg";
 //empty profile img
 import defaultUserImg from "../assets/profileImg.svg";
 
@@ -44,6 +45,7 @@ const Profile = () => {
   //state
   const [isKo, setIsKo] = useState(true);
   const [userName, setUserName] = useState("");
+  const [userSteamId, setUserSteamId] = useState("");
   const [userImage, setUserImage] = useState(defaultUserImg);
   const [user] = useRecoilState(userState);
 
@@ -152,6 +154,7 @@ const Profile = () => {
         setScrapGames(response.data.scrap);
         setGamesTotalCount(response.data.page.size);
         setUserName(response.data.user.userName);
+        setUserSteamId(response.data.user.userSteamId);
         const userImg = response.data.user.userImagePath;
         if (userImg == null || userImg.length <= 0) {
           setUserImage(defaultUserImg);
@@ -598,6 +601,18 @@ const Profile = () => {
           <ProfileImgWrapper>
             <img src={userImage} alt="profileImage" />
             {userName != null ? <p className="profile-name">{userName}</p> : ""}
+            <div className="steam-btn" onClick={() => {
+              console.log("click");
+              window.open(
+                `https://steamcommunity.com/profiles/${userSteamId}/`
+              )
+            }
+            }>
+              <img
+                alt="steamIcon"
+                src={steamIcon}
+              />
+            </div>
           </ProfileImgWrapper>
         </div>
         <nav>
