@@ -95,8 +95,8 @@ public class SteamController {
             cookie.setMaxAge(60*60*24);
             response.addCookie(cookie);
 
-            headers.setLocation(URI.create("http://gamemakase.com/signUp"));
-//            headers.setLocation(URI.create("http://localhost:3000/signUp"));
+            headers.setLocation(URI.create("http://gamemakase.com/login"));
+//            headers.setLocation(URI.create("http://localhost:3000/login"));
             return new ResponseEntity<Object>(headers, HttpStatus.MOVED_PERMANENTLY);
         }
 
