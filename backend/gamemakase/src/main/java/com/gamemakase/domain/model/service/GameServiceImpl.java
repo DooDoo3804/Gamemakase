@@ -146,6 +146,9 @@ public class GameServiceImpl implements GameService{
 
         long userId = Long.parseLong(userIdStr);
 
+//        0일 경우 1로 변환 (zero division error 방지)
+        totalPlayGame = totalPlayGame == 0 ? 1:totalPlayGame;
+
         Game game = gameRepository.findById(gameId).orElse(null);
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("유저정보를 찾을 수 없습니다."));
         GameHistory gameHistory = GameHistoryInsertRequestDto.toEntity(totalPlayGame, twoWeekPlayGame, game, user);

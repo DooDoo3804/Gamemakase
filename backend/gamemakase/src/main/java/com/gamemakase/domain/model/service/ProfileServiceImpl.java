@@ -172,4 +172,22 @@ public class ProfileServiceImpl implements ProfileService {
 				.build();
 	}
 
+	@Override
+	public List<Long> updateUserProfileImage() throws NotFoundException, IOException, ParseException {
+		List<UserInfoVo> result = realTimeUserInfoService.getUserInfoResponseVo(userRepository.findAll());
+
+		return imageRepository.saveAll(result.stream()
+				.map(r -> Image.builder()
+						.imagePath(r.getUserImagePath())
+						.type("User")
+						.typeId(r.getUserId())
+						.build())
+				.collect(Collectors.toList()))
+				.stream()
+				.map(Image::getTypeId)
+				.collect(Collectors.toList());
+
+
+	}
+
 }

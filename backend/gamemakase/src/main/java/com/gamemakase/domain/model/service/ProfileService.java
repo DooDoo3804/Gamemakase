@@ -14,4 +14,6 @@ public interface ProfileService {
 	ProfileInfoResponseDto getProfile(long userId, int pageNo) throws IOException, ParseException, NotFoundException;
 	List<GameInfoVo> getScrap(long userId, int pageNo) throws NotFoundException;
 	ProfileReviewsResponseDto getReviews(long userId, int pageNo) ;
+
+    List<Long> updateUserProfileImage() throws NotFoundException, IOException, ParseException;
 }
