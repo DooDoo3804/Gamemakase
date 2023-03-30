@@ -26,5 +26,5 @@ public interface UserService {
 
     String getWriterName(long userId) throws NotFoundException;
 
-    void deleteUser(User user);
+    void Withdrawal(User user);
 }

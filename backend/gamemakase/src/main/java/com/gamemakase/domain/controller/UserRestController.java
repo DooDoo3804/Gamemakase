@@ -47,7 +47,7 @@ public class UserRestController {
     @DeleteMapping("/auth/user")
     public ResponseEntity<?> deleteUser(Authentication authentication){
         User user = (User) authentication.getPrincipal();
-        userService.deleteUser(user);
+        userService.Withdrawal(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
