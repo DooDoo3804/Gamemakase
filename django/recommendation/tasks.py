@@ -8,6 +8,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from .serializers import *
 import logging
 from django.db import connection
+import requests
 
 
 def B(df, users):
@@ -149,3 +150,13 @@ def update_recommed():
         get_recommended_games(users)
     except Exception as e:
         logging.exception(f"Error in background job: {str(e)}")
+
+# 프로필 업데이트 reauests
+def profile_schedule():
+    print("start profile update")
+    try:
+        response = requests.post("https://gamemakase.com/api/profile/update-image")
+        print(response.json())
+    except Exception as e:
+        print(e)
+ 

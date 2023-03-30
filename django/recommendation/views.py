@@ -1,15 +1,15 @@
 import pandas as pd
 import pymysql
 import pymysql.cursors
-from rest_framework.status import HTTP_201_CREATED
+from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK
 from django.http import HttpResponse
 from .models import GameHistory, Game, Image, GameSmall, Recommendation
 from sklearn.metrics.pairwise import cosine_similarity
 from .serializers import *
 import logging
-from .tasks import update_recommed
+from .tasks import update_recommed, profile_schedule
 from apscheduler.schedulers.background import BackgroundScheduler
-import time
+import time, requests
 from django.db import connection
 # user_id : 유저 모델 의 아이디 값 > user_steam_id 로 대체
 # user_steam_id : 유저 스팀 아이디
@@ -155,10 +155,18 @@ def job():
     print("***********************************************************************************")
 
 
+def profile():
+    print("***********************************************************************************")
+    profile_schedule()
+    print(f"End Time : {time.strftime('%c')}")
+    print("***********************************************************************************")
+    
+
 def schedule_api():
     print("start big data recommend start")
     sched = BackgroundScheduler()
     sched.add_job(job, 'cron', hour='03', minute='0', second='0')
+    sched.add_job(profile, 'cron', hour='15', minute='37', second='0')
     try:
         sched.start()
     except Exception as e:
