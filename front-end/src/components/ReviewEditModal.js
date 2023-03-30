@@ -192,7 +192,7 @@ const ReviewEditModal = ({
               </div>
               <div className="btns-wrapper">
                 <TranslucentBtn
-                  text={"작성하기"}
+                  text={"수정하기"}
                   onClick={() => handleWriting()}
                 ></TranslucentBtn>
                 <TranslucentBtn
