@@ -105,7 +105,13 @@ const Profile = () => {
   const calStatisticsSum = (Array) => {
     let statisticsSumTmp = 0;
     Array.forEach((e) => {
-      statisticsSumTmp += e.value;
+      const value = Number(e.value);
+      if (isNaN(value)) {
+        statisticsSumTmp += 1;
+        e.value = 1;
+      } else {
+        statisticsSumTmp += Number(e.value);
+      }
     });
     return statisticsSumTmp;
   };
@@ -138,6 +144,8 @@ const Profile = () => {
             return data2.value - data1.value;
           })
         );
+        const sum = calStatisticsSum(statistics);
+        console.log(sum);
         setStatisticsSum(calStatisticsSum(statistics));
         setScrapGames(response.data.scrap);
         setGamesTotalCount(response.data.page.size);
