@@ -71,9 +71,9 @@ const Star = ({ i, isHoveringWrapper, isClicked }) => {
     </>
   );
 };
-const StarRating = ({ handleRating }) => {
-  const [isClicked, setIsClicked] = useState(0);
-  const [isHovering, setIsHovering] = useState(0);
+const StarRating = ({ handleRating, initial }) => {
+  const [isClicked, setIsClicked] = useState(initial - 1);
+  const [isHovering, setIsHovering] = useState(initial - 1);
 
   const handleClick = (i) => {
     setIsClicked(i);
