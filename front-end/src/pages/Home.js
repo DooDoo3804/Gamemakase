@@ -198,7 +198,18 @@ const Home = () => {
       } else {
         result.push(
           <div className="no-game" key={0}>
-            추천 게임이 존재하지 않습니다.
+            1개 이상의 게임을 플레이하거나,{" "}
+            <div
+              className="steam-link"
+              onClick={() =>
+                window.open(
+                  `https://steamcommunity.com/profiles/${user.userSteamId}/edit/settings`
+                )
+              }
+            >
+              스팀 프로필을 공개
+            </div>
+            로 설정해주세요.
           </div>
         );
       }

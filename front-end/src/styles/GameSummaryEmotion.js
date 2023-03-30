@@ -45,7 +45,6 @@ export const GameSummaryClip = styled(motion.div)`
     @media (max-width: 600px) {
       margin-top: 15px;
       min-height: 120px;
-      min-width: 260px;
     }
 
     @media (max-width: 700px) {
@@ -209,6 +208,14 @@ export const GameSummaryClip = styled(motion.div)`
     }
     @media (min-width: 1300px) {
       font-size: 15px;
+    }
+  }
+
+  .not-my {
+    position: relative;
+    top: 95px;
+    @media (max-width: 600px) {
+      top: 0px;
     }
   }
 `;

@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import axios from "axios";
 import Lottie from "react-lottie";
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil/user";
+
 import { motion } from "framer-motion";
 import ReviewModal from "../components/ReviewModal";
 import {
@@ -60,21 +64,29 @@ const Detail = () => {
   const [ref, inView] = useInView();
   const pageNo = useRef(1);
 
+  const [user, setUser] = useRecoilState(userState);
+  const [cookies, setCookie] = useCookies(["accessToken"]);
+
   const { lockScroll } = useBodyScrollLock();
   const location = useLocation();
   const gameId = location.pathname.split("/").reverse()[0];
 
   useEffect(() => {
+    let userId = -1;
+    if (user) {
+      userId = user.userId;
+    }
+
     axios
       .get(`${BACKEND_URL}api/game/${gameId}`, {
-        // todo : userId 수정해야함
-        headers: { "Content-Type": "application/json", userId: 1 },
+        headers: { "Content-Type": "application/json", userId: userId },
       })
       .then(function (response) {
-        // console.log(response.data);
+        console.log(response.data);
         setGameData(response.data);
         setRecommendedUsers(response.data.recommendedUsers);
         setReviewData(response.data.reviews);
+        setIsLiked(response.data.isLiked);
         setIsLoading(false);
       })
       .catch(function (error) {
@@ -291,35 +303,58 @@ const Detail = () => {
   };
 
   const handleScrap = () => {
-    // todo : 로그인 안했을 때 로그인 유도
-    // Auth 설정
-    if (isLiked) {
-      // 스크랩 취소
-    } else {
-      // 스크랩 하기
-      axios
-        .post(
-          `${BACKEND_URL}auth/user/bookmarks`,
-          {
-            game: gameData,
-          },
-          {
+    if (user) {
+      if (isLiked) {
+        // 스크랩 취소
+        axios
+          .delete(`${BACKEND_URL}auth/user/bookmarks/${gameData.likeId}`, {
             headers: {
               "Content-Type": "application/json",
+              accessToken: cookies["accessToken"],
             },
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-          setIsLiked(!isLiked);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          })
+          .then((response) => {
+            setIsLiked(!isLiked);
+          })
+          .catch((error) => {
+            console.log(error);
+            // if (error.response.status === 401) {
+            //   window.location.replace(window.location.href);
+            // }
+            alert("스크랩 취소에 실패했습니다.");
+          });
+      } else {
+        // 스크랩 하기
+        axios
+          .post(
+            `${BACKEND_URL}auth/user/bookmarks/${gameData.gameId}`,
+            {
+              game: gameData,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                accessToken: cookies["accessToken"],
+              },
+            }
+          )
+          .then((response) => {
+            setIsLiked(!isLiked);
+            let tempGameData = gameData;
+            tempGameData.likeId = response.data.likeId;
+            setGameData(tempGameData);
+          })
+          .catch((error) => {
+            console.log(error);
+            // if (error.response.status === 401) {
+            //   window.location.replace(window.location.href);
+            // }
+            alert("스크랩에 실패했습니다.");
+          });
+      }
+    } else {
+      alert("로그인 후 스크랩 기능을 사용할 수 있습니다.");
     }
-
-    // todo : 개발용 코드, 추후 삭제
-    setIsLiked(!isLiked);
   };
 
   if (isLoading) {
@@ -361,36 +396,52 @@ const Detail = () => {
                 >
                   <div className="title-logo">
                     <p className="title">{gameData.gameName}</p>
-                    <div className="logo-box">
-                      {gameData.windows ? (
-                        <img
-                          src={windowSvg}
-                          className="brand-logo"
-                          alt="windowSvg"
-                        />
+                    <div>
+                      <div className="logo-box">
+                        {gameData.windows ? (
+                          <img
+                            src={windowSvg}
+                            className="brand-logo"
+                            alt="windowSvg"
+                          />
+                        ) : null}
+                        {gameData.mac ? (
+                          <img
+                            src={appleSvg}
+                            className="brand-logo"
+                            alt="appleSvg"
+                          />
+                        ) : (
+                          ""
+                        )}
+                        {gameData.linux ? (
+                          <img
+                            src={linuxSvg}
+                            className="brand-logo"
+                            alt="linuxSvg"
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                      {gameData.isOwned ? (
+                        <div className="own-game">
+                          <div className="own-btn">보유중</div>
+                        </div>
                       ) : null}
-                      {gameData.mac ? (
-                        <img
-                          src={appleSvg}
-                          className="brand-logo"
-                          alt="appleSvg"
-                        />
-                      ) : (
-                        ""
-                      )}
-                      {gameData.linux ? (
-                        <img
-                          src={linuxSvg}
-                          className="brand-logo"
-                          alt="linuxSvg"
-                        />
-                      ) : (
-                        ""
-                      )}
                     </div>
                   </div>
-
                   <p className="discription">{gameData.gameDescription}</p>
+                  <div
+                    className="steam-btn"
+                    onClick={() =>
+                      window.open(
+                        `https://store.steampowered.com/app/${gameData.gameId}`
+                      )
+                    }
+                  >
+                    스팀에서 보기
+                  </div>
                 </motion.div>
               </div>
               <div className="scrap-wrapper" onClick={() => handleScrap()}>
@@ -414,7 +465,9 @@ const Detail = () => {
               </span>
               <span className="single-info">
                 <p className="info-title">가격</p>
-                <p className="info-content">{"$" + gameData.gamePrice}</p>
+                <p className="info-content">
+                  {gameData.gamePrice ? "$" + gameData.gamePrice : "Free"}
+                </p>
               </span>
               <span className="single-info">
                 <p className="info-title">장르</p>
@@ -433,6 +486,31 @@ const Detail = () => {
                 {renderScreenshots()}
               </Swiper>
             </div>
+            {gameData.youtube.length ? (
+              <div className="video-wrapper">
+                <p className="video-text">관련 영상</p>
+                <div className="videos">
+                  <iframe
+                    src={
+                      "https://www.youtube.com/embed/" +
+                      gameData.youtube[0].youtubeId.videoId
+                    }
+                    title={gameData.youtube[0].youtubeName}
+                    className="single-video"
+                    allow="fullscreen"
+                  ></iframe>
+                  <iframe
+                    src={
+                      "https://www.youtube.com/embed/" +
+                      gameData.youtube[1].youtubeId.videoId
+                    }
+                    title={gameData.youtube[1].youtubeName}
+                    className="single-video"
+                    allow="fullscreen"
+                  ></iframe>
+                </div>
+              </div>
+            ) : null}
           </div>
           <div className="gradient"></div>
           <RecommendUsers>

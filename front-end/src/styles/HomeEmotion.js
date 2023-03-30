@@ -331,9 +331,13 @@ export const RecommendWrapper = styled.div`
     color: ${Common.colors.white01};
     margin: 2rem 0rem;
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
+    justify-content: center;
     align-items: center;
     font-family: "Noto Sans KR", serif;
+    white-space: pre-wrap;
+
+    text-align: center;
 
     -ms-user-select: none;
     -moz-user-select: -moz-none;
@@ -342,7 +346,14 @@ export const RecommendWrapper = styled.div`
     user-select: none;
 
     p {
+      display: flex;
       margin-bottom: 2rem;
+    }
+
+    .steam-link {
+      cursor: pointer;
+      font-weight: 700;
+      border-bottom: 1px solid ${Common.colors.white01};
     }
   }
 `;

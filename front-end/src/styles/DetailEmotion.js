@@ -8,7 +8,6 @@ export const DetailWrapper = styled.div`
   .detail-main {
     display: flex;
     width: 100%;
-    height: 56vw;
     background-image: linear-gradient(
         to bottom,
         rgba(50, 50, 50, 0.5),
@@ -20,15 +19,15 @@ export const DetailWrapper = styled.div`
 
     @media (min-width: 768px) {
       margin-top: -4.4rem;
-      height: 40rem;
+      min-height: 40rem;
     }
     @media (max-width: 768px) {
       margin-top: -3.9rem;
-      height: 30rem;
+      min-height: 30rem;
     }
     @media (max-width: 500px) {
       margin-top: -3.4rem;
-      height: 400px;
+      min-height: 400px;
     }
   }
 
@@ -57,11 +56,13 @@ export const DetailWrapper = styled.div`
     width: 90%;
     display: flex;
     align-items: flex-end;
-    margin-bottom: 5rem;
+    margin-bottom: 3rem;
   }
 
   .title-wrapper {
     transition: all 0.5s ease-in-out;
+
+    margin-top: 7rem;
 
     @media (min-width: 768px) {
       width: 50%;
@@ -112,6 +113,36 @@ export const DetailWrapper = styled.div`
     }
   }
 
+  .steam-btn {
+    background: ${Common.colors.mainColor04};
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 2rem;
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: 768px) {
+      width: 9rem;
+      margin: 1.5rem 0rem;
+      padding: 1rem;
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) {
+      width: 6rem;
+      margin: 1.5rem 0rem;
+      padding: 0.7rem;
+      font-size: 0.7rem;
+    }
+    @media (max-width: 500px) {
+      width: 5rem;
+      margin: 1rem 0rem;
+      padding: 0.7rem;
+      font-size: 10px;
+    }
+  }
+
   .logo-box {
     display: flex;
     justify-content: end;
@@ -143,6 +174,32 @@ export const DetailWrapper = styled.div`
       width: 1rem;
       height: 1rem;
       margin: 0rem 0.3rem;
+    }
+  }
+  .own-game {
+    display: flex;
+    justify-content: end;
+  }
+
+  .own-btn {
+    /* background: rgba(255, 255, 255, 0.4); */
+    background: ${Common.colors.mainColor03};
+    border-radius: 1rem;
+
+    @media (min-width: 768px) {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.9rem;
+      margin: 0.6rem 0rem;
+    }
+    @media (max-width: 768px) {
+      padding: 0.3rem 0.5rem;
+      font-size: 0.6rem;
+      margin: 0.3rem 0rem;
+    }
+    @media (max-width: 500px) {
+      padding: 0.2rem 0.4rem;
+      font-size: 6px;
+      margin: 0.3rem 0rem;
     }
   }
 
@@ -258,7 +315,8 @@ export const DetailWrapper = styled.div`
     }
   }
 
-  .scrennshots-wrapper {
+  .scrennshots-wrapper,
+  .video-wrapper {
     font-family: "Noto Sans KR", serif;
     font-weight: 700;
 
@@ -279,7 +337,8 @@ export const DetailWrapper = styled.div`
     }
   }
 
-  .screenshot-text {
+  .screenshot-text,
+  .video-text {
     margin: 0;
 
     -ms-user-select: none;
@@ -287,6 +346,13 @@ export const DetailWrapper = styled.div`
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+  }
+
+  .single-video {
+    width: 45%;
+    height: calc((100vw - 8rem / 2) * 0.25);
+    border: none;
+    margin: 1rem 0rem;
   }
 
   .swiper-pagination {
@@ -332,6 +398,12 @@ export const DetailWrapper = styled.div`
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+  }
+
+  .videos {
+    margin: 1rem 0rem;
+    display: flex;
+    justify-content: space-around;
   }
 
   .gradient {

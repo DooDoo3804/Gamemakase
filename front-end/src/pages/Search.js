@@ -2,6 +2,8 @@ import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "react-router";
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil/user";
 import { useInView } from "react-intersection-observer";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
@@ -34,9 +36,7 @@ const Search = () => {
   const niddle = params.get("query");
   const [width, setWidth] = useState(window.innerWidth);
 
-  // 임시
-  const [userId, setUserId] = useState(1);
-  const [userName, setUserName] = useState("");
+  const [user] = useRecoilState(userState);
 
   // ajax data
   const [isLoading, setIsLoading] = useState(true);
@@ -110,13 +110,12 @@ const Search = () => {
     (niddle) => {
       // login시
       const history = [];
-      if (userId) {
-        setUserName("김아무개");
+      if (user) {
         // 현재 검색기록을 post
         if (niddle && niddle.length > 0) {
           axios
             .post(`${BACKEND_URL}api/search/history`, {
-              userId: userId,
+              userId: user.userId,
               content: niddle,
             })
             .then(() =>{
@@ -130,15 +129,18 @@ const Search = () => {
         axios
           .get(`${BACKEND_URL}api/search/history`, {
             params: {
-              userId: userId,
+              userId: user.userId,
             },
           })
           .then((response) => {
-            response.data.forEach((e) => {
-              if (e !== niddle) {
-                history.push(e);
-              }
-            });
+            const datas = response.data;
+            if(datas && datas.length > 0) {
+              response.data.forEach((e) => {
+                if (e !== niddle) {
+                  history.push(e);
+                }
+              });
+            }
           })
           .catch((error) => {
             console.log(error);
@@ -163,7 +165,7 @@ const Search = () => {
           console.log(error);
         });
     },
-    [userId]
+    [user]
   );
 
   const priceInput = useRef();
@@ -330,7 +332,7 @@ const Search = () => {
     axios
       .delete(`${BACKEND_URL}api/search/history`, {
         params: {
-          userId: userId,
+          userId: user.userId,
           content: value,
         },
       })
@@ -374,7 +376,7 @@ const Search = () => {
     const result = [];
     result.push(
       <div key="searchHistory" className="tag-header">
-        최근 {userName} 님의 검색
+        최근 {user.userName} 님의 검색
       </div>
     );
     const tagsRend = () => {
@@ -574,7 +576,7 @@ const Search = () => {
     if (width > 1160) {
       return (
         <SearchWrapper>
-          {userId ? (
+          {user ? (
             <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
           ) : (
             ""
@@ -623,7 +625,7 @@ const Search = () => {
           ) : (
             ""
           )}
-          {userId ? (
+          {user ? (
             <SearchHistoryWrapper>{searchHistoryRend()}</SearchHistoryWrapper>
           ) : (
             ""
