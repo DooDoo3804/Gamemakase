@@ -107,8 +107,7 @@ const Profile = () => {
     Array.forEach((e) => {
       const value = Number(e.value);
       if (isNaN(value)) {
-        statisticsSumTmp += 1;
-        e.value = 1;
+        statisticsSumTmp += 0;
       } else {
         statisticsSumTmp += Number(e.value);
       }
@@ -139,14 +138,17 @@ const Profile = () => {
       .then((response) => {
         const mapping = { genre: "id", value: "value" };
         const statistics = renameKeys(mapping, response.data.statistics);
-        setStatisticsData(
-          statistics.sort((data1, data2) => {
-            return data2.value - data1.value;
-          })
-        );
         const sum = calStatisticsSum(statistics);
-        console.log(sum);
-        setStatisticsSum(calStatisticsSum(statistics));
+        if (sum === 0) {
+          setStatisticsData(0);
+        } else {
+          setStatisticsData(
+            statistics.sort((data1, data2) => {
+              return data2.value - data1.value;
+            })
+          );
+          setStatisticsSum(calStatisticsSum(statistics));
+        }
         setScrapGames(response.data.scrap);
         setGamesTotalCount(response.data.page.size);
         setUserName(response.data.user.userName);
