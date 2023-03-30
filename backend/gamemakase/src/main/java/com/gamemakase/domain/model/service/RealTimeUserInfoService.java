@@ -32,99 +32,100 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class RealTimeUserInfoService {
 
-	@Value("${steam.api.key}")
-	private String steamApiKey;
-	@Value("${steam.api.url}")
-	private String steamApiUrlPrefix;
-	private static final String GET_PLAYER_SUMMARIES_URL = "/ISteamUser/GetPlayerSummaries/v0002/";
-	private final Logger logger = LoggerFactory.getLogger(RealTimeUserInfoService.class);
-	private final UserRepository userRepository;
+    @Value("${steam.api.key}")
+    private String steamApiKey;
+    @Value("${steam.api.url}")
+    private String steamApiUrlPrefix;
+    private static final String GET_PLAYER_SUMMARIES_URL = "/ISteamUser/GetPlayerSummaries/v0002/";
+    private final Logger logger = LoggerFactory.getLogger(RealTimeUserInfoService.class);
+    private final UserRepository userRepository;
 
-	/***
-	 * User info (유저 표시이름, 온라인여부, 이미지를 실시간으로 가져옵니다.)
-	 * 그 중 유저 표시이름은 변경되었으면 db에 반영합니다.
-	 * @param userList
-	 * @return
-	 * @throws IOException
-	 * @throws ParseException
-	 * @throws NotFoundException
-	 */
-	public List<UserInfoVo> getUserInfoResponseVo(List<User> userList) throws IOException, ParseException, NotFoundException {
-		List<UserInfoVo> result = new ArrayList<UserInfoVo>();
-		
-		String userSteamIdsQuerys = "";
-		for (User user : userList) {
-			userSteamIdsQuerys += user.getUserSteamId() + ",";
-		}
-		
-		String requestUriStr = UriComponentsBuilder
-				.fromUriString(steamApiUrlPrefix + GET_PLAYER_SUMMARIES_URL)
-				.queryParam("key", steamApiKey)
-				.queryParam("steamids", userSteamIdsQuerys)
-				.build()
-				.encode()
-				.toUriString();
+    /***
+     * User info (유저 표시이름, 온라인여부, 이미지를 실시간으로 가져옵니다.)
+     * 그 중 유저 표시이름은 변경되었으면 db에 반영합니다.
+     * @param userList
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     * @throws NotFoundException
+     */
+    public List<UserInfoVo> getUserInfoResponseVo(List<User> userList) throws IOException, ParseException, NotFoundException {
+        List<UserInfoVo> result = new ArrayList<UserInfoVo>();
 
-		URL requestUrl = new URL(requestUriStr);
-		HttpURLConnection conn = getHttpURLConnection(requestUrl);
-		int responseCode = conn.getResponseCode();
-		boolean isSuccess = 200 <= responseCode && responseCode <= 300;
-		String response = getResponse(conn, isSuccess);
+        String userSteamIdsQuerys = "";
+        for (User user : userList) {
+            userSteamIdsQuerys += user.getUserSteamId() + ",";
+        }
 
-		if (isSuccess) {
-			JSONParser parser = new JSONParser();
-			JSONObject totalInfoJson = (JSONObject) ((JSONObject) parser.parse(response)).get("response");
-			JSONArray playerInfoJsons = (JSONArray) totalInfoJson.get("players");
+        String requestUriStr = UriComponentsBuilder
+                .fromUriString(steamApiUrlPrefix + GET_PLAYER_SUMMARIES_URL)
+                .queryParam("key", steamApiKey)
+                .queryParam("steamids", userSteamIdsQuerys)
+                .build()
+                .encode()
+                .toUriString();
 
-			if (playerInfoJsons.size() == 0) {
-				logger.error("조회되는 정보 없음");
-			} else {
-				for (int i = 0; i < playerInfoJsons.size(); i++) {
-					JSONObject playerInfoJson = (JSONObject) playerInfoJsons.get(i);
-					String realTimeUserName = playerInfoJson.get("personaname").toString();
-					String steamId = playerInfoJson.get("steamid").toString();
-					
-					// steamId를 토대로 User 검사
-					User user = userRepository.findByUserSteamId(Long.parseLong(steamId));
-					// 지금 db name이 실시간 name정보와 다르면 db값을 변경
-					if (!user.getUserName().equals(realTimeUserName)) {
-						user.setUserName(realTimeUserName);
-						userRepository.save(user);
-					}
-					result.add(UserInfoVo.builder()
-							.userId(user.getUserId())
-							.state(playerInfoJson.get("personastate").toString().equals("0") ? false : true)
-							.userImagePath(playerInfoJson.get("avatar").toString())
-							.userName(realTimeUserName).build());
-				}
-			}
-		} else {
-			logger.error("api 응답 실패");
-		}
-		return result;
-	}
+        URL requestUrl = new URL(requestUriStr);
+        HttpURLConnection conn = getHttpURLConnection(requestUrl);
+        int responseCode = conn.getResponseCode();
+        boolean isSuccess = 200 <= responseCode && responseCode <= 300;
+        String response = getResponse(conn, isSuccess);
 
-	private static String getResponse(HttpURLConnection conn, boolean isSuccess) throws IOException {
-		BufferedReader br;
-		if (isSuccess) {
-			br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		} else {
-			br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-		}
-		StringBuilder sb = new StringBuilder();
-		String line;
-		while ((line = br.readLine()) != null) {
-			sb.append(line);
-		}
-		conn.disconnect();
-		br.close();
-		return sb.toString();
-	}
+        if (isSuccess) {
+            JSONParser parser = new JSONParser();
+            JSONObject totalInfoJson = (JSONObject) ((JSONObject) parser.parse(response)).get("response");
+            JSONArray playerInfoJsons = (JSONArray) totalInfoJson.get("players");
 
-	private static HttpURLConnection getHttpURLConnection(URL url) throws IOException {
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
-		conn.setRequestProperty("Content-type", "application/json");
-		return conn;
-	}
+            if (playerInfoJsons.size() == 0) {
+                logger.error("조회되는 정보 없음");
+            } else {
+                for (int i = 0; i < playerInfoJsons.size(); i++) {
+                    JSONObject playerInfoJson = (JSONObject) playerInfoJsons.get(i);
+                    String realTimeUserName = playerInfoJson.get("personaname").toString();
+                    String steamId = playerInfoJson.get("steamid").toString();
+
+                    // steamId를 토대로 User 검사
+                    User user = userRepository.findByUserSteamId(Long.parseLong(steamId));
+                    // 지금 db name이 실시간 name정보와 다르면 db값을 변경
+                    if (!user.getUserName().equals(realTimeUserName)) {
+                        user.setUserName(realTimeUserName);
+                        userRepository.save(user);
+                    }
+                    result.add(UserInfoVo.builder()
+                            .userSteamId(user.getUserSteamId())
+                            .userId(user.getUserId())
+                            .state(playerInfoJson.get("personastate").toString().equals("0") ? false : true)
+                            .userImagePath(playerInfoJson.get("avatar").toString())
+                            .userName(realTimeUserName).build());
+                }
+            }
+        } else {
+            logger.error("api 응답 실패");
+        }
+        return result;
+    }
+
+    private static String getResponse(HttpURLConnection conn, boolean isSuccess) throws IOException {
+        BufferedReader br;
+        if (isSuccess) {
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        conn.disconnect();
+        br.close();
+        return sb.toString();
+    }
+
+    private static HttpURLConnection getHttpURLConnection(URL url) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        return conn;
+    }
 }
