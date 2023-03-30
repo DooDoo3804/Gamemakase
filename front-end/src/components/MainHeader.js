@@ -61,7 +61,7 @@ const MainHeader = () => {
           accessToken: cookies["accessToken"],
         },
       });
-      console.log(loginResponse.data);
+      // console.log(loginResponse.data);
       setUser(loginResponse.data);
     } catch (error) {
       console.log(error);
