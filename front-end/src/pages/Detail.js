@@ -529,7 +529,7 @@ const Detail = () => {
             <div className="gradient-second"></div>
           </RecommendUsers>
           <ReviewWrapper>
-            <div className="title-wrapper">
+            <div className="review-title-wrapper">
               <p className="title-text">리뷰</p>
               {gameData.canReview ? (
                 <TranslucentBtn
