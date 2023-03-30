@@ -195,6 +195,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String getWriterName(long userId) {
+        User user = userRepository.findByUserId(userId);
+        String name = user.getUserName();
+        return name;
+    }
+
+    @Override
     public void deleteUser(User user) {
         userRepository.delete(user);
     }

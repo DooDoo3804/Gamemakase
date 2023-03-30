@@ -22,14 +22,18 @@ public class MongoChat {
   private long writerId;
   private long gameId;
   private long chatRoomId;
+
+  private String writerName;
+
   @CreatedDate
   private LocalDateTime createdAt;
 
   @Builder
-  public MongoChat(String content, long chatRoomId, long writerId, long gameId){
+  public MongoChat(String content, long chatRoomId, long writerId, long gameId, String writerName){
     this.content = content;
     this.chatRoomId = chatRoomId;
     this.writerId = writerId;
     this.gameId = gameId;
+    this.writerName = writerName;
   }
 }

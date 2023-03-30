@@ -23,12 +23,13 @@ public class ChatServiceImpl implements ChatService{
   }
 
   @Override
-  public String insertChat(ChatInsertRequestDto requestDto) {
+  public String insertChat(ChatInsertRequestDto requestDto, String writerName) {
     MongoChat chat = MongoChat.builder()
         .chatRoomId((int) requestDto.getChatRoomId())
         .writerId((int) requestDto.getWriterId())
         .gameId((int) requestDto.getGameId())
         .content(requestDto.getContent())
+        .writerName(writerName)
         .build();
 
     MongoChat insert = chatRepository.insert(chat);
