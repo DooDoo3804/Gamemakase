@@ -270,6 +270,7 @@ const ChatModal = ({ gameData, chatView, setChatView, scrollPosition }) => {
 
   const renderChatLogs = (chatLogs) => {
     const result = [];
+    prevId.current = -1;
 
     if (chatLogs) {
       for (let i = 0; i < chatLogs.length; i++) {
