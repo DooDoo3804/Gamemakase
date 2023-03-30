@@ -14,12 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @Api(value = "프로필 페이지 관련 컨트롤러")
@@ -38,7 +36,7 @@ public class ProfileRestContoller {
 			@RequestParam(required = true) @ApiParam(required = true) int pageNo) throws IOException, ParseException, NotFoundException {
 		logger.info("get mapping, userId : {}", userId);
 		ProfileInfoResponseDto result = profileService.getProfile(userId, pageNo);
-		return new ResponseEntity<ProfileInfoResponseDto>(result, HttpStatus.OK);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "스크랩 게임 리스트", notes = "개인 profile 페이지의 main탭 속 스크랩한 리스트에 대한 요청에 대한 응답")
@@ -48,7 +46,7 @@ public class ProfileRestContoller {
 			@RequestParam(required = true) @ApiParam(required = true) int pageNo) throws IOException, ParseException, NotFoundException {
 		logger.info("get mapping, userId : {}", userId);
 		List<GameInfoVo> result = profileService.getScrap(userId, pageNo);
-		return new ResponseEntity<List<GameInfoVo>>(result, HttpStatus.OK);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "해당 유저가 작성한 리뷰 리스트", notes = "개인 profile 페이지의 review탭 요청에 대한 응답")
@@ -58,6 +56,14 @@ public class ProfileRestContoller {
 			@RequestParam(required = true) @ApiParam(required = true) int pageNo) {
 		logger.info("get reviews mapping, userId, pageNo : {}", userId, pageNo);
 		ProfileReviewsResponseDto result = profileService.getReviews(userId, pageNo);
-		return new ResponseEntity<ProfileReviewsResponseDto>(result, HttpStatus.OK);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "전체 유저의 프로필 이미지 db에 업로드", notes = "스케줄링을 통해 서버에서 자체적으로 호출해 업데이트 예정, 프론트에서 따로 호출 하지 마세요")
+	@PostMapping("/update-image")
+	public ResponseEntity<HashMap<String, List<Long>>> updateProfileImage() throws NotFoundException, IOException, ParseException {
+		HashMap<String, List<Long>> result = new HashMap<>();
+		result.put("userId", profileService.updateUserProfileImage());
+		return ResponseEntity.status(HttpStatus.CREATED).body(result);
 	}
 }
