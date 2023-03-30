@@ -39,7 +39,7 @@ public class ChatRestController {
 
   //front와 연동할 때는 인자 값에 @RequestBody 어노테이션 추가
   @MessageMapping("/send")
-  public ResponseEntity<?> sendChat(@RequestBody ChatInsertRequestDto requestDto) throws ClassNotFoundException, NotFoundException {
+  public void sendChat(@RequestBody ChatInsertRequestDto requestDto) throws ClassNotFoundException, NotFoundException {
 
     System.out.println("message보내기 성공");
     System.out.println("gameId : " + requestDto.getGameId());
@@ -49,8 +49,7 @@ public class ChatRestController {
 
     chatService.insertChat(requestDto, writerName);
 
-    sendingOperations.convertAndSend("/sub/chat/" + requestDto.getGameId() + requestDto.getChatRoomId(), requestDto);
-    return ResponseEntity.status(HttpStatus.CREATED).body(requestDto.toEntity(writerName));
+    sendingOperations.convertAndSend("/sub/chat/" + requestDto.getGameId() + requestDto.getChatRoomId(), requestDto.toEntity(writerName));
   }
 
   @GetMapping(value = "/api/chatroom/{gameId}/{chatRoomId}")
