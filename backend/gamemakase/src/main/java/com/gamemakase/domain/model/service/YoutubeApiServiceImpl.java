@@ -62,6 +62,7 @@ public class YoutubeApiServiceImpl implements YoutubeApiService{
 
             // api key 추가
             ArrayList<String> apiKeysList = new ArrayList<String>(Arrays.asList(
+                    "AIzaSyDOJt4eQqom3a7cBYXSupYPpPEkExP1mBc",
                     "AIzaSyD8H8D6hUcFYg8lEvddo3pKF-qEwIwpOiM",
                     "AIzaSyC2g6Xk4Nc0g-GOdeUzpSu7PJeGPjigngg",
                     "AIzaSyD8H8D6hUcFYg8lEvddo3pKF-qEwIwpOiM"
