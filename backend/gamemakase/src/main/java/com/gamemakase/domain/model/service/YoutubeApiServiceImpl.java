@@ -1,5 +1,6 @@
 package com.gamemakase.domain.model.service;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 
 import com.gamemakase.domain.model.entity.Game;
@@ -59,21 +60,39 @@ public class YoutubeApiServiceImpl implements YoutubeApiService{
 
             YouTube.Search.List search = youtube.search().list(Collections.singletonList("id,snippet"));
 
-            search.setKey("AIzaSyD8H8D6hUcFYg8lEvddo3pKF-qEwIwpOiM");
-            search.setQ(queryTerm);
-            search.setType(Collections.singletonList("video"));
-            search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
-            search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
-            SearchListResponse searchResponse = search.execute();
-            List<SearchResult> searchResultList = searchResponse.getItems();
-            System.out.println(searchResultList);
+            // api key 추가
+            ArrayList<String> apiKeysList = new ArrayList<String>(Arrays.asList(
+                    "AIzaSyDOJt4eQqom3a7cBYXSupYPpPEkExP1mBc",
+                    "AIzaSyD8H8D6hUcFYg8lEvddo3pKF-qEwIwpOiM",
+                    "AIzaSyC2g6Xk4Nc0g-GOdeUzpSu7PJeGPjigngg",
+                    "AIzaSyD8H8D6hUcFYg8lEvddo3pKF-qEwIwpOiM"
+            ));
 
-            if (searchResultList != null) {
-                for (SearchResult sl : searchResultList){
-                    result.add(sl);
+            for (String api : apiKeysList) {
+                try {
+                    search.setKey(api);
+                    search.setQ(queryTerm);
+                    search.setType(Collections.singletonList("video"));
+                    search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
+                    search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+                    SearchListResponse searchResponse = search.execute();
+                    List<SearchResult> searchResultList = searchResponse.getItems();
+                    System.out.println(searchResultList);
+
+                    if (searchResultList != null) {
+                        for (SearchResult sl : searchResultList) {
+                            result.add(sl);
+                        }
+                        prettyPrint(searchResultList.iterator(), queryTerm);
+                        break;
+                    }
                 }
-                prettyPrint(searchResultList.iterator(), queryTerm);
+                catch (Exception e) {
+                    System.err.println(e);
+                    continue;
+                }
             }
+
         } catch (GoogleJsonResponseException e) {
             System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
                     + e.getDetails().getMessage());
