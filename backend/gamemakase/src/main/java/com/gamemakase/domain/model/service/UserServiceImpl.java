@@ -207,7 +207,6 @@ public class UserServiceImpl implements UserService {
     public void Withdrawal(User user) {
         user.setUserName("탈퇴한 유저");
         user.setUserSteamId(0);
-        user.setUpdatedAt(LocalDateTime.now());
         user.setAuthority(null);
         userRepository.save(user);
     }
