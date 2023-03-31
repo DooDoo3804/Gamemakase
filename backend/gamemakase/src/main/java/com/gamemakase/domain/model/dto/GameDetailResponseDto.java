@@ -1,6 +1,5 @@
 package com.gamemakase.domain.model.dto;
 
-import com.google.api.services.youtube.model.ResourceId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -92,7 +91,7 @@ public class GameDetailResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class YoutubeDTO {
-        private ResourceId youtubeId;
+        private String youtubeId;
         private String youtubeName;
     }
 }
