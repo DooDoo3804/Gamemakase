@@ -81,7 +81,7 @@ const MainHeader = () => {
     setUser(null);
     removeCookie("accessToken", { path: "/" });
     removeCookie("redirect-url", { path: "/" });
-    window.location.replace(window.location.href);
+    window.location.assign(window.location.href);
   };
 
   return (
