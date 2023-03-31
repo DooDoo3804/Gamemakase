@@ -1,12 +1,10 @@
 package com.gamemakase.domain.model.service;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 
 import com.gamemakase.domain.model.entity.Game;
 import com.gamemakase.domain.model.repository.GameRepository;
 import com.gamemakase.global.Exception.NotFoundException;
-import com.google.api.services.youtube.model.Thumbnail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +16,6 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.ResourceId;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 
@@ -61,11 +58,12 @@ public class YoutubeApiServiceImpl implements YoutubeApiService{
             YouTube.Search.List search = youtube.search().list(Collections.singletonList("id,snippet"));
 
             // api key 추가
-            ArrayList<String> apiKeysList = new ArrayList<String>(Arrays.asList(
+            ArrayList<String> apiKeysList = new ArrayList<>(Arrays.asList(
                     "AIzaSyDOJt4eQqom3a7cBYXSupYPpPEkExP1mBc",
                     "AIzaSyD8H8D6hUcFYg8lEvddo3pKF-qEwIwpOiM",
                     "AIzaSyC2g6Xk4Nc0g-GOdeUzpSu7PJeGPjigngg",
-                    "AIzaSyD8H8D6hUcFYg8lEvddo3pKF-qEwIwpOiM"
+                    "AIzaSyD8H8D6hUcFYg8lEvddo3pKF-qEwIwpOiM",
+                    "AIzaSyBrBjvk68qe3bKQEl8T7nyX7cBTvz7Ff3o"
             ));
 
             for (String api : apiKeysList) {
@@ -83,13 +81,11 @@ public class YoutubeApiServiceImpl implements YoutubeApiService{
                         for (SearchResult sl : searchResultList) {
                             result.add(sl);
                         }
-                        prettyPrint(searchResultList.iterator(), queryTerm);
                         break;
                     }
                 }
                 catch (Exception e) {
                     System.err.println(e);
-                    continue;
                 }
             }
 
@@ -104,31 +100,4 @@ public class YoutubeApiServiceImpl implements YoutubeApiService{
         return result;
     }
 
-    private static void prettyPrint(Iterator<SearchResult> iteratorSearchResults, String query) {
-
-        System.out.println("\n=============================================================");
-        System.out.println(
-                "   First " + NUMBER_OF_VIDEOS_RETURNED + " videos for search on \"" + query + "\".");
-        System.out.println("=============================================================\n");
-
-        if (!iteratorSearchResults.hasNext()) {
-            System.out.println(" There aren't any results for your query.");
-        }
-
-        while (iteratorSearchResults.hasNext()) {
-
-            SearchResult singleVideo = iteratorSearchResults.next();
-            ResourceId rId = singleVideo.getId();
-
-            // Double checks the kind is video.
-            if (rId.getKind().equals("youtube#video")) {
-                Thumbnail thumbnail = (Thumbnail) singleVideo.getSnippet().getThumbnails().get("default");
-
-                System.out.println(" Video Id" + rId.getVideoId());
-                System.out.println(" Title: " + singleVideo.getSnippet().getTitle());
-                System.out.println(" Thumbnail: " + thumbnail.getUrl());
-                System.out.println("\n-------------------------------------------------------------\n");
-            }
-        }
-    }
 }
