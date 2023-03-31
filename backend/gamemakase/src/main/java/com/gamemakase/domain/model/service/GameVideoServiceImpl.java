@@ -53,6 +53,7 @@ public class GameVideoServiceImpl implements GameVideoService{
 //            기존 디비에 저장되어있던 영상 새로운 영상으로 업데이트
             List<SearchResult> resultList = youtubeApiService.getGameYoutubeVideo(gameId);
             List<GameVideo> finalGameVideos = gameVideos;
+//            영상이 2개라서 intstream으로 기존 비디오 1/2 -> 새 비디오 1/2에 업데이트했습니다.
             IntStream.range(0, Math.min(gameVideos.size(), 2))
                             .forEach(i -> {
                                 GameVideo gameVideo = finalGameVideos.get(i);
