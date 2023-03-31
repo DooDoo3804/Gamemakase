@@ -160,6 +160,8 @@ export const TestWrapper = styled.div`
     max-width: 40rem;
     margin: 1rem 3rem;
     text-align: center;
+    white-space: pre-wrap;
+    word-break: keep-all;
   }
 
   .type-text {
@@ -183,10 +185,18 @@ export const TestWrapper = styled.div`
   }
 
   .result-lottie-wrapper {
-    width: 40%;
-    min-width: 230px;
-    max-width: 300px;
     margin: 2rem;
+    margin-bottom: 0rem;
+
+    @media (min-width: 768px) {
+      height: 200px;
+    }
+    @media (max-width: 768px) {
+      height: 180px;
+    }
+    @media (max-width: 500px) {
+      height: 150px;
+    }
   }
 
   .rcm-wrapper {
