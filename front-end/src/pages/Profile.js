@@ -256,6 +256,13 @@ const Profile = () => {
     setWithdrawalAlertView(true);
   }
 
+  const logout = () => {
+    removeCookie("accessToken", { path: "/" });
+    removeCookie("redirect-url", { path: "/" });
+    setUser(null);
+    window.location.assign("/");
+  }
+
   const withDrawal = () => {
     axios
       .delete(`${BACKEND_URL}auth/user`, {
@@ -265,10 +272,7 @@ const Profile = () => {
         },
       })
       .then((response) => {
-        setUser(null);
-        removeCookie("accessToken", { path: "/" });
-        removeCookie("redirect-url", { path: "/" });
-        window.location.replace(window.location.href);
+        logout();
       })
       .catch((error) => {
         console.log(error);

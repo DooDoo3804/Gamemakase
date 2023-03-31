@@ -142,7 +142,7 @@ const MainHeader = () => {
               </div>
               <p
                 className="single-menu"
-                onClick={() => navigate(`/profile/${user.userId}`)}
+                onClick={() => window.location.assign(`/profile/${user.userId}`)}
               >
                 {user.userName}
               </p>
