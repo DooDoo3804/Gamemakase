@@ -9,12 +9,14 @@ import com.gamemakase.domain.model.entity.Review;
 import com.gamemakase.domain.model.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 	Long countByUser(User user);
     Page<Review> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
     Page<Review> findAllByGameOrderByCreatedAtDesc(Game game, Pageable pageable);
 
+    Optional<Review> findByGameAndUser(Game game, User user);
     boolean existsByGameGameIdAndUserUserId(Long gameId, Long userId);
 
     List<Review> findAllByGameGameId(Long gameId);
