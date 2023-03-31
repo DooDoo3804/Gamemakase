@@ -207,15 +207,15 @@ const renderResult = (resultId) => {
       <div className="rcm-wrapper">
         <p className="rcm-text">나와 잘 맞는 게임</p>
         <div className="rcm-game-wrapper">
-          <div
-            className="single-game"
-            onClick={() =>
-              window.location.assign(
-                `/detail/${results[resultId].games[0].gameId}`
-              )
-            }
-          >
-            <div className="gameimg-wrapper">
+          <div className="single-game">
+            <div
+              className="gameimg-wrapper"
+              onClick={() =>
+                window.location.assign(
+                  `/detail/${results[resultId].games[0].gameId}`
+                )
+              }
+            >
               <img
                 className="game-img"
                 alt="game_img"
@@ -224,15 +224,15 @@ const renderResult = (resultId) => {
             </div>
             <p className="game-title">{results[resultId].games[0].gameName}</p>
           </div>
-          <div
-            className="single-game"
-            onClick={() =>
-              window.location.assign(
-                `/detail/${results[resultId].games[1].gameId}`
-              )
-            }
-          >
-            <div className="gameimg-wrapper">
+          <div className="single-game">
+            <div
+              className="gameimg-wrapper"
+              onClick={() =>
+                window.location.assign(
+                  `/detail/${results[resultId].games[1].gameId}`
+                )
+              }
+            >
               <img
                 className="game-img"
                 alt="game_img"
