@@ -42,7 +42,7 @@ const Profile = () => {
   const location = useLocation();
   const userId = location.pathname.split("/").reverse()[0];
   const [width, setWidth] = useState(window.innerWidth);
-  const [cookies, removeCookie] = useCookies(["accessToken"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
   
   const { lockScroll } = useBodyScrollLock();
 
