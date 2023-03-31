@@ -522,7 +522,7 @@ const Detail = () => {
                   <iframe
                     src={
                       "https://www.youtube.com/embed/" +
-                      gameData.youtube[0].youtubeId.videoId
+                      gameData.youtube[0].youtubeId
                     }
                     title={gameData.youtube[0].youtubeName}
                     className="single-video"
@@ -531,7 +531,7 @@ const Detail = () => {
                   <iframe
                     src={
                       "https://www.youtube.com/embed/" +
-                      gameData.youtube[1].youtubeId.videoId
+                      gameData.youtube[1].youtubeId
                     }
                     title={gameData.youtube[1].youtubeName}
                     className="single-video"
