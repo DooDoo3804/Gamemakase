@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { Common } from "../styles/Common";
 import { motion } from "framer-motion";
+import steamIcon from "../assets/fontAwesomeSvg/steam.svg";
+import steamIconHover from "../assets/fontAwesomeSvg/steam_hover.svg";
 
 export const ProfileBackgroundWrapper = styled.div`
   background: ${Common.colors.mainColor01};
@@ -48,28 +50,28 @@ export const ProfileBackgroundWrapper = styled.div`
   }
 `;
 
-export const ProfileImgWrapper = styled.div`
+export const ProfileImgWrapper = styled(motion.div)`
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  
+
   display: flex;
   height: 10px;
   margin-left: 10%;
-  
+
   position: relative;
   top: -60px;
 
   @media (max-width: 450px) {
     top: -40px;
   }
-  
+
   img {
     border-radius: 70%;
     width: 120px;
     height: 120px;
-      @media (max-width: 450px) {
+    @media (max-width: 450px) {
       width: 90px;
       height: 90px;
     }
@@ -88,10 +90,18 @@ export const ProfileImgWrapper = styled.div`
       margin-top: 50px;
       width: 30px;
     }
-    img {
-      margin-top: 3px;
-      width: 30px;
-      height: 30px;
+    .steam-Icon:hover {
+      background-image: url(${steamIconHover});
+    }
+    .steam-Icon {
+      cursor: pointer;
+      background-image: url(${steamIcon});
+      background-size: contain;
+      background-repeat: no-repeat;
+      transition: all 0.5s ease-in-out;
+      margin-top: 7px;
+      width: 25px;
+      height: 25px;
       @media (max-width: 450px) {
         width: 20px;
         height: 20px;
@@ -132,21 +142,50 @@ export const ProfileNavWrapper = styled.div`
   display: flex;
   flex-direction: column;
 
-  //width: 300px; 친구탭 포함
-  width: 250px;
-  height: 45px;
+  margin-top: 6rem;
   margin-left: 10%;
-  padding-top: 6rem;
+  margin-right: 10%;
 
   @media (max-width: 450px) {
+    margin-top: 5rem;
     width: 80%;
-    padding-top: 80px;
   }
 
-  .flex {
+  .nav-section {
+    position: relative;
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
+  }
+  .flex {
+    width: 260px;
+    @media (max-width: 450px) {
+      width: 80%;
+    }
+    display: flex;
+    justify-content: space-between;
+  }
+  .withdrawal {
+    width: 50px;
+    @media (max-width: 450px) {
+      width: 15%;
+    }
+    height: 35px;
+    border-radius: 8px 8px 8px 8px;
+    font-family: "Noto Sans KR";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    color: ${Common.colors.lightGray01};
+    line-height: 35px;
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .withdrawal:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease-in-out;
   }
 
   .nav-tap-clicked {
@@ -187,10 +226,20 @@ export const ProfileNavWrapper = styled.div`
     color: ${Common.colors.white01};
   }
 
+  .line-section {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .nav-line {
     position: relative;
-    width: 100%;
+    width: 260px;
     height: 8px;
+    @media (max-width: 450px) {
+      width: 80%;
+      height: 5px;
+    }
     background-color: rgba(255, 255, 255, 0.6);
   }
 `;
@@ -211,10 +260,11 @@ export const ProfileMainStatistics = styled(motion.div)`
   width: 80%;
   height: 33rem;
 
+  margin-top: 2.5rem;
   @media (max-width: 450px) {
     height: 25rem;
+    margin-top: 2rem;
   }
-  margin-top: 2.5rem;
 
   background: rgba(255, 255, 255, 0.4);
   border: 3px solid ${Common.colors.white01};
