@@ -121,11 +121,18 @@ export const TestWrapper = styled.div`
   }
 
   .lottie-wrapper {
-    min-width: 260px;
-    max-width: 360px;
-    max-height: 360px;
     margin: 2rem;
     margin-bottom: 0rem;
+
+    @media (min-width: 768px) {
+      height: 300px;
+    }
+    @media (max-width: 768px) {
+      height: 250px;
+    }
+    @media (max-width: 500px) {
+      height: 200px;
+    }
   }
 
   .level {
@@ -249,7 +256,7 @@ export const TestWrapper = styled.div`
     margin: 1rem 1rem;
     width: 40%;
     min-width: 20rem;
-    justify-content: space-around;
+    justify-content: space-evenly;
 
     .single-btn {
       margin: 0rem 1rem;
