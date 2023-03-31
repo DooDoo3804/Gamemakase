@@ -252,7 +252,11 @@ const Detail = () => {
             <div className="profile-wrapper">
               <div
                 className="profile-img-wrapper"
-                onClick={() => navigate(`/profile/${reviewData[i].userId}`)}
+                onClick={() => {
+                  if (reviewData[i].userName !== "탈퇴한 유저") {
+                    navigate(`/profile/${reviewData[i].userId}`);
+                  }
+                }}
               >
                 <img
                   src={

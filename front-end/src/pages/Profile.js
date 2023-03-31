@@ -31,7 +31,6 @@ import noReivew from "../assets/lottie/review.json";
 //Svg
 import starSvgYellow from "../assets/fontAwesomeSvg/star-yellow.svg";
 import starSvgEmpty from "../assets/fontAwesomeSvg/star-empty.svg";
-import steamIcon from "../assets/fontAwesomeSvg/steam.svg";
 //empty profile img
 import defaultUserImg from "../assets/profileImg.svg";
 
@@ -40,14 +39,14 @@ const Profile = () => {
   const location = useLocation();
   const userId = location.pathname.split("/").reverse()[0];
   const [width, setWidth] = useState(window.innerWidth);
-  const [cookies] = useCookies(["accessToken"]);
-
+  const [cookies, removeCookie] = useCookies(["accessToken"]);
+  
   //state
   const [isKo, setIsKo] = useState(true);
   const [userName, setUserName] = useState("");
   const [userSteamId, setUserSteamId] = useState("");
   const [userImage, setUserImage] = useState(defaultUserImg);
-  const [user] = useRecoilState(userState);
+  const [user, setUser] = useRecoilState(userState);
 
   // sync
   const [scrapId, setScrapId] = useState();
@@ -61,6 +60,7 @@ const Profile = () => {
   const [isMainTap, setIsMainTap] = useState(true);
   const [scrapDeleteAlertView, setScrapDeleteAlertView] = useState(false);
   const [reviewDeleteAlertView, setReviewDeleteAlertView] = useState(false);
+  const [withdrawalAlertView, setWithdrawalAlertView] = useState(false);
   const [scrapGames, setScrapGames] = useState([]);
 
   // paging state
@@ -138,6 +138,9 @@ const Profile = () => {
         },
       })
       .then((response) => {
+        if (Number(response.data.user.userSteamId) === 0) {
+          navigate("/404");
+        }
         const mapping = { genre: "id", value: "value" };
         const statistics = renameKeys(mapping, response.data.statistics);
         const sum = calStatisticsSum(statistics);
@@ -231,6 +234,29 @@ const Profile = () => {
       })
       .then((response) => {
         setScrapGames(scrapGames.filter(scrapGames => scrapGames.likeId !== scrapId));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const withDrawalClick = () => {
+    setWithdrawalAlertView(true);
+  }
+
+  const withDrawal = () => {
+    axios
+      .delete(`${BACKEND_URL}auth/user`, {
+        headers: {
+          "Content-Type": "application/json",
+          accessToken: cookies["accessToken"],
+        },
+      })
+      .then((response) => {
+        setUser(null);
+        removeCookie("accessToken", { path: "/" });
+        removeCookie("redirect-url", { path: "/" });
+        window.location.replace(window.location.href);
       })
       .catch((error) => {
         console.log(error);
@@ -596,42 +622,58 @@ const Profile = () => {
         cancelMsg="취소"
         goFunction={reviewDelete}
       ></AlertModal>
+       <AlertModal
+        alertView={withdrawalAlertView}
+        setAlertView={setWithdrawalAlertView}
+        msg="정말로 탈퇴하시겠습니까?"
+        confrimMsg="탈퇴"
+        cancelMsg="취소"
+        goFunction={withDrawal}
+      ></AlertModal>
       <div className="profile-box">
         <div>
           <ProfileImgWrapper>
             <img src={userImage} alt="profileImage" />
             {userName != null ? <p className="profile-name">{userName}</p> : ""}
-            <div className="steam-btn" onClick={() => {
+            <motion.div whileHover={{ scale: 1.04 }} className="steam-btn" onClick={() => {
               console.log("click");
               window.open(
                 `https://steamcommunity.com/profiles/${userSteamId}/`
               )
             }
             }>
-              <img
+              <div
+                className="steam-Icon"
                 alt="steamIcon"
-                src={steamIcon}
-              />
-            </div>
+              ></div>
+            </motion.div>
           </ProfileImgWrapper>
         </div>
         <nav>
           <ProfileNavWrapper>
-            <div className="flex">
-              <div
-                className={`${isMainTap ? "nav-tap-clicked" : "nav-tap"}`}
-                onClick={() => clickMainTap()}
-              >
-                Main
+            <div className="nav-section">
+              <div className="flex">
+                <div
+                  className={`${isMainTap ? "nav-tap-clicked" : "nav-tap"}`}
+                  onClick={() => clickMainTap()}
+                >
+                  Main
+                </div>
+                <div
+                  className={`${!isMainTap ? "nav-tap-clicked" : "nav-tap"}`}
+                  onClick={() => clickReviewsTap()}
+                >
+                  Reviews
+                </div>
               </div>
-              <div
-                className={`${!isMainTap ? "nav-tap-clicked" : "nav-tap"}`}
-                onClick={() => clickReviewsTap()}
-              >
-                Reviews
-              </div>
+              {user && Number(user.userId) === Number(userId) ? <div className="withdrawal"
+              onClick={() => {withDrawalClick();}}>
+                탈퇴
+              </div> : ""}
             </div>
-            <div className="nav-line"></div>
+            <div className="line-section">
+              <div className="nav-line"></div>
+            </div>
           </ProfileNavWrapper>
         </nav>
         <section>
