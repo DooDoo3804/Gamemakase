@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.gamemakase.domain.model.entity.*;
 import com.gamemakase.domain.model.repository.*;
+import com.gamemakase.global.Exception.DuplicatedException;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,8 +117,12 @@ public class ReviewServiceImpl implements ReviewService {
 			Game game = gameRepository.findById(reviewRequest.getGameId()).orElseThrow(() -> new NotFoundException("게임정보를 찾을 수 없습니다."));
 			User user = userRepository.findById(reviewRequest.getUserId()).orElseThrow(() -> new NotFoundException("유저정보를 찾을 수 없습니다."));
 			GameHistory gameHistory = gameHistoryRepository.findByUserAndGame(user, game).orElseThrow(() -> new UnAuthorizedException("게임을 구매하지 않은 사용자의 접근입니다."));
-			Review review = ReviewInsertRequestDto.toEntity(reviewRequest, game, user);
-			reviewRepository.save(review);
+			Optional<Review> review = reviewRepository.findByGameAndUser(game, user);
+			if (review.isPresent()) {
+				throw new DuplicatedException("이미 작성한 게임에 대한 접근입니다.");
+			}
+			Review newReview = ReviewInsertRequestDto.toEntity(reviewRequest, game, user);
+			reviewRepository.save(newReview);
 		} catch (NumberFormatException e) {
 			logger.error(e.getMessage());
 			throw new TokenValidFailedException("유효하지 않은 토큰값입니다.");

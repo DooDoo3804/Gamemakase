@@ -1,5 +1,6 @@
 package com.gamemakase.global.handler;
 
+import com.gamemakase.global.Exception.DuplicatedException;
 import com.gamemakase.global.Exception.NotFoundException;
 import com.gamemakase.global.Exception.TokenValidFailedException;
 import com.gamemakase.global.Exception.UnAuthorizedException;
@@ -34,5 +35,12 @@ public class ExceptionController {
         log.info(ex.getClass().getName());
         log.error("UnAuthorizedException", ex);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+    @ExceptionHandler({DuplicatedException.class})
+    public ResponseEntity<?> handleUnAuthorizedException(final DuplicatedException ex) {
+        log.info(ex.getClass().getName());
+        log.error("DuplicatedException", ex);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
 }
