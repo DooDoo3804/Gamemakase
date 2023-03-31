@@ -32,14 +32,6 @@ public class User implements UserDetails {
   @Column(name = "user_name", length = 40, nullable = false)
   private String userName;
 
-  @Column(name = "created_at")
-  @CreatedDate
-  private LocalDateTime createdAt;
-
-  @Column(name = "updated_at")
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
-
   @OneToOne
   @JoinTable(
           name = "user_authority_join",
