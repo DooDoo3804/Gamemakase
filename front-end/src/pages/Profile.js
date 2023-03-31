@@ -42,8 +42,8 @@ const Profile = () => {
   const location = useLocation();
   const userId = location.pathname.split("/").reverse()[0];
   const [width, setWidth] = useState(window.innerWidth);
-  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
-  
+  const [cookies] = useCookies(["accessToken"]);
+
   const { lockScroll } = useBodyScrollLock();
 
   //state
@@ -257,10 +257,9 @@ const Profile = () => {
   }
 
   const logout = () => {
-    removeCookie("accessToken", { path: "/" });
-    removeCookie("redirect-url", { path: "/" });
+    console.log("logout");
     setUser(null);
-    window.location.assign("/");
+    navigate("/");
   }
 
   const withDrawal = () => {
@@ -658,7 +657,6 @@ const Profile = () => {
             <img src={userImage} alt="profileImage" />
             {userName != null ? <p className="profile-name">{userName}</p> : ""}
             <motion.div whileHover={{ scale: 1.04 }} className="steam-btn" onClick={() => {
-              console.log("click");
               window.open(
                 `https://steamcommunity.com/profiles/${userSteamId}/`
               )
