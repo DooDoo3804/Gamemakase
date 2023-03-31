@@ -8,11 +8,14 @@ import { userState } from "../recoil/user";
 import { ResponsivePie } from "@nivo/pie";
 import { Common } from "../styles/Common";
 import { motion } from "framer-motion";
+
 //Components
 import GameSummary from "../components/GameSummary";
 import { Paging } from "../components/Pagination";
 import EditModal from "../components/EditModal";
 import AlertModal from "../components/AlertModal";
+import ReviewEditModal from "../components/ReviewEditModal";
+import useBodyScrollLock from "../components/ScrollLock";
 //Emotions
 import {
   ProfileBackgroundWrapper,
@@ -41,12 +44,19 @@ const Profile = () => {
   const [width, setWidth] = useState(window.innerWidth);
   const [cookies, removeCookie] = useCookies(["accessToken"]);
   
+  const { lockScroll } = useBodyScrollLock();
+
   //state
   const [isKo, setIsKo] = useState(true);
   const [userName, setUserName] = useState("");
   const [userSteamId, setUserSteamId] = useState("");
   const [userImage, setUserImage] = useState(defaultUserImg);
   const [user, setUser] = useRecoilState(userState);
+
+  //review edit
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [editModalView, setEditModalView] = useState(false);
+  const [editReviewData, setEditReviewData] = useState(null);
 
   // sync
   const [scrapId, setScrapId] = useState();
@@ -194,8 +204,10 @@ const Profile = () => {
   /////             REST API             //////
   /////////////////////////////////////////////
 
-  const reviewEdit = () => {
-    console.log("edit!");
+  const reviewEdit = (editData) => {
+    setScrollPosition(lockScroll());
+    setEditReviewData(editData);
+    setEditModalView(true);
   };
 
   const reviewDeleteClick = (reviewId) => {
@@ -525,7 +537,7 @@ const Profile = () => {
               </div>
               {
                 Number(user.userId) === Number(userId) ? <EditModal
-                  editFunction={reviewEdit}
+                  editFunction={() => { reviewEdit(e); }}
                   deleteFunction={() => {
                     reviewDeleteClick(e.reviewId);
                   }}
@@ -622,7 +634,7 @@ const Profile = () => {
         cancelMsg="취소"
         goFunction={reviewDelete}
       ></AlertModal>
-       <AlertModal
+      <AlertModal
         alertView={withdrawalAlertView}
         setAlertView={setWithdrawalAlertView}
         msg="정말로 탈퇴하시겠습니까?"
@@ -630,6 +642,12 @@ const Profile = () => {
         cancelMsg="취소"
         goFunction={withDrawal}
       ></AlertModal>
+      <ReviewEditModal
+        reviewData={editReviewData}
+        modalView={editModalView}
+        setModalView={setEditModalView}
+        scrollPosition={scrollPosition}
+      ></ReviewEditModal>
       <div className="profile-box">
         <div>
           <ProfileImgWrapper>
@@ -667,7 +685,7 @@ const Profile = () => {
                 </div>
               </div>
               {user && Number(user.userId) === Number(userId) ? <div className="withdrawal"
-              onClick={() => {withDrawalClick();}}>
+                onClick={() => { withDrawalClick(); }}>
                 탈퇴
               </div> : ""}
             </div>
