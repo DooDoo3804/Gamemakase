@@ -232,6 +232,7 @@ export const TestWrapper = styled.div`
       justify-content: center;
       align-items: center;
       border-radius: 2rem;
+      overflow: hidden;
 
       -ms-user-select: none;
       -moz-user-select: -moz-none;
@@ -244,6 +245,7 @@ export const TestWrapper = styled.div`
       width: 100%;
       height: 100%;
       object-fit: cover;
+      cursor: pointer;
     }
 
     .game-title {
