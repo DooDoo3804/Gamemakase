@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -25,6 +26,12 @@ public class GameVideoServiceImpl implements GameVideoService{
     private final GameRepository gameRepository;
     private final YoutubeApiService youtubeApiService;
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+//    이모지 제거
+    private final Pattern EMOJI_PATTERN = Pattern.compile("[\uD83C-\uDBFF\uDC00-\uDFFF]+");
+    private String removeEmojis(String input) {
+        return EMOJI_PATTERN.matcher(input).replaceAll("");
+    }
 
 
     @Override
@@ -40,7 +47,7 @@ public class GameVideoServiceImpl implements GameVideoService{
             List<GameVideo> collect = resultList.stream()
                     .map(r -> GameVideo.builder()
                             .youtubeId(r.getId().getVideoId())
-                            .youtubeName(r.getSnippet().getTitle())
+                            .youtubeName(removeEmojis(r.getSnippet().getTitle()))
                             .game(gameRepository.findByGameId(gameId).get())
                             .createdAt(LocalDateTime.now())
                             .build())
@@ -60,7 +67,7 @@ public class GameVideoServiceImpl implements GameVideoService{
                                 SearchResult searchResult = resultList.get(i);
 
                                 gameVideo.setYoutubeId(searchResult.getId().getVideoId());
-                                gameVideo.setYoutubeName(searchResult.getSnippet().getTitle());
+                                gameVideo.setYoutubeName(removeEmojis(searchResult.getSnippet().getTitle()));
                                 gameVideo.setCreatedAt(now);
 
                                 gameVideoRepository.save(gameVideo);
