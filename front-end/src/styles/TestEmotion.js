@@ -40,7 +40,6 @@ export const SingleProgressBar = styled.div`
 export const TestWrapper = styled.div`
   display: flex;
   width: 100%;
-  min-height: calc(100vh - 3.9rem);
   justify-content: center;
   background-image: linear-gradient(
     to bottom,
@@ -48,12 +47,21 @@ export const TestWrapper = styled.div`
     rgba(153, 136, 189, 1)
   );
 
+  @media (min-width: 768px) {
+    min-height: calc(100vh - 4.4rem);
+  }
+  @media (max-width: 768px) {
+    min-height: calc(100vh - 3.9rem);
+  }
+  @media (max-width: 500px) {
+    min-height: calc(100vh - 3.4rem);
+  }
+
   .test-body {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 3rem 0rem;
     padding: 2rem 0rem;
     max-width: 60rem;
 
@@ -73,12 +81,15 @@ export const TestWrapper = styled.div`
 
     @media (min-width: 768px) {
       width: 80%;
+      margin: 2.5rem 0rem;
     }
     @media (max-width: 768px) {
       width: 80%;
+      margin: 2rem 0rem;
     }
     @media (max-width: 500px) {
       width: 95%;
+      margin: 1rem 0rem;
     }
   }
 
@@ -110,9 +121,11 @@ export const TestWrapper = styled.div`
   }
 
   .lottie-wrapper {
-    min-width: 330px;
-    max-width: 500px;
+    min-width: 260px;
+    max-width: 360px;
+    max-height: 360px;
     margin: 2rem;
+    margin-bottom: 0rem;
   }
 
   .level {
@@ -232,7 +245,8 @@ export const TestWrapper = styled.div`
 
   .btns-wrapper {
     display: flex;
-    margin: 2rem 1rem;
+    flex-wrap: wrap;
+    margin: 1rem 1rem;
     width: 40%;
     min-width: 20rem;
     justify-content: space-around;
