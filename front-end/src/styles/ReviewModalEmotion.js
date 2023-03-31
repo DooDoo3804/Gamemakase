@@ -89,6 +89,7 @@ export const ReviewModalBody = styled(motion.div)`
     font-family: "Noto Sans KR", serif;
     font-weight: 700;
     margin: 0;
+    color: ${Common.colors.white01};
 
     transition: all 0.3s ease-in-out;
 
@@ -209,6 +210,7 @@ export const ReviewModalBody = styled(motion.div)`
       justify-content: end;
 
       .character-counter {
+        color: ${Common.colors.white01};
         font-family: "Sarpanch", serif;
         display: flex;
         margin: 0;
