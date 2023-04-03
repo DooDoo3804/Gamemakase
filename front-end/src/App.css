@@ -16,7 +16,7 @@
   background-color: #ffffff;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #9988BD;
+  background-color: #9988bd;
 }
 ::-webkit-scrollbar-button:start:decrement,
 ::-webkit-scrollbar-button:end:increment {
@@ -32,13 +32,9 @@ html {
   min-height: 100vh;
   background-color: #323232;
 }
-/* 미디어쿼리로 너비 설정 */
-/* @media (min-width: 650px) {
+
+@media (max-width: 360px) {
   .App {
+    width: 360px;
   }
 }
-
-@media (max-width: 650px) {
-  .App {
-  }
-} */

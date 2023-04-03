@@ -184,6 +184,11 @@ const Home = () => {
             onClick={() => navigate(`/detail/${games[i].gameId}`)}
           />
           <p className="game-title">{games[i].gameName}</p>
+          {games[i].rating ? (
+            <p className="game-title">
+              예상 별점 : {games[i].rating.toFixed(1)}
+            </p>
+          ) : null}
         </SwiperSlide>
       );
     }
