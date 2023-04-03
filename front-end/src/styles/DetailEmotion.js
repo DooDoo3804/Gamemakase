@@ -476,7 +476,7 @@ export const RecommendUsers = styled.div`
   .users-wrapper {
     display: flex;
     margin: 2rem 0rem;
-    /* justify-content: space-around; */
+    justify-content: space-between;
     overflow-x: scroll;
 
     -ms-overflow-style: none; /* 인터넷 익스플로러 */
@@ -574,6 +574,8 @@ export const RecommendUsers = styled.div`
   .no-user {
     font-family: "Noto Sans KR", serif;
     margin: 2rem 1rem;
+    width: 100%;
+    text-align: center;
 
     transition: all 0.3s ease-in-out;
 
