@@ -37,21 +37,23 @@ const TranslucentBtnEmotion = styled.div`
     font-size: 0.8rem;
   }
 
-  :hover {
-    background-color: rgba(255, 255, 255, 0.5);
-    transition: background-color 0.3s ease-in-out;
-    font-weight: 600;
+  @media (hover: hover) and (pointer: fine) {
+    :hover {
+      background-color: rgba(255, 255, 255, 0.5);
+      transition: background-color 0.3s ease-in-out;
+      font-weight: 600;
 
-    transition: font-size 0.3s ease-in-out;
+      transition: font-size 0.3s ease-in-out;
 
-    @media (min-width: 768px) {
-      font-size: 1.05rem;
-    }
-    @media (max-width: 768px) {
-      font-size: 0.85rem;
-    }
-    @media (max-width: 500px) {
-      font-size: 0.85rem;
+      @media (min-width: 768px) {
+        font-size: 1.05rem;
+      }
+      @media (max-width: 768px) {
+        font-size: 0.85rem;
+      }
+      @media (max-width: 500px) {
+        font-size: 0.85rem;
+      }
     }
   }
 `;
