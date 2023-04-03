@@ -13,6 +13,7 @@ import Search from "./pages/Search";
 import Test from "./pages/Test";
 import TestResult from "./pages/TestResult";
 import Login from "./pages/Login";
+import QnA from "./pages/QnA";
 
 import ServerError from "./pages/ServerError";
 import NotFound from "./pages/NotFound";
@@ -38,6 +39,7 @@ function App() {
             <Route path="/test" element={<Test />} />
             <Route path="/testResult/:resultId" element={<TestResult />} />
             <Route path="/login" element={<Login />} />
+            <Route path="qna" element={<QnA />} />
             <Route path="/500" element={<ServerError />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
