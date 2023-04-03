@@ -34,6 +34,7 @@ import noReivew from "../assets/lottie/review.json";
 //Svg
 import starSvgYellow from "../assets/fontAwesomeSvg/star-yellow.svg";
 import starSvgEmpty from "../assets/fontAwesomeSvg/star-empty.svg";
+
 //empty profile img
 import defaultUserImg from "../assets/profileImg.svg";
 
@@ -116,14 +117,18 @@ const Profile = () => {
   // 배열의 value값의 sum값을 구하는 func
   const calStatisticsSum = (Array) => {
     let statisticsSumTmp = 0;
-    Array.forEach((e) => {
-      const value = Number(e.value);
+    let arr = Array;
+    for (let i = 0; i < arr.length; i++) {
+      const value = arr[i].value;
       if (isNaN(value)) {
         statisticsSumTmp += 0;
       } else {
-        statisticsSumTmp += Number(e.value);
+        statisticsSumTmp += Number(arr[i].value);
       }
-    });
+      if (typeof(value) !== 'number') {
+        Array.splice(i, 1);
+      }
+    }
     return statisticsSumTmp;
   };
 
@@ -686,10 +691,12 @@ const Profile = () => {
                   Reviews
                 </div>
               </div>
-              {user && Number(user.userId) === Number(userId) ? <div className="withdrawal"
-                onClick={() => { withDrawalClick(); }}>
-                탈퇴
-              </div> : ""}
+              {user && Number(user.userId) === Number(userId) ?
+                <div className="withdrawal"
+                  onClick={() => { withDrawalClick(); }}>
+                  탈퇴
+                </div>
+                : ""}
             </div>
             <div className="line-section">
               <div className="nav-line"></div>
