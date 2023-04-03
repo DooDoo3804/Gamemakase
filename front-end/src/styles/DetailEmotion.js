@@ -187,16 +187,19 @@ export const DetailWrapper = styled.div`
     border-radius: 1rem;
 
     @media (min-width: 768px) {
+      min-width: 2.8rem;
       padding: 0.4rem 0.6rem;
       font-size: 0.9rem;
       margin: 0.6rem 0rem;
     }
     @media (max-width: 768px) {
+      min-width: 2rem;
       padding: 0.3rem 0.5rem;
       font-size: 0.6rem;
       margin: 0.3rem 0rem;
     }
     @media (max-width: 500px) {
+      min-width: 1.9rem;
       padding: 0.2rem 0.4rem;
       font-size: 6px;
       margin: 0.3rem 0rem;
