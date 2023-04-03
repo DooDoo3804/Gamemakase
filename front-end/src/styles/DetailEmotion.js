@@ -479,8 +479,9 @@ export const RecommendUsers = styled.div`
   .users-wrapper {
     display: flex;
     margin: 2rem 0rem;
-    justify-content: space-between;
+    justify-content: start;
     overflow-x: scroll;
+    margin-top: 3rem;
 
     -ms-overflow-style: none; /* 인터넷 익스플로러 */
     scrollbar-width: none; /* 파이어폭스 */
