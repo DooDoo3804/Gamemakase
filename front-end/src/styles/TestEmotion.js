@@ -264,11 +264,11 @@ export const TestWrapper = styled.div`
 
   .btns-wrapper {
     display: flex;
-    flex-wrap: wrap;
     margin: 1rem 1rem;
     width: 40%;
     min-width: 20rem;
     justify-content: space-evenly;
+    margin-bottom: 50px;
 
     .single-btn {
       margin: 0rem 1rem;
