@@ -539,7 +539,7 @@ const Profile = () => {
                 </div>
               </div>
               {
-                Number(user.userId) === Number(userId) ? <EditModal
+                user && user.userId && Number(user.userId) === Number(userId) ? <EditModal
                   editFunction={() => { reviewEdit(e); }}
                   deleteFunction={() => {
                     reviewDeleteClick(e.reviewId);
