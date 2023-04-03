@@ -96,7 +96,7 @@ public class RealTimeUserInfoService {
                             .userSteamId(steamId)
                             .userId(user.getUserId())
                             .state(playerInfoJson.get("personastate").toString().equals("0") ? false : true)
-                            .userImagePath(playerInfoJson.get("avatar").toString())
+                            .userImagePath(playerInfoJson.get("avatarfull").toString())
                             .userName(realTimeUserName).build());
                 }
             }
