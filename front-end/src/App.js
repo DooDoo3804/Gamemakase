@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { CookiesProvider } from "react-cookie";
 import "./App.css";
@@ -17,7 +17,13 @@ import Login from "./pages/Login";
 import ServerError from "./pages/ServerError";
 import NotFound from "./pages/NotFound";
 
+import initialize from "./API/Share/Kakao";
+
 function App() {
+  useEffect(() => {
+    initialize();
+  }, []);
+
   return (
     <div className="App">
       <CookiesProvider>
