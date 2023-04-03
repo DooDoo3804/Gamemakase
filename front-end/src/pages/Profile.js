@@ -572,7 +572,7 @@ const Profile = () => {
             page={reviewCurrentpage}
             count={reviewDataSize}
             setPage={setPage}
-            countPerPage={6}
+            countPerPage={8}
           />
         );
       }
