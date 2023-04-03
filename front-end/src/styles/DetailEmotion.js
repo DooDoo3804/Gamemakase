@@ -476,7 +476,7 @@ export const RecommendUsers = styled.div`
   .users-wrapper {
     display: flex;
     margin: 2rem 0rem;
-    justify-content: space-around;
+    /* justify-content: space-around; */
     overflow-x: scroll;
 
     -ms-overflow-style: none; /* 인터넷 익스플로러 */
