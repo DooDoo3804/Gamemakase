@@ -261,7 +261,7 @@ const TestResult = () => {
         transition={{ duration: 0.5 }}
       >
         {renderResult(resultId)}
-        <div className="btns-wrapper">
+        <div className="result-btns-wrapper">
           <div className="single-btn">
             <TranslucentBtn
               text={"다시하기"}

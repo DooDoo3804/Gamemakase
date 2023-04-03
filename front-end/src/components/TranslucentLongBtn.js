@@ -25,22 +25,22 @@ const TranslucentLongBtnEmotion = styled.div`
   word-break: keep-all;
 
   @media (min-width: 768px) {
-    width: 15rem;
+    width: 20rem;
     min-height: 2.5rem;
     font-size: 1rem;
     padding: 1rem;
   }
   @media (max-width: 768px) {
-    width: 7rem;
+    width: 17rem;
     min-height: 2.2rem;
     font-size: 0.8rem;
-    padding: 0.5rem;
+    padding: 1rem;
   }
   @media (max-width: 500px) {
-    width: 6rem;
+    width: 15rem;
     min-height: 2rem;
     font-size: 0.8rem;
-    padding: 0.5rem;
+    padding: 0.8rem;
   }
 
   :hover {
