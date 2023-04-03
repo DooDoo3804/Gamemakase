@@ -157,6 +157,16 @@ class ChattingRoom(models.Model):
         db_table = 'chatting_room'
 
 
+class DailyRecommendation(models.Model):
+    daily_recommendation_id = models.BigAutoField(primary_key=True)
+    game = models.ForeignKey('Game', models.DO_NOTHING)
+    created_at = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'daily_recommendation'
+
+
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
     object_id = models.TextField(blank=True, null=True)
@@ -283,6 +293,18 @@ class GameSmall(models.Model):
         db_table = 'game_small'
 
 
+class GameVideo(models.Model):
+    game = models.ForeignKey(Game, models.DO_NOTHING)
+    youtube_id = models.CharField(max_length=255, db_collation='utf8mb3_bin')
+    created_at = models.DateTimeField()
+    game_video_id = models.BigAutoField(primary_key=True)
+    youtube_name = models.TextField(db_collation='utf8mb3_bin')
+
+    class Meta:
+        managed = False
+        db_table = 'game_video'
+
+
 class Genre(models.Model):
     genre_id = models.BigAutoField(primary_key=True)
     game = models.ForeignKey(Game, models.DO_NOTHING)
@@ -305,7 +327,7 @@ class Image(models.Model):
 
 
 class LikeGame(models.Model):
-    like_id = models.BigIntegerField(primary_key=True)
+    like_id = models.BigAutoField(primary_key=True)
     game = models.ForeignKey(Game, models.DO_NOTHING)
     user = models.ForeignKey('User', models.DO_NOTHING)
     type = models.CharField(max_length=20)
@@ -329,7 +351,7 @@ class Rating(models.Model):
 
 class RatingSmall(models.Model):
     game_id = models.BigIntegerField(blank=True, null=True)
-    steam_id = models.CharField(max_length=25, blank=True, null=True)
+    steam_id = models.IntegerField(blank=True, null=True)
     playtime = models.IntegerField(blank=True, null=True)
     frequency = models.FloatField(blank=True, null=True)
     rating = models.FloatField(blank=True, null=True)
@@ -340,7 +362,7 @@ class RatingSmall(models.Model):
 
 
 class Recommendation(models.Model):
-    steam_id = models.BigIntegerField()
+    steam = models.ForeignKey('User', models.DO_NOTHING)
     game = models.ForeignKey(Game, models.DO_NOTHING)
     rating = models.FloatField()
     recommendation_id = models.BigAutoField(primary_key=True)
@@ -386,10 +408,8 @@ class TendencyTest(models.Model):
 
 class User(models.Model):
     user_id = models.BigAutoField(primary_key=True)
-    user_steam_id = models.BigIntegerField(unique=True)
+    user_steam_id = models.BigIntegerField()
     user_name = models.CharField(max_length=40)
-    created_at = models.DateTimeField(blank=True, null=True)
-    updated_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
