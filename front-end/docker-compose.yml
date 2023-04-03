@@ -10,6 +10,6 @@ services:
       - "3000:3000"
     restart: always
     environment:
-      SERVER_MODE: prod
-      REACT_APP_KAKAO_JAVASCRIPT_KEY: "${REACT_APP_KAKAO_JAVASCRIPT_KEY}"
-      TZ: "ASIA/SEOUL"
+      - SERVER_MODE: prod
+      - REACT_APP_KAKAO_JAVASCRIPT_KEY: "${REACT_APP_KAKAO_JAVASCRIPT_KEY}"
+      - TZ: "ASIA/SEOUL"
