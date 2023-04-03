@@ -265,6 +265,19 @@ export const TestWrapper = styled.div`
   .btns-wrapper {
     display: flex;
     margin: 1rem 1rem;
+    flex-wrap: wrap;
+    width: 40%;
+    min-width: 20rem;
+    justify-content: space-around;
+
+    .single-btn {
+      margin: 0rem 1rem;
+    }
+  }
+
+  .result-btns-wrapper {
+    display: flex;
+    margin: 1rem 1rem;
     width: 40%;
     min-width: 20rem;
     justify-content: space-evenly;
