@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sarpanch&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap");
+
+@font-face {
+  font-family: "bitbit";
+  src: url("//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff"),
+    url("//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff2");
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+}
+::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #9988bd;
+}
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+  display: none;
+}
+body,
+html {
+  margin: 0;
+  height: 100%;
+}
+
+.App {
+  min-height: 100vh;
+  background-color: #323232;
+}
+
+@media (max-width: 360px) {
+  .App {
+    width: 360px;
+  }
+}
