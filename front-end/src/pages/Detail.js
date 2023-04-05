@@ -460,7 +460,11 @@ const Detail = () => {
                       ) : null}
                     </div>
                   </div>
+                  <p className="is-korean">
+                    {gameData.isKorean ? "한국어 지원" : null}
+                  </p>
                   <p className="discription">{gameData.gameDescription}</p>
+
                   <div
                     className="steam-btn"
                     onClick={() =>
