@@ -113,6 +113,23 @@ export const DetailWrapper = styled.div`
     }
   }
 
+  .is-korean {
+    transition: all 0.5s ease-in-out;
+    font-family: "Noto Sans KR", serif;
+    font-weight: 700;
+    margin-top: 0;
+
+    @media (min-width: 768px) {
+      font-size: 1rem;
+    }
+    @media (max-width: 768px) {
+      font-size: 12px;
+    }
+    @media (max-width: 500px) {
+      font-size: 10px;
+    }
+  }
+
   .steam-btn {
     background: ${Common.colors.mainColor04};
     font-weight: 700;
