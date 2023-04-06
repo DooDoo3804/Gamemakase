@@ -49,7 +49,8 @@
 ✔ 사용 기술스택 : SpringBoot, React, Django, Docker, AWS + (3. 시스템 아키텍처 참고)
 
 ✔ 소개 영상
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Ikfp1O9-4no" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+[![소개영상 썸네일](https://user-images.githubusercontent.com/109324637/230325245-2261c592-2324-4dc7-bfa4-eec14e844569.png)](https://www.youtube.com/watch?v=Ikfp1O9-4no)
 
 ## 1. 서비스 및 기능 소개
 
