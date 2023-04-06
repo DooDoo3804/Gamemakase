@@ -50,7 +50,7 @@
 
 ✔ 소개 영상
 
-[![소개영상 썸네일](https://user-images.githubusercontent.com/109324637/230325245-2261c592-2324-4dc7-bfa4-eec14e844569.png)](https://www.youtube.com/watch?v=Ikfp1O9-4no)
+[![소개영상 썸네일](https://user-images.githubusercontent.com/109324637/230326027-405a5f7e-9cf8-4a08-bf6c-99c6bed314ab.png)](https://www.youtube.com/watch?v=Ikfp1O9-4no)
 
 ## 1. 서비스 및 기능 소개
 
