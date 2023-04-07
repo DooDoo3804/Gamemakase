@@ -21,6 +21,7 @@ const InfoIconWrapper = styled.div`
 
   .box-body {
     display: flex;
+    flex-direction: column;
     position: absolute;
     z-index: 9;
 
@@ -64,9 +65,15 @@ const InfoIconWrapper = styled.div`
       padding: 1.5rem;
     }
   }
+
+  .info-link {
+    display: inline-block;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;
 
-const InfoIcon = ({ text }) => {
+const InfoIcon = ({ text, link }) => {
   const [infoView, setInfoView] = useState(false);
 
   return (
@@ -90,7 +97,12 @@ const InfoIcon = ({ text }) => {
             onClick={() => setInfoView(false)}
             onMouseLeave={() => setInfoView(false)}
           >
-            {text}
+            <div>{text}</div>
+            {link ? (
+              <p onClick={() => window.open(link)} className="info-link">
+                추천 알고리즘 설명 바로가기
+              </p>
+            ) : null}
           </motion.div>
         ) : null}
       </AnimatePresence>
