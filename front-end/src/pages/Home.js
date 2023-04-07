@@ -171,6 +171,9 @@ const Home = () => {
   const popularText =
     "지금 인기 있는 게임들을 만나보세요! \n겜마카세는 Peak CCU(Peak Concurrent Users, 최고 동시 접속자 수)를 기준으로 하여 다양한 장르의 최신 인기게임들을 제공합니다. \n<인기게임>에서 지금 이 순간 가장 핫한 게임들을 즐겨보세요!";
 
+  const infoLink =
+    "https://oval-hyena-8db.notion.site/dab409892ec64e09bcb9416b8ea4f1bf";
+
   const renderGames = (games) => {
     const result = [];
 
@@ -340,7 +343,8 @@ const Home = () => {
             }}
           >
             <div className="rcm-title">
-              나를 위한 게임<InfoIcon text={recommendText}></InfoIcon>
+              나를 위한 게임
+              <InfoIcon text={recommendText} link={infoLink}></InfoIcon>
             </div>
             <Swiper
               modules={[Navigation]}
